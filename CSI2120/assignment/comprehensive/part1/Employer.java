@@ -1,5 +1,6 @@
 /**
- * Employer
+ * Employer 
+ * Hongyi Lin, 300053082
  */
 public class Employer extends Person {
     // attribute

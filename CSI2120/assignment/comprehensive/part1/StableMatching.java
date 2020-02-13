@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 /**
  * StableMatching
+ * Hongyi Lin, 300053082
  */
 public class StableMatching {
     public static void main(String[] args) {

@@ -1,5 +1,6 @@
 /**
- * Person
+ * Person 
+ * Hongyi Lin, 300053082
  */
 public class Person {
     // attribute

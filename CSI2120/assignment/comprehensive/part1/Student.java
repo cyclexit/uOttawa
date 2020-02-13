@@ -1,5 +1,6 @@
 /**
- * Student
+ * Student 
+ * Hongyi Lin, 300053082
  */
 public class Student extends Person {
     // constructor
