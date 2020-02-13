@@ -1,5 +1,8 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +37,6 @@ public class StableMatching {
                     n = info.length - 1;
                 }
                 Employer e = new Employer(info[0], Arrays.copyOfRange(info, 1, info.length));
-                // e.printPref(); // test
                 employers.add(e);
                 unmatchedEmp.add(e);
                 eHashMap.put(info[0], e);
@@ -46,15 +48,13 @@ public class StableMatching {
             while (studScanner.hasNext()) {
                 String[] info = studScanner.nextLine().split(",");
                 Student s = new Student(info[0], Arrays.copyOfRange(info, 1, info.length));
-                // s.printPref(); // test
                 sHashMap.put(info[0], s);
             }
             studScanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            System.out.println("File Not Found.");
             e.printStackTrace();
         }
-        
         // Gale-Shapley algorithm
         while (!unmatchedEmp.isEmpty()) {
             Employer curEmployer = unmatchedEmp.poll();
@@ -76,10 +76,21 @@ public class StableMatching {
                 }
             }
         }
-        // print result
-        for (int i = 0; i < employers.size(); ++i) {
-            Employer e = employers.get(i);
-            System.out.println(e.getName() + " - " + e.getMatch());
+        // write results to .csv file
+        String fileName = "matches_java_" + n + "x" + n + ".csv";
+        try {
+            BufferedWriter bWriter = new BufferedWriter(new FileWriter(fileName));
+            for (int i = 0; i < employers.size(); ++i) {
+                Employer e = employers.get(i);
+                if (i > 0) {
+                    bWriter.write("\n");
+                }
+                bWriter.write(e.getName() + "," + e.getMatch());
+            }
+            bWriter.close();
+        } catch (IOException e) {
+            System.out.println("Output Exception");
+            e.printStackTrace();
         }
     }
 }

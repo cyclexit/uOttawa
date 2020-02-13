@@ -17,19 +17,11 @@ public class Person {
         this.pref = pref;
         this.match = -1;
     }
-    // method
+    // getters
     public String getName() {
         return name;
     }
-    /*
-     * method for test purpose
-     */
-    public void printPref() {
-        for (String str : pref) {
-            System.out.print(str + " ");
-        }
-        System.out.println();
-    }
+    // method
     /*
      * return the name of the matched one
      * return null if this person is not matched
