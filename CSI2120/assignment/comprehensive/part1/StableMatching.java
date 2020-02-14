@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class StableMatching {
     public static void main(String[] args) {
         // size of the problem
-        int n = -1;
+        int n = 0;
         // Array to store employers
         ArrayList<Employer> employers = new ArrayList<>();
         // queue to hold unmatched employers
@@ -32,11 +32,8 @@ public class StableMatching {
             File employerPref = new File(args[0]);
             Scanner empScanner = new Scanner(employerPref);
             while (empScanner.hasNext()) {
+                ++n; // count n
                 String[] info = empScanner.nextLine().split(",");
-                // initialize the size n
-                if (n == -1) {
-                    n = info.length - 1;
-                }
                 Employer e = new Employer(info[0], Arrays.copyOfRange(info, 1, info.length));
                 employers.add(e);
                 unmatchedEmp.add(e);
