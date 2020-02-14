@@ -1,10 +1,10 @@
 package student
 
-import "matching/person"
+import "person"
 
 // Student is a struct to represent students
 type Student struct {
-	p *person.Person
+	P *person.Person
 }
 
 // NewStudent is the constructor of Student struct
@@ -13,6 +13,11 @@ func NewStudent(p *person.Person) *Student {
 }
 
 func (s *Student) Prefer(name string) bool {
-	index := s.p.GetIndex(name)
-	return index < s.p.GetMatch()
+	var index int64
+	for i := 0; i < len(s.P.Pref); i++ {
+		if s.P.Pref[i] == name {
+			index = int64(i)
+		}
+	}
+	return index < s.P.Match
 }

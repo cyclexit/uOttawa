@@ -1,11 +1,11 @@
 package employer
 
-import "matching/person"
+import "person"
 
 // Employer is a struct to represent employers
 type Employer struct {
-	p   *person.Person
-	cur int64
+	P   *person.Person
+	Cur int64
 }
 
 // NewEmployer is the constructor of Employer struct
@@ -13,8 +13,8 @@ func NewEmployer(p *person.Person) *Employer {
 	return &Employer{p, 0}
 }
 
-func (e *Employer) GetCurrent() string {
-	name := e.p.GetPref(e.cur)
-	e.cur++
+func (e *Employer) getCurrent() string {
+	name := e.P.Pref[e.Cur]
+	e.Cur++
 	return name
 }
