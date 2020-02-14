@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"os"
 	"sync"
-	"fmt"
 	"strings"
+	"strconv"
 	. "person"
 	. "employer"
 	. "student"
@@ -91,9 +91,16 @@ func main() {
 	}
 	wg.Wait()
 	
-	// print the result 
+	// write the result to .csv file
+	n := strconv.FormatInt(int64(len(employers)), 10)
+	fileName := "matches_go_" + n + "x" + n + ".csv"
+	outFile, err := os.Create(fileName)
+	defer outFile.Close()
 	for i := 0; i < len(employers); i++ {
 		ep := employers[i].P
-		fmt.Println(ep.Name + "," + ep.Pref[ep.Match])
+		if i > 0 {
+			outFile.WriteString("\n")
+		}
+		outFile.WriteString(ep.Name + "," + ep.Pref[ep.Match])
 	}
 }
