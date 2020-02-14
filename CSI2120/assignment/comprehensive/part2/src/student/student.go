@@ -7,11 +7,12 @@ type Student struct {
 	p *person.Person
 }
 
+// NewStudent is the constructor of Student struct
 func NewStudent(p *person.Person) *Student {
 	return &Student{p}
 }
 
-func (s *Student) prefer(name string) bool {
+func (s *Student) Prefer(name string) bool {
 	index := s.p.GetIndex(name)
 	return index < s.p.GetMatch()
 }
