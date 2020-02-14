@@ -2,23 +2,51 @@ package main
 
 import (
 	"bufio"
-	// "fmt"
 	"os"
+	"sync"
+	"fmt"
 	"strings"
-	"person"
-	"employer"
-	"student"
+	. "person"
+	. "employer"
+	. "student"
 )
+
+func offer(e *Employer) {
+	if e.P.Match == -1 {
+		curStudent := sMap[e.GetCurrent()]
+		evaluate(e, curStudent)
+	}
+}
+
+func evaluate(e *Employer, s *Student) {
+	if s.P.Match == -1 {
+		s.P.ChangeMatch(e.P.Name)
+		e.P.ChangeMatch(s.P.Name)
+	} else if (s.Prefer(s.P.Name)) {
+		prevEmp := eMap[s.P.Pref[s.P.Match]]
+		prevEmp.P.Unmatch()
+		s.P.ChangeMatch(e.P.Name)
+		e.P.ChangeMatch(s.P.Name)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			offer(prevEmp)
+		}()
+	} else {
+		offer(e)
+	}
+}
+
+// employer map
+var eMap = make(map[string]*Employer)
+// student map
+var sMap = make(map[string]*Student)
+// wait group
+var wg sync.WaitGroup
 
 func main() {
 	// array to hold employers
-	employers := make([]*employer.Employer, 0)
-	// array to hold unmatched employers
-	unmatched := make([]*employer.Employer, 0)
-	// employer map
-	eMap := make(map[string]*employer.Employer)
-	// student map
-	sMap := make(map[string]*student.Student)
+	employers := make([]*Employer, 0)
 
 	// read employers' preferences
 	eFile, err := os.Open(os.Args[1])
@@ -29,17 +57,9 @@ func main() {
 	eScanner := bufio.NewScanner(eFile)
 	for eScanner.Scan() {
 		info := strings.Split(eScanner.Text(), ",")
-		e := employer.NewEmployer(person.NewPerson(info[0], info[1:]))
+		e := NewEmployer(NewPerson(info[0], info[1:]))
 		employers = append(employers, e)
-		unmatched = append(unmatched, e)
 		eMap[info[0]] = e
-		/*
-		fmt.Println(e.P.Name) // test
-		for i := 0; i < len(e.P.Pref); i++ {
-			fmt.Printf("%s ", e.P.Pref[i])
-		}
-		fmt.Println()
-		*/
 	}
 	if eScanner.Err() != nil {
 		panic(eScanner.Err())
@@ -53,17 +73,27 @@ func main() {
 	sScanner := bufio.NewScanner(sFile)
 	for sScanner.Scan() {
 		info := strings.Split(sScanner.Text(), ",")
-		s := student.NewStudent(person.NewPerson(info[0], info[1:]))
+		s := NewStudent(NewPerson(info[0], info[1:]))
 		sMap[info[0]] = s
-		/*
-		fmt.Println(s.P.Name) // test
-		for i := 0; i < len(s.P.Pref); i++ {
-			fmt.Printf("%s ", s.P.Pref[i])
-		}
-		fmt.Println()
-		*/
 	}
 	if eScanner.Err() != nil {
 		panic(eScanner.Err())
+	}
+
+	// McVitie-Wilson algorithm
+	for i := 0; i < len(employers); i++ {
+		index := i
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			offer(employers[index])
+		}()
+	}
+	wg.Wait()
+	
+	// print the result 
+	for i := 0; i < len(employers); i++ {
+		ep := employers[i].P
+		fmt.Println(ep.Name + "," + ep.Pref[ep.Match])
 	}
 }

@@ -13,7 +13,7 @@ func NewEmployer(p *person.Person) *Employer {
 	return &Employer{p, 0}
 }
 
-func (e *Employer) getCurrent() string {
+func (e *Employer) GetCurrent() string {
 	name := e.P.Pref[e.Cur]
 	e.Cur++
 	return name
