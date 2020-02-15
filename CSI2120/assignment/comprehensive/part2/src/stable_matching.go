@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"bufio"
 	"os"
 	"sync"
@@ -22,7 +23,7 @@ func evaluate(e *Employer, s *Student) {
 	if s.P.Match == -1 {
 		s.P.ChangeMatch(e.P.Name)
 		e.P.ChangeMatch(s.P.Name)
-	} else if (s.Prefer(s.P.Name)) {
+	} else if (s.Prefer(e.P.Name)) {
 		prevEmp := eMap[s.P.Pref[s.P.Match]]
 		prevEmp.P.Unmatch()
 		s.P.ChangeMatch(e.P.Name)
@@ -33,7 +34,11 @@ func evaluate(e *Employer, s *Student) {
 			offer(prevEmp)
 		}()
 	} else {
-		offer(e)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			offer(e)
+		}()
 	}
 }
 
@@ -102,5 +107,27 @@ func main() {
 			outFile.WriteString("\n")
 		}
 		outFile.WriteString(ep.Name + "," + ep.Pref[ep.Match])
+	}
+
+	// check if the matching is stable
+	// for test
+	flag := true
+	for i := 0; i < len(employers); i++ {
+		ep := employers[i].P
+		for j := 0; j < len(ep.Pref); j++ {
+			if int64(j) != ep.Match {
+				flag1 := ep.Match < int64(j)
+				s := sMap[ep.Pref[j]]
+				flag2 := !s.Prefer(ep.Name)
+				flag = flag && (flag1 || flag2)
+				if !flag {
+					fmt.Println(ep.Name + "," + ep.Pref[ep.Match] + " -- breaker:" + s.P.Name)
+					break
+				}
+			}
+		}
+	}
+	if flag {
+		fmt.Println("The matching is stable.")
 	}
 }
