@@ -6,3 +6,11 @@ addAlternate([H|T], A, p, S) :- !,
 addAlternate([H|T], A, m, S) :- !, 
 	AA is A - H,
   addAlternate(T, AA, p, S).
+
+%addAlternate([], 0) :- !.
+%addAlternate([A|Arr], Res) :-
+%	length(Arr, 0),
+%	Res is A, !.
+%addAlternate([A, B|Arr], Res) :- 
+%	addAlternate(Arr, C),
+%	Res is C + A - B.
