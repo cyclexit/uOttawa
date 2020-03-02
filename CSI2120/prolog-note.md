@@ -24,9 +24,9 @@
 * `union(+Set1, +Set2, -Set3)`: *Set3* is the union of *Set1* and *Set2*.
 * `subtract(+Set, +Delete, -Result)`: *Result* is the difference of *Set* and *Delete*.
 ### Others
-* `bagof(+Template, :Goal, -Bag)`: Create a bag which satifies the goal. Allow backtracking. </br>
+* `bagof(+Template, :Goal, -Bag)`: Create *Bag* which satifies the *Goal* with *Template*. Allow backtracking. </br>
   `+Var^Goal`: not to bind *Var* in *Goal*.
-* `setof(+Template, +Goal, -Set)`: Equivalent to `bagof/3`, but sorts the result using `sort/2` to get a sorted list of alternatives without duplicates.
+* `setof(+Template, +Goal, -Set)`: Equivalent to `bagof/3`, but sorts the result using `sort/2` to get a sorted list of alternatives without duplicates. The order of lists is also sorted by `sort/2`.
 
 ## Prolog Environment
 ### Load file
