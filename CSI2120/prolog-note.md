@@ -19,3 +19,7 @@ In Prolog environment, type `[file_name]` to load a file.
 ### Turn on/off trace.
 * Turn on: `trace.`
 * Turn off: `notrace, nodebug.`
+
+## Other
+* Remember to write the base case!
+* Small-case letters and numbers will be treated as **literals**.
