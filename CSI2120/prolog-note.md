@@ -5,6 +5,7 @@
 * [Prolog Environment](#Prolog-Environment)
   * [Load file](#Load-file)
   * [Turn on/off trace](#Turn-on/off-trace)
+* [Other](#Other)
 
 ## Function
 * `length(?List, ?Int)`: get the list length.
@@ -22,4 +23,7 @@ In Prolog environment, type `[file_name]` to load a file.
 
 ## Other
 * Remember to write the base case!
-* Small-case letters and numbers will be treated as **literals**.
+* Small-case letters and numbers will be treated as **literals**. </br>
+  This feature can be used to implement flag arguments.[lab7/ex4](lab/lab7/ex4.prolog)
+* If you want to pick something in an array, you need an auxilary array. </br>
+  In the end, you just need to assign the auxilary array to the result.[lab7/ex3](lab/lab7/ex3.prolog)
