@@ -4,7 +4,7 @@
 * [Operator](#Operator)
 * [Function](#Function)
   * [List operation](#List-operation)
-  * [Others](#Others)
+  * [Collect solutions](#Collect-solutions)
 * [Prolog Environment](#Prolog-Environment)
   * [Load file](#Load-file)
   * [Turn on/off trace](#Turn-on/off-trace)
@@ -23,10 +23,11 @@
 * `intersection(+Set1, +Set2, -Set3)`: *Set3* is the intersection of *Set1* and *Set2*.
 * `union(+Set1, +Set2, -Set3)`: *Set3* is the union of *Set1* and *Set2*.
 * `subtract(+Set, +Delete, -Result)`: *Result* is the difference of *Set* and *Delete*.
-### Others
+### Collect solutions
 * `bagof(+Template, :Goal, -Bag)`: Create *Bag* which satifies the *Goal* with *Template*. Allow backtracking. </br>
   `+Var^Goal`: not to bind *Var* in *Goal*.
 * `setof(+Template, +Goal, -Set)`: Equivalent to `bagof/3`, but sorts the result using `sort/2` to get a sorted list of alternatives without duplicates. The order of lists is also sorted by `sort/2`.
+* `findall(+Template, :Goal, -Bag)`: Do not bind any variable.
 
 ## Prolog Environment
 ### Load file
