@@ -15,6 +15,7 @@
 * `\+`: not
 * `=\=`: not equal(numbers) </br>
   `\==`: not equal(others)
+* `=`: assign string literal to a variable
 
 ## Function
 ### List operation

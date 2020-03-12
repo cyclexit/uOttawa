@@ -1,2 +1,4 @@
 # java class file
 *.class
+# test file
+test.*
