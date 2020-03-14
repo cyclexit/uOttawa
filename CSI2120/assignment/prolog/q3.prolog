@@ -32,7 +32,7 @@ incList([C|Ranks], Scores, W, RScores) :-
 % getMaxIndex function
 getMaxIndex([X|_], Max, Cnt, Index) :-
   X == Max,
-  Index is Cnt, !.
+  Index is Cnt.
 getMaxIndex([X|L], Max, Cnt, Index) :-
   X =\= Max,
   NCnt is Cnt + 1,
