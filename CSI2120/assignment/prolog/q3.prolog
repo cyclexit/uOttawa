@@ -23,32 +23,30 @@ update2([K|DKeys], Pairs, NPairs, [K-Pairs.K|NNPairs]) :-
 
 % getAns function
 getAns(_, [], []) :- !.
-getAns(Max, [C-P|Pairs], [C|Country]) :-
+getAns(Max, [C-P|Pairs], [C|Countries]) :-
   P =:= Max,
-  getAns(Max, Pairs, Country), !.
-getAns(Max, [_-P|Pairs], Country) :-
+  getAns(Max, Pairs, Countries), !.
+getAns(Max, [_-P|Pairs], Countries) :-
   P =\= Max,
-  getAns(Max, Pairs, Country), !.
+  getAns(Max, Pairs, Countries), !.
 
-% printAns function
-printAns([]).
-printAns([C|Country]) :-
-  writeln(C),
-  printAns(Country).
-
-% where function
-where(People, Country) :- 
-  where(People, [], Country).
-where([], Pairs, Country) :-
+% solve function
+solve(People, Countries) :- 
+  solve(People, [], Countries).
+solve([], Pairs, Countries) :-
   pairs_values(Pairs, Vals),
   max_member(Max, Vals),
-  getAns(Max, Pairs, Country),
-  printAns(Country).
-where([P|People], Pairs, Country) :-
+  getAns(Max, Pairs, Countries).
+solve([P|People], Pairs, Countries) :-
   choice(P, Ranks),
   pairs_keys(Pairs, Keys),
   update1(Ranks, 3, Keys, Pairs, NPairs), % update1
   pairs_keys(NPairs, NKeys),
   subtract(Keys, NKeys, DKeys),
   update2(DKeys, Pairs, NPairs, NNPairs), % update2
-  where(People, NNPairs, Country).
+  solve(People, NNPairs, Countries).
+
+% where function
+where(People, Country) :-
+  solve(People, Countries),
+  member(Country, Countries).
