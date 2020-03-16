@@ -1,6 +1,7 @@
 # Prolog Note
 
 ## Index
+* [Syntax](#Syntax)
 * [Operator](#Operator)
 * [Function](#Function)
   * [List operation](#List-operation)
@@ -11,6 +12,13 @@
   * [List predicates](#List-predicates)
 * [Other stuff](#Other-stuff)
 
+## Syntax
+* list: `[a1, a2, ..., an]`
+* pair: `key-val`</br>
+  list of pairs: `[k1-v1, k2-v2, ..., kn-vn]` </br>
+  get value with key from pairs: `Pairs.Key`(*Pairs* is a list of key-val pairs) </br>
+  iterate through pairs: `[K-V|Pairs]`(*Pairs* is a list of key-val pairs)
+
 ## Operator
 * `\+`: not
 * `=\=`: not equal(numbers) </br>
@@ -20,10 +28,14 @@
 ## Function
 ### List operation
 * `length(?List, ?Int)`: get the list length.
-* `member(?Elem, ?List)`: return true if *Elem* is a member of the *List*.
-* `intersection(+Set1, +Set2, -Set3)`: *Set3* is the intersection of *Set1* and *Set2*.
-* `union(+Set1, +Set2, -Set3)`: *Set3* is the union of *Set1* and *Set2*.
-* `subtract(+Set, +Delete, -Result)`: *Result* is the difference of *Set* and *Delete*.
+* `member(?Elem, ?List)`: return true if *Elem* is a member of the *List*. </br>
+  If *Elem* is an unassigned variable, member will iterate throungh the whole the list.
+* `intersection(+Set1, +Set2, -Set3)`: *Set3* is the intersection of *Set1* and *Set2*. </br>
+  `union(+Set1, +Set2, -Set3)`: *Set3* is the union of *Set1* and *Set2*. </br>
+  `subtract(+Set, +Delete, -Result)`: *Result* is the difference of *Set* and *Delete*.
+* `max_member(-Max, +List)`: get the max member in the list. </br>
+  `min_member(-Min, +List)`: get the min member in the list. 
+
 ### Collect solutions
 * `bagof(+Template, :Goal, -Bag)`: Create *Bag* which satifies the *Goal* with *Template*. Allow backtracking. </br>
   `+Var^Goal`: not to bind *Var* in *Goal*.
