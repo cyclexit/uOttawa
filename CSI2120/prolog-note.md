@@ -23,6 +23,8 @@
 * `\+`: not
 * `=\=`: not equal(numbers) </br>
   `\==`: not equal(others)
+* `=<`: less than or equal to </br>
+  `>=`: greater than or equal to
 * `=`: assign string literal to a variable
 
 ## Function
