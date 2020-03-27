@@ -10,7 +10,8 @@
 * `(load "file_name")`: load a file into scheme environment.
 * `(values v1, v2, ...)`: used to return multiple values.
 * `(define <name> <value>)`: used to define a global constant.
-* `(let ((x1 1) (x2 2) ...) (<procedure>))`: define local variable.
+* `(let ((x1 1) (x2 2) ...) (<procedure>))`: define local variable. </br>
+  `(let-values ( ((x1 x2) (1 2)) ((y1 y2) (1 2)) ...) (<procedure>))`: used to get multiple return values of a function.
 * `quote` or `'`: ensure the expression is not evaluated by the scheme.
 * `?`: indicate a boolean function returning `#t` or `#f`.
     * `(eq? x y)`: return true if *x* and *y* have the same address. </br>
@@ -51,6 +52,7 @@
 * `(car 'x)`: ONLY return the first element in *x*. </br>
   `(cdr 'x)`: return everything in *x* EXCEPT FOR the first element. </br>
   `car` and `cdr` can be combined to use, e.g., `cdadr`.
+* `(list-ref <list> <index>)`: get the element of the list with index starting from 0.
 * append-list function
   ```scheme
   (define (append-list l1 l2)
