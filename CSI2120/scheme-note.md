@@ -65,16 +65,35 @@
   (define (invert-list l)
     (if (null? l)
       '()
-      (append-list (invert-list(cdr l)) (list (car l)))
+      (append-list (invert-list (cdr l)) (list (car l)))
     )
   )
   ```
 * member-list function
   ```scheme
   (define (member-list a L)
-    (cond ((null? L) `())
+    (cond 
+      ((null? L) `())
       ((equal? a (car L)) L)
       (else (member-list a (cdr L)))
+    )
+  )
+  ```
+* sum-list function
+  ```scheme
+  (define (sum-list l)
+    (if (null? l)
+      0
+      (+ (car l) (sum-list (cdr l)))
+    )
+  )
+  ```
+* len-list function
+  ```scheme
+  (define (len-list l)
+    (if (null? l)
+      0
+      (+ 1 (len-list (cdr l)))
     )
   )
   ```
