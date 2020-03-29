@@ -1,5 +1,5 @@
 (require racket/trace) ; test
-(define tl '(0 1 5 3 3 3 2 1 1)) ; test
+(define tl '(0 1 5 3 3 3 2 1 1 1)) ; test
 (define taux '(1 1 1 1 2 3 1 1 2)) ; test
 
 (define (mark-len l pre cnt)
@@ -13,7 +13,7 @@
 
 (define (last-max aux l len val)
   (cond
-    ( (null? aux) (values len val) )
+    ( (null? aux) (list len val) )
     ( (null? len) (last-max (cdr aux) (cdr l) (car aux) (car l)) )
     ( (>= (car aux) len) (last-max (cdr aux) (cdr l) (car aux) (car l)) )
     ( else (last-max (cdr aux) (cdr l) len val) )
@@ -29,8 +29,8 @@
 
 (define (sameNum l)
   (let ((aux (mark-len l null 1)))
-    (let-values (((len val) (last-max aux l null null)))
-      (list-gen len val)
+    (let ((res (last-max aux l null null)))
+      (list-gen (car res) (cdr res))
     )
   )
 )
