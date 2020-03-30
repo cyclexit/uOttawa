@@ -3,14 +3,16 @@
 )
 
 (define (neuralNode params sigmoid)
-  (letrec 
-    (
-      (calc (
-        lambda (lst)
-          (sigmoid (+ (car params) (+ (* (cadr params) (car lst)) (* (caddr params) (cadr lst)))))
-        )
-      )
+  (lambda (inputs)
+    (sigmoid (+ (car params) (+ (* (cadr params) (car inputs)) (* (caddr params) (cadr inputs)))))
+  )
+)
+
+(define (neuralLayer params-list)
+  (lambda (inputs)
+    (cond
+      ( (null? params-list) '()) ; test
+      ( else (cons ((neuralNode (car params-list) sigmoid) inputs) ((neuralLayer (cdr params-list)) inputs)) );test
     )
-    calc
   )
 )
