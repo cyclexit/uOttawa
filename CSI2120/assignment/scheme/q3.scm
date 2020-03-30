@@ -6,26 +6,8 @@
     ("sasha" ("vietnam" "peru" "greece"))
     ("helena" ("peru" "vietnam" "greece"))
     ("emma" ("greece" "peru" "vietnam"))
+    ("jane" ("greece" "vietnam" "peru")) ; test for tied situation
   )
-)
-
-(define places '("peru" "greece" "vietnam"))
-
-(define pts '(("peru" . 3)
-  ("greece" . 2)
-  ("vietnam" . 1)
-  ("greece" . 3)
-  ("peru" . 2)
-  ("vietnam" . 1)
-  ("vietnam" . 3)
-  ("peru" . 2)
-  ("greece" . 1)
-  ("peru" . 3)
-  ("vietnam" . 2)
-  ("greece" . 1)
-  ("greece" . 3)
-  ("peru" . 2)
-  ("vietnam" . 1))
 )
 ; test data
 
@@ -73,10 +55,29 @@
   )
 )
 
+(define (get-max-score res max-score)
+  (cond
+    ( (null? res) max-score )
+    ( (null? max-score) (get-max-score (cdr res) (cdar res)) )
+    ( (< max-score (cdar res)) (get-max-score (cdr res) (cdar res)) )
+    ( else (get-max-score (cdr res) max-score) )
+  )
+)
+
+(define (get-ans res max-score ans)
+  (cond
+    ( (null? res) ans )
+    ( (equal? (cdar res) max-score) (get-ans (cdr res) max-score (append ans (list (car res)))) )
+    ( else (get-ans (cdr res) max-score ans) )
+  )
+)
+
 (define (destination choices)
   (let ((places (do-add-places choices '())) (pts (do-assign-pts choices)))
     (let ((res (do-calc-result places pts)))
-      res
+      (let ((max-score (get-max-score res null)))
+        (get-ans res max-score '())
+      )
     )
   )
 )
