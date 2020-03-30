@@ -16,3 +16,9 @@
     )
   )
 )
+
+(define (neuralNet inputs)
+  (let ((zs ((neuralLayer '((0.1 0.3 0.4) (0.5 0.8 0.3) (0.7 0.6 0.6))) inputs)))
+    ( sigmoid (+ 0.5 (+ (* 0.3 (car zs)) (+ (* 0.7 (cadr zs)) (* 0.1 (caddr zs))))) )
+  )
+)
