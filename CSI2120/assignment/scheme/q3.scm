@@ -1,3 +1,4 @@
+; test data
 (define choices 
   '(
     ("marie" ("peru" "greece" "vietnam"))
@@ -7,6 +8,26 @@
     ("emma" ("greece" "peru" "vietnam"))
   )
 )
+
+(define places '("peru" "greece" "vietnam"))
+
+(define pts '(("peru" . 3)
+  ("greece" . 2)
+  ("vietnam" . 1)
+  ("greece" . 3)
+  ("peru" . 2)
+  ("vietnam" . 1)
+  ("vietnam" . 3)
+  ("peru" . 2)
+  ("greece" . 1)
+  ("peru" . 3)
+  ("vietnam" . 2)
+  ("greece" . 1)
+  ("greece" . 3)
+  ("peru" . 2)
+  ("vietnam" . 1))
+)
+; test data
 
 (define (add-places rank places)
   (cond
@@ -34,5 +55,28 @@
   (if (null? choices)
     '()
     (append (assign-pts (cadar choices) 3) (do-assign-pts (cdr choices)))
+  )
+)
+
+(define (calc-result place pts res)
+  (cond
+    ( (null? pts) res)
+    ( (equal? (caar pts) place) (calc-result place (cdr pts) (+ res (cdar pts))) )
+    ( else (calc-result place (cdr pts) res) )
+  )
+)
+
+(define (do-calc-result places pts)
+  (cond
+    ( (null? places) '() )
+    ( else (cons (cons (car places) (calc-result (car places) pts 0)) (do-calc-result (cdr places) pts)) )
+  )
+)
+
+(define (destination choices)
+  (let ((places (do-add-places choices '())) (pts (do-assign-pts choices)))
+    (let ((res (do-calc-result places pts)))
+      res
+    )
   )
 )
