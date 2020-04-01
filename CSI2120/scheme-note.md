@@ -4,6 +4,8 @@
 * [Keyword](#Keyword)
 * [Numerical](#Numerical)
 * [List](#List)
+* [File](#File)
+* [String](#String)
 * [Recursive Function](#Recursive-Function)
 
 ## Keyword
@@ -53,6 +55,8 @@
   `(cdr 'x)`: return everything in *x* EXCEPT FOR the first element. </br>
   `car` and `cdr` can be combined to use, e.g., `cdadr`.
 * `(list-ref <list> <index>)`: get the element of the list with index starting from 0.
+* `(list-update <list> <pos> <updater>)`: update the element with the index *pos* in the *list* </br>
+  updater: `add1`
 * append-list function
   ```scheme
   (define (append-list l1 l2)
@@ -99,6 +103,12 @@
     )
   )
   ```
+
+## File
+* `(file->sting <file_name>)`: read file to string, keep `\n`.
+
+## String
+* `(string-split <str> <sep>)`: split the *str* with *sep*.
 
 ## Recursive Function
 ```scheme
