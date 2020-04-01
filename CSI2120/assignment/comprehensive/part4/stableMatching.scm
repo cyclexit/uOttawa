@@ -122,9 +122,7 @@
       (emps-choices (choices-gen emps-pref))
       (match '())
     )
-    ; emps-choices ; test
-    ; emps-pref ; test
-    studs-pref ; test
+    (offer emps-choices '() emps-pref studs-pref)
   )
 )
 
