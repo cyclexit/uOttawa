@@ -1,3 +1,12 @@
+(require racket/trace) ; test
+
+; test data ;
+(define emps-choices '(("Thales" 1) ("Canada Post" 1) ("Cisco" 1)))
+
+(define emps-pref '(("Thales" "Olivia" "Jackson" "Sophia") ("Canada Post" "Sophia" "Jackson" "Olivia") ("Cisco" "Olivia" "Sophia" "Jackson")))
+
+(define studs-pref '(("Olivia" "Thales" "Canada Post" "Cisco") ("Jackson" "Thales" "Canada Post" "Cisco") ("Sophia" "Cisco" "Thales" "Canada Post")))
+
 ; input handler ;
 (define (list-gen l)
   (cond
@@ -42,6 +51,14 @@
   )
 )
 
+(define (update-match match stud new-emp)
+  (cond
+    ( (null? match) null ) ; actually will not happen...
+    ( (equal? (cadar match) stud) (cons (cons new-emp (list stud)) (cdr match)) )
+    ( else (cons (car match) (update-match (cdr match) stud new-emp)) )
+  )
+)
+
 ; calculation function ;
 (define (prefer stud studs-pref new-emp cur-emp)
   (cond
@@ -55,7 +72,8 @@
   (let ((stud (get-stud emp-choice emps-pref)))
     (cond
       ( (equal? (stud-match stud match) #f) (append match (list (cons (car emp-choice) (list stud)))) )
-      ( (equal? (pref stud studs-pref (car emp) (stud-match stud match)) #t) ) ; TODO
+      ( (equal? (prefer stud studs-pref (car emp-choice) (stud-match stud match)) #t) (update-match match stud (car emp-choice)) )
+      ( (equal? (prefer stud studs-pref (car emp-choice) (stud-match stud match)) #f) #f)
       ( else match )
     )
   )
@@ -64,13 +82,33 @@
 (define (offer emps-choices match emps-pref studs-pref)
   (let ((cur (car emps-choices)))
     (cond
-      ( (equal? (emp-match (car cur) match) #f) 
-        (offer
-          (append (cdr emps-choices) (list (cons (car cur) (list (+ 1 (cadr cur))))))
-          (evaluate cur match)
-          emps-pref
-          stud-pref
+      ( (equal? (emp-match (car cur) match) #f)
+        (cond
+          ( (equal? (evaluate cur match emps-pref studs-pref) #f) 
+            (offer
+              (cons (cons (caar emps-choices) (list (+ (cadar emps-choices) 1))) (cdr emps-choices))
+              match
+              emps-pref
+              studs-pref
+            )
+          )
+          ( else 
+            (offer
+              (append (cdr emps-choices) (list (cons (car cur) (list (+ 1 (cadr cur))))))
+              (evaluate cur match emps-pref studs-pref)
+              emps-pref
+              studs-pref
+            )
+          )
         )
+      )
+      ( (< (length match) (length emps-pref)) 
+        (offer
+          (append (cdr emps-choices) (list (car emps-choices)))
+          match
+          emps-pref
+          studs-pref
+        )      
       )
       ( else match )
     )
@@ -95,3 +133,8 @@
     (stableMatching emps-pref studs-pref)
   )
 )
+
+; (trace offer) ; test
+; (trace evaluate) ; test
+; (trace prefer) ; test
+; (trace update-match) ; test
