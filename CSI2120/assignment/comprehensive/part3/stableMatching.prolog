@@ -47,8 +47,15 @@ gen_match([E|Employers], [E-S|Match]) :-
   student(S),
   gen_match(Employers, Match).
 
+remove_duplicate([]).
+remove_duplicate([_-S|Match]) :-
+  pairs_values(Match, Values),
+  \+member(S, Values),
+  remove_duplicate(Match).
+
 % main function %
-stableMatching(L_employer_preference, L_student_preference, Match).
+% stableMatching(L_employer_preference, L_student_preference, Match).
+
 
 findStableMatch(EmployerFile, StudentFile) :-
   read_file(EmployerFile, L_employer_preference), 
@@ -56,5 +63,5 @@ findStableMatch(EmployerFile, StudentFile) :-
   get_employers(L_employer_preference, Employers),
   add_student(L_student_preference),
   gen_match(Employers, Match),
-  stableMatching(L_employer_preference, L_student_preference, Match).
+  remove_duplicate(Match),
   writeln(Match). % test 
