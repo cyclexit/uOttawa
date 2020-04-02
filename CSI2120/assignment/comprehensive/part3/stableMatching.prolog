@@ -59,11 +59,31 @@ find_pref([[O|_]|L], Obj, Pref) :-
   O \= Obj,
   find_pref(L, Obj, Pref). 
 
-% main function %
-stableMatching(_, _, []).
-stableMatching(L_employer_preference, L_student_preference, [E-S|Match]) :-
+find_matched_emp(S, [E-S|_], E).
+find_matched_emp(S, [_|Match], EM) :-
+  find_matched_emp(S, Match, EM).
+
+% calculation function %
+s_pref_cur(_, 0, _, _, _).
+s_pref_cur([S|EPref], Cnt, E, L_student_preference ,Match) :-
+  find_pref(L_student_preference, S, SPref),
+  find_matched_emp(S, Match, EM),
+  nth0(EIndex, SPref, E),
+  nth0(EMIndex, SPref, EM),
+  EMIndex < EIndex,
+  Cnt1 is Cnt - 1,
+  s_pref_cur(EPref, Cnt1, E, L_student_preference, Match).
+
+solve(_, _, _, []).
+solve(L_employer_preference, L_student_preference, Match, [E-S|MatchList]) :-
   find_pref(L_employer_preference, E, EPref),
-  find_pref(L_student_preference, S, SPref).
+  nth0(Cnt, EPref, S),
+  s_pref_cur(EPref, Cnt, E, L_student_preference, Match),
+  solve(L_employer_preference, L_student_preference, Match, MatchList).
+
+% main function %
+stableMatching(L_employer_preference, L_student_preference, Match) :-
+  solve(L_employer_preference, L_student_preference, Match, Match).
 
 findStableMatch(EmployerFile, StudentFile) :-
   read_file(EmployerFile, L_employer_preference), 
@@ -72,4 +92,5 @@ findStableMatch(EmployerFile, StudentFile) :-
   add_student(L_student_preference),
   gen_match(Employers, Match),
   remove_duplicate(Match),
+  stableMatching(L_employer_preference, L_student_preference, Match),
   writeln(Match). % test 
