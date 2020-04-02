@@ -13,15 +13,19 @@ read_stream(InStream, [List|L]) :-
 
 
 % assistant function %
-add_employer([]).
-add_employer([[E|_]|Employers]) :-
-  assert(employer(E)),
-  add_employer(Employers).
+get_employers([], []).
+get_employers([[E|_]|L_employer_preference], [E|Employers]) :-
+  get_employers(L_employer_preference, Employers).
 
 add_student([]).
-add_student([[S|_]|Students]) :-
+add_student([[S|_]|L_student_preference]) :-
   assert(student(S)),
-  add_student(Students).
+  add_student(L_student_preference).
+
+gen_match([], []).
+gen_match([E|Employers], [E-S|Match]) :-
+  student(S),
+  gen_match(Employers, Match).
 
 % main function %
 % stableMatching(L_employer_preference, L_student_preference, M).
@@ -29,8 +33,10 @@ add_student([[S|_]|Students]) :-
 findStableMatch(EmployerFile, StudentFile) :-
   read_file(EmployerFile, L_employer_preference),
   read_file(StudentFile, L_student_preference),
-  add_employer(L_employer_preference),
-  add_student(L_student_preference).
+  get_employers(L_employer_preference, Employers),
+  add_student(L_student_preference),
+  gen_match(Employers, Match),
+  writeln(Match). % test
   % add facts
   % generate match and then test.
   % stableMatching(L_employer_preference, L_student_preference, M).
