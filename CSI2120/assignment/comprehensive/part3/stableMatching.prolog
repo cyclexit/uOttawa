@@ -11,6 +11,26 @@ read_stream(InStream, [List|L]) :-
   split_string(Str, ",", "", List),
   read_stream(InStream, L).
 
+% output handler %
+output_file_name(Len, FileName) :-
+  number_string(Len, LenStr),
+  string_concat("matches_prolog_", LenStr, Str1),
+  string_concat(Str1, "x", Str2),
+  string_concat(Str2, LenStr, Str3),
+  string_concat(Str3, ".csv", FileName).
+
+write_match([], _).
+write_match([M|Match], Out) :-
+  write(Out, M),
+  write(Out, "\n"),
+  write_match(Match, Out).
+
+write_csv(Match) :-
+  length(Match, Len),
+  output_file_name(Len, FileName),
+  open(FileName, write, Out),
+  write_match(Match, Out),
+  close(Out).
 
 % assistant function %
 get_employers([], []).
@@ -28,17 +48,13 @@ gen_match([E|Employers], [E-S|Match]) :-
   gen_match(Employers, Match).
 
 % main function %
-% stableMatching(L_employer_preference, L_student_preference, M).
+stableMatching(L_employer_preference, L_student_preference, Match).
 
 findStableMatch(EmployerFile, StudentFile) :-
-  read_file(EmployerFile, L_employer_preference),
+  read_file(EmployerFile, L_employer_preference), 
   read_file(StudentFile, L_student_preference),
   get_employers(L_employer_preference, Employers),
   add_student(L_student_preference),
   gen_match(Employers, Match),
-  writeln(Match). % test
-  % add facts
-  % generate match and then test.
-  % stableMatching(L_employer_preference, L_student_preference, M).
-  % writeln(L_employer_preference), % test
-  % writeln(L_student_preference). % test
+  stableMatching(L_employer_preference, L_student_preference, Match).
+  writeln(Match). % test 
