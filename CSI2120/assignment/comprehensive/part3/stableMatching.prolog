@@ -20,8 +20,10 @@ output_file_name(Len, FileName) :-
   string_concat(Str3, ".csv", FileName).
 
 write_match([], _).
-write_match([M|Match], Out) :-
-  write(Out, M),
+write_match([E-S|Match], Out) :-
+  write(Out, E),
+  write(Out, ","),
+  write(Out, S),
   write(Out, "\n"),
   write_match(Match, Out).
 
@@ -88,4 +90,5 @@ findStableMatch(EmployerFile, StudentFile) :-
   add_student(L_student_preference),
   gen_match(Employers, [], Match),
   stableMatching(L_employer_preference, L_student_preference, Match),
-  writeln(Match). % test 
+  write_csv(Match).
+  % writeln(Match). % test 
