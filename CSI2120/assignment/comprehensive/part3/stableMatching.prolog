@@ -42,16 +42,12 @@ add_student([[S|_]|L_student_preference]) :-
   assert(student(S)),
   add_student(L_student_preference).
 
-gen_match([], []).
-gen_match([E|Employers], [E-S|Match]) :-
+gen_match([], Temp, Temp).
+gen_match([E|Employers], Temp, Match) :-
   student(S),
-  gen_match(Employers, Match).
-
-remove_duplicate([]).
-remove_duplicate([_-S|Match]) :-
-  pairs_values(Match, Values),
+  pairs_values(Temp, Values),
   \+member(S, Values),
-  remove_duplicate(Match).
+  gen_match(Employers, [E-S|Temp], Match).
 
 find_pref([[O|P]|_], Obj, P) :-
   O = Obj.
@@ -90,7 +86,6 @@ findStableMatch(EmployerFile, StudentFile) :-
   read_file(StudentFile, L_student_preference),
   get_employers(L_employer_preference, Employers),
   add_student(L_student_preference),
-  gen_match(Employers, Match),
-  remove_duplicate(Match),
+  gen_match(Employers, [], Match),
   stableMatching(L_employer_preference, L_student_preference, Match),
   writeln(Match). % test 
