@@ -26,6 +26,30 @@
   )
 )
 
+; output handler ;
+(define (gen-output-port len)
+  (let ((strlen (number->string len)))
+    (open-output-file 
+      (string-append "matches_scheme_" strlen "x" strlen ".csv")
+    )
+  )
+)
+
+(define (write-csv-line match out)
+  (display (car match) out)
+  (display "," out)
+  (display (cadr match) out)
+  (display "\n" out)
+  match ; to avoid ((void)) error
+)
+
+(define (write-csv matches out)
+  (cond
+    ( (null? matches) null )
+    ( else (cons (write-csv-line (car matches) out) (write-csv (cdr matches) out)) ) ; use cons to avoid ((void)) error
+  )
+)
+
 ; assistant function ;
 (define (emp-match emp match) 
   (cond
@@ -127,8 +151,15 @@
 )
 
 (define (findStableMatch emp-file stud-file)
-  (let ((emps-pref (read-csv emp-file)) (studs-pref (read-csv stud-file)))
-    (stableMatching emps-pref studs-pref)
+  (let*
+    (
+      (emps-pref (read-csv emp-file)) (studs-pref (read-csv stud-file))
+      (matches (stableMatching emps-pref studs-pref))
+      (out (gen-output-port (length emps-pref)))
+    )
+    (write-csv matches out)
+    (close-output-port out)
+    matches
   )
 )
 
@@ -136,3 +167,4 @@
 ; (trace evaluate) ; test
 ; (trace prefer) ; test
 ; (trace update-match) ; test
+; (trace write-csv) ;test
