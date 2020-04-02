@@ -53,9 +53,17 @@ remove_duplicate([_-S|Match]) :-
   \+member(S, Values),
   remove_duplicate(Match).
 
-% main function %
-% stableMatching(L_employer_preference, L_student_preference, Match).
+find_pref([[O|P]|_], Obj, P) :-
+  O = Obj.
+find_pref([[O|_]|L], Obj, Pref) :-
+  O \= Obj,
+  find_pref(L, Obj, Pref). 
 
+% main function %
+stableMatching(_, _, []).
+stableMatching(L_employer_preference, L_student_preference, [E-S|Match]) :-
+  find_pref(L_employer_preference, E, EPref),
+  find_pref(L_student_preference, S, SPref).
 
 findStableMatch(EmployerFile, StudentFile) :-
   read_file(EmployerFile, L_employer_preference), 
