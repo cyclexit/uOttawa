@@ -1,3 +1,5 @@
+:- set_prolog_stack(global, limit(1 000 000 000)).
+
 % input handler %
 read_file(File, Res) :-
   open(File, read, InStream),
@@ -30,7 +32,7 @@ write_match([E-S|Match], Out) :-
 write_csv(Match) :-
   length(Match, Len),
   output_file_name(Len, FileName),
-  open(FileName, write, Out),
+  open(FileName, append, Out),
   write_match(Match, Out),
   close(Out).
 
