@@ -12,6 +12,8 @@
   * [List predicates](#List-predicates)
 * [Other stuff](#Other-stuff)
 
+***
+
 ## Syntax
 * list: `[a1, a2, ..., an]`
 * pair: `key-val`</br>
@@ -37,12 +39,12 @@
   `subtract(+Set, +Delete, -Result)`: *Result* is the difference of *Set* and *Delete*.
 * `max_member(-Max, +List)`: get the max member in the list. </br>
   `min_member(-Min, +List)`: get the min member in the list. 
-
 ### Collect solutions
 * `bagof(+Template, :Goal, -Bag)`: Create *Bag* which satifies the *Goal* with *Template*. Allow backtracking. </br>
+  *Template* is a variable, and *Goal* is a predicate with parameters. </br>
   `+Var^Goal`: not to bind *Var* in *Goal*.
-* `setof(+Template, +Goal, -Set)`: Equivalent to `bagof/3`, but sorts the result using `sort/2` to get a sorted list of alternatives without duplicates. The order of lists is also sorted by `sort/2`.
 * `findall(+Template, :Goal, -Bag)`: Do not bind any variable.
+* `setof(+Template, +Goal, -Set)`: Equivalent to `bagof/3`, but sorts the result using `sort/2` to get a sorted list of alternatives without duplicates. The order of lists is also sorted by `sort/2`.
 
 ## Prolog Environment
 ### Load file
