@@ -23,4 +23,4 @@ niceMonth(Month, Year) :-
   difference(Observed, Normal, Diff),
   length(Observed, Len),
   positive(Diff, Num),
-  Num > Len / 2.
+  Num >= Len / 2.
