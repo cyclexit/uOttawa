@@ -1,0 +1,7 @@
+# test file
+test.*
+
+# binary
+*.out
+*.cmi
+*.cmo
