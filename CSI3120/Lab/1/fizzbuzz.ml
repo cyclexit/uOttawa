@@ -8,6 +8,25 @@ Write a program that prints the numbers from 0 to 100, one per line.
 * For numbers which are multiples of both three and five print "FizzBuzz".
 *)
 
+let fizzBuzz (i : int) = 
+    if i mod 15 = 0 then 
+        print_string ("FizzBuzz")
+    else if (i mod 3) = 0 then
+        print_string ("Fizz")
+    else if (i mod 5) = 0 then
+        print_string ("Buzz")
+    else 
+        print_string (string_of_int i);
+    print_newline ()
+
+let rec doFizzBuzz (i : int) = 
+    (fizzBuzz i);
+    if i > 1 then
+        doFizzBuzz (i - 1)
+
+let _ =
+    doFizzBuzz 100
+
 (* Useful printing functions (what do they do? what type do they have? :
 
   print_endline
