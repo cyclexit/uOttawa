@@ -49,8 +49,7 @@ let volume_cylinder (r:float) (h:float) : float =
 (* 1f. Determine if an integer is even. Again use the Pervasives library. *)
 
 let even (x: int) : bool =
-    let m = (abs x) mod 2 in
-        m = 0
+    x mod 2 = 0
 
 
 (* 1g. Write odd in terms of even *)
