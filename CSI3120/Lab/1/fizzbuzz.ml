@@ -21,11 +21,11 @@ let fizzBuzz (i : int) =
 
 let rec doFizzBuzz (i : int) = 
     (fizzBuzz i);
-    if i > 1 then
-        doFizzBuzz (i - 1)
+    if i < 100 then
+        doFizzBuzz (i + 1)
 
 let _ =
-    doFizzBuzz 100
+    doFizzBuzz 0
 
 (* Useful printing functions (what do they do? what type do they have? :
 
