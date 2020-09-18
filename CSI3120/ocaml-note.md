@@ -9,3 +9,17 @@
         ...
     ```
 * output: `print_int`, `print_string`, `print_newline`
+
+## String
+concat: `^` operator
+
+## Type Cast
+function form: A_of_B </br>
+Example: string_of_int, float_of_int
+
+# Arithemetic
+`+`, `-`, `*`, `/`: integer operator
+`+.`, `-.`, `*.`, `/.`: float operator
+
+## Comparison
+`=` is structural equality and `==` is physical equality. Beware: `<>` is structural not-equals while `!=` is physical not-equals.
