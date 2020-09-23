@@ -1,7 +1,7 @@
 (*** CSI 3120 Assignment 1 ***)
-(*** YOUR NAME HERE ***)
-(*** YOUR STUDENT ID HERE ***)
-(*** OCAML VERSION USED FOR THIS ASSIGNMENT HERE ***)
+(*** Hongyi Lin ***)
+(*** 300053082 ***)
+(*** 4.08.1 ***)
 (* If you use the version available from the lab machines via VCL, the
    version is 4.05.0 ***)
 
@@ -21,25 +21,25 @@ let undefined : unit -> 'a = fun () -> failwith "undefined"
    example, Ctrl+c and then Ctrl+e in Emacs with Tuareg mode *)
                                      
 (* 1a. Create a string with your first name *)
-let name : string = undefined ()
+let name : string = "Hongyi"
 
 (* 1b. Use a string operator on the string from 1.a. to create a
    string that contains both your first and last names. *)
-let fullname : string = undefined ()
+let fullname : string = name ^ " Lin"
 
 (* 1c. Create a string containing your email address *)
-let email : string = undefined ()
+let email : string = "hlin087@uottawa.ca"
 
 (* 1d. Replace (Other "...") in class_year with the appropriate item
    below *)
 (* ie: replace (Other "...") with SecondYear or ThirdYear for example *)
 type year = FirstYear | SecondYear | ThirdYear | FourthYear | Other of string
 
-let class_year : year = Other "..."
+let class_year : year = ThirdYear
 
 (* 1e. Replace the .... with one thing you hope to learn about in
    this course *)
-let learning : string = "I hope to learn ...."
+let learning : string = "I hope to learn functional programming."
 
 let print = Printf.printf
 
