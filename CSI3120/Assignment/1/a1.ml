@@ -102,28 +102,28 @@ let rec prob2d (x : float) (y: int) : (int -> char) =
    with the expression. *)
 
 (* Problem 3a. *)
-(* 
-let prob3a = let x = 4 in
-             let y = 3.9 in
-             (2 * x) + (3 * y)
- *)
 
-let exp3a : string = ""
+let prob3a = let x = 4 in
+             let y = 3 in
+             (2 * x) + (3 * y)
+
+
+let exp3a : string = "There will be a type error in (3 * y), since y = 3.9 has type float but the expression is expected of type int."
 
 (* Problem 3b. Hint: look at the section on "Core Expression Syntax"
    in the course notes (the last section of the first lecture about
    OCaml) to help determine one of the problems. *)
-(* 
+ 
 let prob3b : int = 
   let rec exp x k =
   if x < 0 || k < 0 then 0
   else if k = 0 then 1
-  else x * exp x k-1
+  else x * exp x (k-1)
   in
   exp 2 8;;
- *)
 
-let exp3b1 : string = ""
+
+let exp3b1 : string = "The function exp will have an infinite recursion, since the value of k never decreases in the recursion call."
 
 let exp3b2 : string = ""
 
@@ -132,9 +132,13 @@ let exp3b2 : string = ""
 (* Consider the following incomplete program *)
 
 (*
-let f (a:??) (b:??) : ?? =
+let f (a:string) (b:float) : bool =
+   if a = "yes" && b = 3.14 then
+      true
+   else
+      false
 
-let rec prob4 (x:??) (y:??) (z:??) : int =
+let rec prob4 (x:bool) (y:bool) (z:string) : int =
   prob4 (f z 3.14) (x || not y) (if x then "yes" else "no")
  *)
 
@@ -142,7 +146,7 @@ let rec prob4 (x:??) (y:??) (z:??) : int =
    write a function f that has the correct type signature. Explain in
    exp4 a problem that remains with the function prob4 *)
 
-let exp4 : string = ""
+let exp4 : string = "The function prob4 will have an infinite recursion, since it does not have a base case so that the function can return"
 
 
 (* Problem 5 *)
@@ -152,3 +156,11 @@ let exp4 : string = ""
    checking whether or not the first and last letters are the same at
    each step. Hint: the String module used in Lab 1 will be useful here. *)
 
+let rec prob5 (str : string) : bool = 
+   let len = String.length str in
+      if len = 0 || len = 1 then
+         true
+      else if str.[0] = str.[len - 1] then
+         prob5 (String.sub str 1 (len - 2))
+      else
+         false
