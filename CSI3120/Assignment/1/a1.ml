@@ -71,28 +71,27 @@ let print_survey () =
    do is fill in the ???s to make them type check. *)
 
 (* Problem 2a. *)
-(*
-let prob2a : ???  = let add3 x = 3 + x in
+
+let prob2a : int * float = let add3 x = 3 + x in
                     let add3' x = 3. +. x in
                     (add3 7, add3' 7.0)
- *)
 
 (* Problem 2b. *)
-(*
-let prob2b : ??? = string_of_int (String.index "abcd" 'c')
- *)
+
+let prob2b : string = string_of_int (String.index "abcd" 'c')
+
 
 (* Problem 2c. *)
-(*
-let rec prob2c (x : ???) : ??? =
+
+let rec prob2c (x : int) : char =
   if x = int_of_string "hello" then prob2c x else 'h'
- *)
+
 
 (* Problem 2d. *)
-(*
-let rec prob2d (x : ???) (y: ???) : ??? =
+
+let rec prob2d (x : float) (y: int) : (int -> char) =
   if x = float_of_int y then prob2c else prob2d x y
- *)
+
 
 
 (* Problem 3 - Explain why each of 3a and 3b will not compile.  Note
