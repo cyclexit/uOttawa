@@ -116,7 +116,7 @@ let exp3a : string = "There will be a type error in (3 * y), since y = 3.9 has t
  
 let prob3b : int = 
   let rec exp x k =
-  if x < 0 || k < 0 then 0
+  if k < 0 then 0
   else if k = 0 then 1
   else x * exp x (k-1)
   in
@@ -125,7 +125,7 @@ let prob3b : int =
 
 let exp3b1 : string = "The function exp will have an infinite recursion, since the value of k never decreases in the recursion call."
 
-let exp3b2 : string = ""
+let exp3b2 : string = "The results cannot be calculated correctly when x is a negative integer, since it directly returns 0."
 
 
 (* Problem 4 *)
