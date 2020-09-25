@@ -23,6 +23,11 @@ let print_employee_info t =
         print_string("Married: " ^ Bool.to_string(marriage));
         print_newline()
 
+let _ =
+    print_string("question 1:\n");
+    let jack : employee = ("Jack", 35, true) in
+        print_employee_info jack
+
 
 (* 2. Reimplement the OCaml standard functions List.length and List.rev.
    This question is optional, but is good practice for the next one. *)
@@ -42,6 +47,10 @@ let rec rmk (k:int) (l:'a list) : 'a list =
     | [] -> []
     | elem :: tl -> if k = 0 then tl else elem :: rmk (k-1) tl
 
+let _ =
+    print_string("question 3:\n");
+    rmk 2 ["to" ; "be" ; "or" ; "not" ; "to" ; "be"]
+
 (* 4. Write a function that returns the final element of a list, 
    if it exists, and None otherwise *)
 
@@ -51,6 +60,10 @@ let final (l: 'a list) : 'a option =
         None
     else
         Some (List.nth l (len - 1))
+
+let _ = 
+    print_string("question 4:\n");
+    final [1;2;3;4;5]
 
 (* 5. Write a function to return the smaller of two int options, or None
  * if both are None. If exactly one argument is None, return the other. Do 
@@ -63,12 +76,20 @@ let min_option (x: int option) (y: int option) : int option =
     | (None, b) -> b
     | (a, b) -> min a b
 
+let _ = 
+    print_string("question 5:\n");
+    min_option (Some 1) None
+
 let max_option (x: int option) (y: int option) : int option = 
     match (x, y) with
     | (None, None) -> None
     | (a, None) -> a
     | (None, b) -> b
     | (a, b) -> max a b
+
+let _ =
+    print_string("question 5:\n");
+    max_option (Some 1) (Some 2)
 
 (* 6. Write a function that returns the integer buried in the argument
  * or None otherwise *)  
@@ -92,12 +113,20 @@ let and_option (x:bool option) (y: bool option) : bool option =
     | (None, b) -> b
     | (Some a, Some b) -> Some (a && b)
 
+let _ =
+    print_string("question 7:\n");
+    and_option (Some false) (Some true)
+
 let or_option (x:bool option) (y: bool option) : bool option = 
     match (x, y) with
     | (None, None) -> None
     | (a, None) -> a
     | (None, b) -> b
     | (Some a, Some b) -> Some (a || b)
+
+let _ =
+    print_string("question 7:\n");
+    or_option (Some true) (Some false)
 
 (* What's the pattern? How can we factor out similar code? *)
 
