@@ -103,6 +103,10 @@ let get_option (x: int option option option option) : int option =
             | None -> None
             | Some c -> c
 
+let _ =
+    print_string("question 6:\n");
+    get_option (Some (Some (Some (Some 7))))
+
 (* 7. Write a function to return the boolean AND/OR of two bool options,
  * or None if both are None. If exactly one is None, return the other. *)
 
