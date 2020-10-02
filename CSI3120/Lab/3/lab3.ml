@@ -114,8 +114,7 @@ let q4b_result = times_x 10 [1; 2; 3]
 (* 4c. Rewrite times_3 in terms of times_x.  This should take very
    little code. *)
 
-let times_3_shorter (lst: int list): int list =
-    times_x 3 lst
+let times_3_shorter = times_x 3
 
 let q4c_result = times_3_shorter [1; 2; 3]
 
