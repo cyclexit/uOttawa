@@ -1,7 +1,7 @@
 (*** CSI 3120 Assignment 2 ***)
-(*** YOUR NAME HERE ***)
-(*** YOUR STUDENT ID HERE ***)
-(*** OCAML VERSION USED FOR THIS ASSIGNMENT HERE ***)
+(*** Hongyi Lin ***)
+(*** 300053082 ***)
+(*** 4.08.1 ***)
 (* If you use the version available from the lab machines via VCL, the
    version is 4.05.0 ***)
 
@@ -21,10 +21,9 @@
    (Do not change the left-hand-side.)
 *)
 
-(*
-let exp1a : string = ""
-let prob1a : (string * int * char) list = ["7"; 8; '9'];;
-*)
+let exp1a : string = "The list on the right-hand-side has elements with different types, but the left-hand-side specifies that the list should only have (string * int * char) tuples as elements."
+let prob1a : (string * int * char) list = [("7", 8, '9')];;
+
 
 (* Problem 1b - Give your explanation in exp1b and then fix the type
    of variable prob1b to match the type of the expression on the
@@ -32,20 +31,18 @@ let prob1a : (string * int * char) list = ["7"; 8; '9'];;
    right-hand-side.)
  *)
 
-(*
-let exp1b : string = ""
-let prob1b : (string * int) list = (["apples";"bananas";"carrots"],[3;2;1]);;
-*)
+let exp1b : string = "The right-hand-side is a tuple of a string list and an int list, but the left-hand-side has the type (string * int) list which means a list with (string * int) tuples."
+let prob1b : (string list * int list) = (["apples";"bananas";"carrots"],[3;2;1]);;
 
 (* Problem 1c - Give your explanation in exp1c and then fix the
    right-hand-side of the expression to match the variable prob1c's
    listed type.  (Do not change the left-hand-side.)
  *)
 
-(*
-let exp1c : string = ""
-let prob1c : string list list = [["2"; "b"]; ["or"; "not"; "2b"]] :: [["that is"; "the"] :: ["question"]]
-*)
+
+let exp1c : string = "The first half and the second half both have the type (string string list), so this does not the obey the typing rule for the list. Besides, in the second half, two string lists are connected by ::, and this also does not obey the typing rule."
+let prob1c : string list list = ["2"; "b"]::["or"; "not"; "2b"]::[["that is"; "the"]; ["question"]]
+
 
 (*************)
 (* PROBLEM 2 *)
