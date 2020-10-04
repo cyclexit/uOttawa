@@ -74,33 +74,30 @@ let prob1c : string list list = ["2"; "b"]::["or"; "not"; "2b"]::[["that is"; "t
  *)
 
 (* Problem 2a *)
-(*
-let prob2a : (int * ((string * float) option list)) list =
-*)
 
+let prob2a : (int * ((string * float) option list)) list = 
+    [(100, [Some ("HaHa", 20.0); None]); (20, [None; Some ("ss", 11.1)])]
 
 (* Problem 2b *)
 (* a pet is a (name, animal_type, age option) tuple *)
 
 type pet = string * string * int option
 
-(*
 let prob2b : string * pet list option =
-*)
+    ("my pets", Some [("Tom", "Cat", Some 2); ("Jerry", "Mouse", Some 3)])
 
 
 (* Problem 2c *)
 (* Fill in a valid function call to f to make prob2c typecheck *)
 
-(*
 let prob2c =
   let rec f arg =
     match arg with
     | (a, b) :: xs -> if a then (b ^ (f xs)) else f xs
     | _ -> ""
-  in ...
+  in
+    f [(true, "This "); (true, "is "); (false, "not"); (true, " possible!")]
 
-*)
 
 (*************)
 (* PROBLEM 3 *)
