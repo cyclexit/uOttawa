@@ -115,15 +115,40 @@ let prob2c =
    text_filter ['a';'m';'z'] ['1';'a';'2';'m';'3';'z'] = true
    text_filter ['a';'m';'z'] ['1';'a';'3';'z'] = false
    text_filter ['a';'m';'z'] ['1';'z';'2';'m';'3';'a'] = false
+ *)
 
 let rec text_filter (xs:char list) (ys:char list) : bool =
- *)
+    match (xs, ys) with
+    | (x::xtl, y::ytl) ->
+        if x = y then
+            true && (text_filter xtl ytl)
+        else
+            text_filter xs ytl
+    | ([], _::_) -> true
+    | ([], []) -> true
+    | (_::_, []) -> false
 
 (* Problem 3b. Rewrite the function above so that is is polymorphic,
    i.e., it should work on lists whose elements are any types.  Give
    at least one test case (call your function at least once) with a
-   type that is different from chars. *)
+   type that is different from chars. 
+   
+    any_filter [1;2;3] [1;7;8;9;2;4;5;6;3];; => true
+    any_filter ["hello"; "world"] ["world"; "foo"; "bar"; "hello"];; => false
+    any_filter [[1]; [2]] [[1]; [3]; [2]];; => true
+    any_filter [true; false] [false; false; true; false];; => true
+ *)
 
+let rec any_filter (xs:'a list) (ys:'a list) : bool = 
+    match (xs, ys) with
+    | (x::xtl, y::ytl) ->
+        if x = y then
+            true && (any_filter xtl ytl)
+        else
+            any_filter xs ytl
+    | ([], _::_) -> true
+    | ([], []) -> true
+    | (_::_, []) -> false
 
 (*************)
 (* PROBLEM 4 *)
