@@ -162,3 +162,15 @@ let rec any_filter (xs:'a list) (ys:'a list) : bool =
 
 type whole = One | Succ of whole
 
+let rec int_to_whole (x:int) : whole option =
+    if x <= 0 then
+        None
+    else
+        let rec to_whole (num:int) : whole = 
+            if num = 1 then
+                One
+            else
+                Succ (to_whole (num - 1))
+        in
+            Some (to_whole x)
+        
