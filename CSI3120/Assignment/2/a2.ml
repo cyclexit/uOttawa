@@ -150,6 +150,11 @@ let rec any_filter (xs:'a list) (ys:'a list) : bool =
     | ([], []) -> true
     | (_::_, []) -> false
 
+let q3b_test1 = any_filter [1;2;3] [1;7;8;9;2;4;5;6;3]
+let q3b_test2 = any_filter [[1]; [2]] [[1]; [3]; [2]]
+let q3b_test3 = any_filter [true; false] [false; false; true; false]
+let q3b_test4 = any_filter [3.1; 1.1; 2.1] [1.1; 2.1; 3.1]
+
 (*************)
 (* PROBLEM 4 *)
 (*************)
