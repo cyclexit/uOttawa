@@ -4,6 +4,7 @@
 1. Type rules:
     * `[]` may have any list type `t list`
     * if `e1:t` and `e2:t` then `(e1::e2):t list`
+2. `@` operator: connect two lists
 
 ## Type Cast
 function form: A_of_B </br>
