@@ -198,14 +198,28 @@ module type DICTIONARY =
    complete the implementation of the module below. Use a sorted list
    for the implementation of the dictionary. *)
 
-(* module SortedAssocList : DICTIONARY =
+module SortedAssocList : DICTIONARY =
   struct
+   (* in ascending order *)
     type key = string
     type 'a dict = (key * 'a) list ref
 
-    let make ...
+    let make () = ref []
 
-    let insert ...
+    let insert (d:'a dict) (k:key) (v:'a) =
+      let rec aux (l:(key * 'a) list) (k:key) (v:'a) : (key * 'a) list =
+         match l with
+         | [] -> (k, v)::l
+         | (k', v')::tl -> (
+            if k > k' then
+               (k', v')::(aux tl k v)
+            else if k = k' then
+               (k, v)::tl
+            else
+               (k, v)::(k', v')::tl
+         )
+      in
+         d := aux (!d) k v
 
     let lookup (d : 'a dict) (k : key) : 'a option =
       let rec aux (l:(key * 'a) list) : 'a option =
@@ -226,7 +240,7 @@ let _ = SortedAssocList.lookup d "Sam"
 let _ = SortedAssocList.lookup d "Eric"
 let _ = SortedAssocList.lookup d "Ada"
 let _ = SortedAssocList.lookup d "Christine"
-*)
+
 
 (* Question 7: References *)
 
