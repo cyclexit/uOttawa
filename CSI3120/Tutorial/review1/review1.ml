@@ -269,3 +269,11 @@ let b' = match point1 with
 (* What are the values of a, b, c, a', and b'? Add a
    comment with your answer. To test your understanding,
    figure this one out without executing the code. *)
+
+(*
+a = 17
+b = (17, 4)
+c = (42, 6)
+a' = 17
+b' = (42, 4)
+*)
