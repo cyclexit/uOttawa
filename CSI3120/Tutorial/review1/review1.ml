@@ -136,12 +136,18 @@ let q5a = q5_fun (New_const2 (New_const2 (New_const2 (New_const1,3,true),7,false
 
 (* Question 5a. What is the value of q5a? Add a comment with your
    answer. *)
+
+(* The value of q5a is [5; 7; 3] *)
+
 (* Question 5b. What is the type of q5_fun? Add a comment with your
    answer. *)
+
+(* The type of q5_fun is ('a, 'b) newtype -> 'a list. *)
+
 (* Question 5c. What does q5_fun do? Replace the empty string below
    with your answer. *)
 
-let answer5c : string = ""
+let answer5c : string = "q5_fun collects the first elements of New_const2 to form a list."
                       
 (* Question 5d. Write a function that takes an input of type
    "(int,float) newtype" and returns a pair of type "int * float"
@@ -151,10 +157,21 @@ let answer5c : string = ""
    structure.
  *)
 
+let rec q5d_fun (xs:(int, float) newtype) : int * float = 
+   match xs with
+   | New_const1 -> (0, 0.0)
+   | New_const2 (xs',xa,xb) ->
+      let (xa', xb') = q5d_fun xs' in
+         (xa + xa', xb +. xb')
+
+let test_q5d_fun = q5d_fun (New_const2 (New_const2 (New_const2 (New_const1, 3, 3.0), 7, 2.0),5, 1.0))
+
 (* Question 5e. Write an expression of type
    "(int,float) newtype" with 3 integers and 3 floats
    that can be used as input to the function from
    Question 5d. *)
+
+let q5d_fun_input = (New_const2 (New_const2 (New_const2 (New_const1, 3, 3.0), 7, 2.0),5, 1.0))
 
 (* Question 6 Imperative Abstract Data Types *)
 
