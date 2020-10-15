@@ -61,9 +61,11 @@ let rec fun2 x n =
 (* Question 2a. What does the fun2 function do? Replace the empty
    string below with your answer. *)
 
-let answer2a : string = ""
+let answer2a : string = "Construct a list with n elements with the value x."
 
 (* Question 2b. What is the type of fun2? Add a comment with your answer *)
+
+(* 'a -> int -> 'a list *)
 
 (* Question 2c. What are the types and values of a2, b2, c2, and d2
    below? Add a comment with your answers. *)
@@ -72,6 +74,13 @@ let a2 = fun2 true 4
 let b2 = fun2 add 2
 let c2 = fun2 (add 3) 2
 let d2 = fun2 (fun2 false 3) 2
+
+(*
+a2: bool list
+b2: (int->int->int) list
+c2: (int->int) list
+d2: bool list list
+*)
 
 (* Question 2d. What are the types of e2, f2, g2, h2, i2, j2 below.
    Add a comment with your answers? *)
@@ -83,10 +92,18 @@ let h2 = fun2 4.3
 let i2 = fun x -> x < 5
 let j2 = [add;mult]
 
+(*
+e2: int * bool
+f2: (int * bool) list
+g2: (int list) * (bool list)
+h2: int -> float list
+i2: int -> bool
+j2: (int->int->int) list
+*)
+
 (* Question 3. Parsing and Precedence
    (All parts of Question 3 can be answered on a separate piece
    of paper.) *)
-
 
 
 (* Question 4: Anonymous Functions *)
