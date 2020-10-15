@@ -119,6 +119,8 @@ let rec guess (f:int -> int -> int) (l:int list) : int option =
 
 let x4 = guess (fun x -> fun y -> (x * x) + y) [2;3;5]
 
+(*The value of x4 is Some 54*)
+
 (* Question 5: More Inductive Data Types *)
 
 type ('a,'b) newtype =
