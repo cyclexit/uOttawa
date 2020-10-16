@@ -15,7 +15,7 @@ end
 
 (* An implementation of the RANGE datatype with int as range type and
    pairs representing a range *)
-  module LoHiPairRange : RANGE with type e = int =
+module LoHiPairRange : RANGE with type e = int =
 struct
   type e = int
   type t = e * e
@@ -83,7 +83,12 @@ struct
   let smult (x:t) (i:e) : t =
     match (minmax x) with
     | None -> []
-    | Some (lx, hx) -> build (lx * i) (hx * i)
+    | Some (lx, hx) -> (
+      if i >= 0 then
+        build (lx * i) (hx * i)
+      else
+        build (hx * i) (lx * i)
+    )
   
   let bridge (x:t) (y:t) : t =
     match ((minmax x), (minmax y)) with
@@ -110,7 +115,11 @@ struct
     | (None, None) -> None
     | (Some (_, _), None) -> None
     | (None, Some (_, _)) -> None
-    | (Some (lx, hx), Some (ly, hy)) -> Some (hx < ly)
+    | (Some (lx, hx), Some (ly, hy)) -> (
+      if hx < ly then Some true
+      else if hy < lx then Some false
+      else None
+    )
 
 end
 
@@ -142,11 +151,127 @@ let rg_rless_rg2 = ListRange.rless rg rg2
 let rg_rless_rg3 = ListRange.rless rg rg3
 let rg_rless_rg4 = ListRange.rless rg rg4
 
-(* Exercise 2: Design an imperative version of RANGE.  Do so by
-   copying range.mli here and changing the types as necessary.  And
+(* Exercise 2: Design an imperative version of RANGE. Do so by
+   copying range.mli here and changing the types as necessary. And
    then copy the implementation of LoHiPairRange and modify the code
-   as necessary.  All the operations should remain the same as in the
-   functional version.  The singleton and range operations should each
-   create a new range.  The sadd and smult operations should modify
+   as necessary. All the operations should remain the same as in the
+   functional version. The singleton and range operations should each
+   create a new range. The sadd and smult operations should modify
    existing ranges. Consider the design choices and design your own
    version of bridge. *)
+
+module type IMP_RANGE =
+sig
+  (* types *)
+  (* RANGE type *)
+  type t
+  (* element type *)
+  type e
+    
+  (* constructors *)
+  (* construct a one-item range *)
+  val singleton : e -> t
+  (* construct a range with two endpoints, inclusive *)
+  val range : e -> e -> t
+
+  (* modifiers *)
+  (* scalar add range, e.g. if r is a range from -4 through 6, 
+     sadd r 1 makes r become a range from  -3 through 7. 
+     This operation does not change the size of a range. *)
+  val sadd : t -> e -> unit
+
+  (* scalar multiply range, e.g. if r is a range from 2 through 4,
+     smult r 3 makes r become a range from 6 through 12. 
+     This operation may change the size of a range. *)                        
+  val smult : t -> e -> unit
+
+  (* span both given ranges, e.g.
+     if given a range from -4 through 6 and a range from 10 through 12, 
+     span both ranges to be from -4 through 12. *)
+  val bridge : t -> t -> unit
+
+  (* observers *)
+  (* how many elements are in the range? *)
+  val size : t -> int
+
+  (* does t contain e? *)
+  val contains : t -> e -> bool
+  
+  (* is an arbitrary element of the first range 
+      less than an arbitrary element of the second range?
+     if the ranges overlap, return None, because 
+      answers differ depending on the element chosen
+     otherwise return whether the first range's max < second range's min
+   *)
+  val rless : t -> t -> bool option
+      
+end
+
+module IMP_LoHiPairRange : IMP_RANGE with type e = int =
+struct
+  type e = int
+  type t = (e * e) ref
+
+  (* constructors *)
+  let singleton (i:e) : t = ref (i,i)
+  let range (i:e) (j:e) : t = ref ((min i j), (max i j))
+  
+  (* modifiers *)
+  let sadd (x:t) (i:e) = 
+    let (lo, hi) = (!x) in 
+      x := (lo+i, hi+i)
+  
+  let smult (x:t) (i:e) =
+    let (lo, hi) = (!x) in
+      if i >= 0 then 
+        x := (lo*i, hi*i)
+      else 
+        x := (hi*i, lo*i)
+
+  let bridge (x:t) (y:t) =
+    let (lx, hx) = (!x) in
+    let (ly, hy) = (!y) in
+      x := ((min lx ly), (max hx hy))
+  
+  (* observers *)
+  let size (x:t) : int =
+    let (lo,hi) = (!x) in
+      hi - lo - (-1)
+  let contains (x:t) (i:e) : bool =
+    let (lo,hi) = (!x) in
+      (lo <= i) && (i <= hi)
+  let rless (x:t) (y:t) : bool option =
+    let (lx, hx) = (!x) in
+    let (ly, hy) = (!y) in
+      if hx < ly then 
+        Some true
+      else if hy < lx then 
+        Some false
+      else
+        None
+end
+
+(* Exercise 2 Test Cases *)
+
+let irg = IMP_LoHiPairRange.singleton 10
+let irg_size = IMP_LoHiPairRange.size irg
+let irg_contains_10 = IMP_LoHiPairRange.contains irg 10;;
+IMP_LoHiPairRange.sadd irg 1
+let irg_contains_10' = IMP_LoHiPairRange.contains irg 10
+let irg_contains_11 = IMP_LoHiPairRange.contains irg 11
+
+let irg1 = IMP_LoHiPairRange.range 3 6
+let irg1_size = IMP_LoHiPairRange.size irg1
+let irg1_contains_2 = IMP_LoHiPairRange.contains irg1 2
+let irg1_contains_6 = IMP_LoHiPairRange.contains irg1 6
+let irg1_rless_irg = IMP_LoHiPairRange.rless irg1 irg;;
+IMP_LoHiPairRange.smult irg1 3
+let irg1_contains_2' = IMP_LoHiPairRange.contains irg1 2
+let irg1_contains_6' = IMP_LoHiPairRange.contains irg1 6
+let irg1_rless_irg' = IMP_LoHiPairRange.rless irg1 irg;;
+
+IMP_LoHiPairRange.sadd irg (-10)
+let irg_contains_1 = IMP_LoHiPairRange.contains irg 1;;
+IMP_LoHiPairRange.bridge irg irg1
+let irg_contains_1' = IMP_LoHiPairRange.contains irg 1
+let irg_size' = IMP_LoHiPairRange.size irg
