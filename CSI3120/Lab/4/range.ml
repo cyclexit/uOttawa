@@ -70,18 +70,77 @@ struct
     if i = j then [j]
     else i :: build (i+1) j
   
+  (* interfacce functions *)
   let singleton (i:e) : t = [i]
   let range (i:e) (j:e) : t = build (min i j) (max i j)
+  
   (* TODO Exercise 1: Replace all the code below with correct implementations of the operations. *)
-  let sadd (x:t) (i:e) : t = x
-  let smult (x:t) (i:e) : t = x
-  let bridge (x:t) (y:t) : t = x
-  let size (x:t) : int = 0
-  let contains (x:t) (i:e) : bool = false
-  let rless (x:t) (y:t) : bool option = None
+  let sadd (x:t) (i:e) : t =
+    match (minmax x) with
+    | None -> []
+    | Some (lx, hx) -> build (lx + i) (hx + i)
+
+  let smult (x:t) (i:e) : t =
+    match (minmax x) with
+    | None -> []
+    | Some (lx, hx) -> build (lx * i) (hx * i)
+  
+  let bridge (x:t) (y:t) : t =
+    match ((minmax x), (minmax y)) with
+    | (None, None) -> []
+    | (Some (_, _), None) -> x
+    | (None, Some (_, _)) -> y
+    | (Some (lx, hx), Some (ly, hy)) -> build (min lx ly) (max hx hy)
+  
+  let size (x:t) : int = 
+    let rec aux_size (x:t) (i:int) : int =
+      match x with
+      | [] -> i
+      | _::tl -> aux_size tl (i + 1)
+    in
+      aux_size x 0
+  
+  let contains (x:t) (i:e) : bool =
+    match (minmax x) with
+    | None -> false
+    | Some (lx, hx) -> (lx <= i) && (i <= hx)
+  
+  let rless (x:t) (y:t) : bool option =
+    match ((minmax x), (minmax y)) with
+    | (None, None) -> None
+    | (Some (_, _), None) -> None
+    | (None, Some (_, _)) -> None
+    | (Some (lx, hx), Some (ly, hy)) -> Some (hx < ly)
+
 end
 
 (* TODO Exercise 1: Add some test code to test your new implementation. *)
+let rg = ListRange.range 2 4
+let rg_size = ListRange.size rg
+let rg_contains_3 = ListRange.contains rg 3
+let rg_contains_5 = ListRange.contains rg 5
+
+let rg1 = ListRange.singleton 6
+let rg1_size = ListRange.size rg1
+let rg1_contains_6 = ListRange.contains rg1 6
+
+let rg2 = ListRange.sadd rg 2
+let rg2_size = ListRange.size rg2
+let rg2_contains_5 = ListRange.contains rg2 5
+
+let rg3 = ListRange.smult rg 3
+let rg3_size = ListRange.size rg3
+let rg3_contains_12 = ListRange.contains rg3 12
+
+let rg4 = ListRange.bridge rg rg3
+let rg4_size = ListRange.size rg4
+let rg4_contains_2 = ListRange.contains rg4 2
+let rg4_contains_12 = ListRange.contains rg4 12
+
+let rg_rless_rg1 = ListRange.rless rg rg1
+let rg_rless_rg2 = ListRange.rless rg rg2
+let rg_rless_rg3 = ListRange.rless rg rg3
+let rg_rless_rg4 = ListRange.rless rg rg4
 
 (* Exercise 2: Design an imperative version of RANGE.  Do so by
    copying range.mli here and changing the types as necessary.  And
