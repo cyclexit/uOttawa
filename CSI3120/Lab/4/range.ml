@@ -1,3 +1,5 @@
+(* Name: Hongyi Lin *)
+
 (* A condensed version of the signature in range.mli.  Your first step is to study the contents of range.mli. *)
 module type RANGE =
 sig
