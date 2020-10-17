@@ -111,6 +111,39 @@ let div_option (x:int option) (y:int option) : float option =
   )
 
 (* Question C (8 marks) Programming with Data Types *)
+type newtype =
+  | Con1 of string
+  | Con2 of string * int
+(* Write a function that takes a string and a list of elements of
+   newtype and counts the number of times that the string appears in
+   the elements of the list. For example, the function should return 2
+   if the input string is "yes" and the input list is:
+   [Con1 "yes"; Con2 ("no", 3); Con2 ("yes", 4)]
+
+   Your function should be called count_occurrences and have type
+   string -> newtype list -> int.
+*)
+let rec count_occurrences (str:string) (l:newtype list) : int =
+  match l with
+  | [] -> 0
+  | (Con1 x)::tl -> (
+    if x = str then
+      1 + (count_occurrences str tl)
+    else
+      0 + (count_occurrences str tl)
+  )
+  | (Con2 (x, _))::tl -> (
+    if x = str then
+      1 + (count_occurrences str tl)
+    else
+      0 + (count_occurrences str tl)
+  )
+
+(*
+let str1 = "yes"
+let l1 = [Con1 "yes"; Con2 ("no", 3); Con2 ("yes", 4)]
+let test_count_occurrences = count_occurrences str1 l1
+*)
 
 (* Question D (7 marks) Higher-Order and Polymorphic Programming *)
 
