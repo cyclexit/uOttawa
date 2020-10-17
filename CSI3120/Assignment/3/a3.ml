@@ -42,6 +42,7 @@ let rec count_connectives (f:form) : int =
    | Or (f1, f2) -> 1 + (count_connectives f1) + (count_connectives f2)
    | Imp (f1, f2) -> 1 + (count_connectives f1) + (count_connectives f2)
 
+(* Problem 1a test case *)
 let test_form = Imp ((And (Prop "p", Prop "q")),  (Or (Prop "r", Prop "s")))
 let test_count_connectives = count_connectives test_form
 
@@ -73,7 +74,18 @@ type env = (prop * bool) list
    duplicates and don't worry about inconsistencies (the same
    propositional variable paired with both "true" and "false").  *)
 
-(* let rec generate_env (f:form') : env = *)
+let rec generate_env (f:form') : env =
+   match f with
+   | True' -> []
+   | False' -> []
+   | Prop' (x, y) -> [(x, y)]
+   | And' (x, y) -> (generate_env x) @ (generate_env y)
+   | Or' (x, y) -> (generate_env x) @ (generate_env y)
+   | Imp' (x, y) -> (generate_env x) @ (generate_env y)
+
+(* Problem 1b test case *)
+let test_form' = Imp' (And' (Prop' ("p", true), Prop' ("q", true)), Prop' ("r", true))
+let test_generate_env = generate_env test_form'
 
 
 (* Problem 1c: Write a function "validate_env" that takes an "env" as
