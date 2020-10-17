@@ -170,5 +170,29 @@ let test_transform_newtypes = transform_newtypes 100 ntl
 *)
 
 (* Question E (7 marks) Modules and Abstract Data Types *)
+(* The interface and structure for the polymorphic immutable stack
+   datatype given in the code in the preface is very similar to the
+   code in the course notes.  The only difference is that there is no
+   "top" operation and the "pop" operation returns a tuple containing
+   both the new stack and the top element.  Replace all of the
+   occurrences of ?? in the bodies of teststack1 and teststack2 so
+   that when they are called they return true. *)
+
+let teststack1 () =
+   let emp = ListStack.empty() in
+   let s0 = ListStack.push "x" emp in
+   let s1 = ListStack.push "y" s0 in
+   let s2 = ListStack.push "z" s1 in
+   let (s3,a) = ListStack.pop s2 in
+   let (s4,b) = ListStack.pop s3 in
+   let (s5,c) = ListStack.pop s4 in
+   (a = Some "z" && b = Some "y" && c = Some "x" && ListStack.is_empty s5)
+
+let teststack2 () =
+   let emp = ListStack.empty() in
+   let s0 = ListStack.push "a" emp in
+   let s1 = ListStack.push "b" emp in
+   let (s2,a) = ListStack.pop s0 in
+   (a = Some "a" && ListStack.is_empty s2)
 
 (* Question F (5 marks) Mutable Types *)
