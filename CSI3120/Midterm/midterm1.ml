@@ -1,3 +1,7 @@
+(* Name: Hongyi Lin *)
+(* Student Number: 300053082 *)
+(* Email: hlin087@uottawa.ca *)
+
 (* For each question in the Brightspace quiz (except for the
    True/False questions at the end), copy the code and question here,
    and follow the instructions to answer it. *)
@@ -51,6 +55,41 @@ type 'a mlist =
   Nil | Cons of 'a * ('a mlist ref)
 
 (* Question A (10 marks) Types in OCaml *)
+(* For all parts of Question A, uncomment and fill in the expressions
+   below to satisfy the types and follow any other instructions that
+   are given.  As in Assignment 2, for option, list, and function
+   types, you must provide a nontrivial answer. For a list that means
+   a non-empty one, for an option type that means a Some construction,
+   and for a function, that means using all its arguments to generate
+   the return value.  *)
+
+let a1 : int list = 3::4::[5; 6]
+
+let a2 : (string list * bool list) list = [(["hello"; "world"], [true; true]); (["runtime error"; "tle"], [false; false])]
+
+let a3 : (string -> string -> string) list = [concat; add_to_ends]
+
+(* (a4) Define a function a4 that has type string -> string tree. *)
+let a4 (str:string) : string tree =
+  Node(Leaf str, Leaf str)
+
+(* (a5) Using the 'a tree data type defined in the preface, represent
+   the following tree.  You may define auxiliary functions and
+   variables to help build the tree step-by-step, but this is not
+   required. *)
+
+(*
+         /\
+        /  \
+       /    \
+      3.14   \ 
+             /\
+            /  \
+           /    \
+        2.718  (sqrt 2.0)
+ *)
+
+let a5 : float tree = Node (Leaf 3.14, Node (Leaf 2.718, Leaf (sqrt 2.0)))
 
 (* Question B (7 marks) Options *)
 
