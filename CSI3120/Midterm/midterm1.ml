@@ -92,6 +92,23 @@ let a4 (str:string) : string tree =
 let a5 : float tree = Node (Leaf 3.14, Node (Leaf 2.718, Leaf (sqrt 2.0)))
 
 (* Question B (7 marks) Options *)
+(* Write a function that takes two int option arguments and returns a
+   float option. The function should divide the first argument by the
+   second if both arguments are present and the second is not 0.
+   Convert values of type int to float when necessary. Otherwise, the
+   function must return None. Name your function "div_option" *)
+
+let div_option (x:int option) (y:int option) : float option =
+  match (x, y) with
+  | (None, None) -> None
+  | (None, _) -> None
+  | (_, None) -> None
+  | (Some a, Some b) -> (
+    if b = 0 then
+      None
+    else
+      Some ((float_of_int a) /. (float_of_int b))
+  )
 
 (* Question C (8 marks) Programming with Data Types *)
 
