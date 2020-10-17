@@ -146,6 +146,28 @@ let test_count_occurrences = count_occurrences str1 l1
 *)
 
 (* Question D (7 marks) Higher-Order and Polymorphic Programming *)
+type newtype =
+  | X of float
+  | Y of int
+  | Z of int * float
+(* Use the map function included in the preface to implement a
+   function transform_newtypes that takes an integer n and a list of
+   elements of newtype and returns a new list where the integer
+   component of every element of the list is replaced by n. *)
+
+let transform_newtypes (n:int) (xs:newtype list) : newtype list =
+  let helper_func (nt:newtype) : newtype =
+    match nt with
+    | X fnum -> X fnum
+    | Y inum -> Y n
+    | Z (inum, fnum) -> Z (n, fnum)
+  in
+    map helper_func xs
+
+(*
+let ntl = [X 1.0; Y 3; Z (4, 2.0)]
+let test_transform_newtypes = transform_newtypes 100 ntl
+*)
 
 (* Question E (7 marks) Modules and Abstract Data Types *)
 
