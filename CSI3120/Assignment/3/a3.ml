@@ -102,7 +102,7 @@ let test_generate_env = generate_env test_form'
 
    The env for this formula is:
 
-   [("p",true); ("q",false); ("p",false); ("r", true); ("r" true)]
+   [("p",true); ("q",false); ("p",false); ("r", true); ("r", true)]
 
    This function should return:
 
@@ -115,7 +115,7 @@ let test_generate_env = generate_env test_form'
 
    The env for this formula is:
 
-   [("p",true); ("q",false); ("p",true); ("r", true); ("r" true)]
+   [("p",true); ("q",false); ("p",true); ("r", true); ("r", true)]
 
    This function should return:
 
@@ -127,7 +127,59 @@ let test_generate_env = generate_env test_form'
    to define them as local functions inside the main function, but you
    do not have to.  *)
 
-(* let validate_env (e:env) : bool * (prop * bool) list = *)
+let validate_env (e:env) : bool * (prop * bool) list =
+   (* Return true if there is no conflict; false, otherwise.*)
+   let rec check (p:prop * bool) (e:env) : bool =
+      let (pr, tr) = p in
+         match e with
+         | [] -> true
+         | (pr', tr')::tl -> (
+            if pr = pr' then
+               if tr = tr' then
+                  true && (true && check p tl)
+               else
+                  false
+            else
+               (true && check p tl)
+         )
+   in
+   let rec do_check (e:env) : bool =
+      match e with
+      | [] -> true
+      | hd::tl -> (check hd tl) && (do_check tl)
+   in
+   let rec collect (p:prop * bool) (e:env) : (prop * bool) list =
+      let (pr, tr) = p in
+         match e with
+         | [] -> [p]
+         | (pr', tr')::tl -> (
+            if (pr = pr') && (tr <> tr') then
+               [p; (pr', tr')]
+            else
+               collect p tl
+         )
+   in
+   let rec do_collect (e:env) : (prop * bool) list =
+      match e with
+      | [] -> []
+      | hd::tl -> (
+         if (check hd tl) = false then
+            collect hd tl
+         else
+            do_collect tl
+      )
+   in
+      if do_check e then
+         (true, e)
+      else
+         (false, do_collect e)   
+
+(* Problem 1c test case *)
+let env_1 = [("p",true); ("q",false); ("p",false); ("r", true); ("r", true)]
+let test_validate_env_1 = validate_env env_1
+
+let env_2 = [("p",true); ("q",false); ("p",true); ("r", true); ("r", true)]
+let test_validate_env_2 = validate_env env_2
 
 (*************)
 (* PROBLEM 2 *)
