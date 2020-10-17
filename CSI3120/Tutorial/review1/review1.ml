@@ -45,7 +45,12 @@ let l1 = fun_1c t1
 
 (*The value of l1 is [0; 1; 2; 6; 7; 8]*)
 
-let answer1c : string = "The fun_1c does the pre-order traversal on the input tree."
+let answer1c : string = 
+   "The fun_1c does the pre-order traversal on the input tree.
+    The nodes are listed in the top-down and left-to-right traversal order, 
+    which means that the value at the parent node shows up first, followed 
+    by all the values in the left subtree, and then all the values in the
+    right subtree."
 
 (* Question 2. Polymorphic and Higher-Order Programming *)
 
