@@ -1,7 +1,7 @@
 (*** CSI 3120 Assignment 3 ***)
-(*** YOUR NAME HERE ***)
-(*** YOUR STUDENT ID HERE ***)
-(*** OCAML VERSION USED FOR THIS ASSIGNMENT HERE ***)
+(*** Hongyi Lin ***)
+(*** 300053082 ***)
+(*** 4.08.1 ***)
 (* If you use the version available from the lab machines via VCL, the
    version is 4.05.0 ***)
 
@@ -33,7 +33,17 @@ type form =
 
  *)
 
-(* let rec count_connectives (f:form) : int = *)
+let rec count_connectives (f:form) : int =
+   match f with
+   | True -> 0
+   | False -> 0
+   | Prop _ -> 0
+   | And (f1, f2) -> 1 + (count_connectives f1) + (count_connectives f2)
+   | Or (f1, f2) -> 1 + (count_connectives f1) + (count_connectives f2)
+   | Imp (f1, f2) -> 1 + (count_connectives f1) + (count_connectives f2)
+
+let test_form = Imp ((And (Prop "p", Prop "q")),  (Or (Prop "r", Prop "s")))
+let test_count_connectives = count_connectives test_form
 
 
 (* Problem 1b: Consider the new types form' and env below *)
