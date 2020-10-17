@@ -196,3 +196,44 @@ let teststack2 () =
    (a = Some "a" && ListStack.is_empty s2)
 
 (* Question F (5 marks) Mutable Types *)
+
+(* Question F1 (2 marks) *)
+(* The code in the preface includes the 'a mlist data type for fully
+   mutable lists studied in class. *)
+
+(* Below is an example mutable list. *)
+let ml_example : int mlist = Cons(40, ref (Cons(32, ref (Cons(101, ref Nil)))))
+
+(* Consider a new alternative representation of mutable lists as a
+   list of references, where each reference is a pointer to some
+   value. *)
+type 'a new_mlist = 'a ref list
+
+(* Build a new version of ml_example using this new representation.
+   The new list should have the same elements occurring in the same
+   order. *)
+
+let rl : int ref list = [ref 40; ref 32; ref 101]
+
+(* Question F2 (3 marks) *)
+(* Describe briefly what the following function does. *)
+
+let mlist_example (x:'a) (xsr:'a mlist ref) (ys:'a mlist) : unit =
+  match !xsr with
+    Nil -> xsr := ys
+  | Cons(y,t) -> if x = y then () else t:=ys
+
+(* Question F2 Answer 
+    If the first element of xsr is Nil, copy the value of ys to xsr.
+    If the first element of xsr is equal to x, then do nothing.
+    If the first element of xsr is NOT equal to x, then copy the value of ys to the rest part of xsr.
+*)
+
+(*
+let ref_ml = ref (Cons(40, ref (Cons(32, ref (Cons(101, ref Nil))))))
+let test_mlist_example_1 = mlist_example 40 ref_ml (Cons (20, ref Nil)) (* Expected to have no changes *)
+let test_mlist_example_2 = mlist_example 10 ref_ml (Cons (20, ref Nil)) (* Expected to have some changes *)
+
+let ref_nil = ref Nil
+let test_mlist_example_3 = mlist_example 10 ref_nil (Cons (100, ref Nil))
+*)
