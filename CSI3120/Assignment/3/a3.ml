@@ -197,25 +197,25 @@ let test_validate_env_2 = validate_env env_2
 
 module type IntQueue =
   sig
-    (* t is a queue whose elements have type int. *)
-    type t
+      (* t is a queue whose elements have type int. *)
+      type t
 
-    (* The empty queue. *)
-    val empty : unit -> t
+      (* The empty queue. *)
+      val empty : unit -> t
 
-    (* Whether a queue is empty. *)
-    val is_empty : t -> bool
+      (* Whether a queue is empty. *)
+      val is_empty : t -> bool
 
-    (* [enqueue x q] is the queue [q] with [x] added to the end. *)
-    val enqueue : int -> t -> t
+      (* [enqueue x q] is the queue [q] with [x] added to the end. *)
+      val enqueue : int -> t -> t
 
-    (* [peek q] is [Some x], where [x] is the element at the front of the queue,
-       or [None] if the queue is empty. *)
-    val peek : t -> int option
+      (* [peek q] is [Some x], where [x] is the element at the front of the queue,
+         or [None] if the queue is empty. *)
+      val peek : t -> int option
 
-    (* [dequeue q] is [Some q'], where [q'] is the queue containing all the elements
-       of [q] except the front of [q], or [None] if [q] is empty. *)
-    val dequeue : t -> t option
+      (* [dequeue q] is [Some q'], where [q'] is the queue containing all the elements
+         of [q] except the front of [q], or [None] if [q] is empty. *)
+      val dequeue : t -> t option
 end
 
 (* Problem 2a: Implement a queue (define a module called
@@ -290,7 +290,28 @@ let  j = let rest = ReverseListIntQueue.dequeue q2 in
    elements of any type, not just ints. (This should be relatively
    easy.) *)
 
-(* module type Queue = *)
+module type Queue =
+   sig
+      (* t is a queue whose elements have type int. *)
+      type 'a queue
+
+      (* The empty queue. *)
+      val empty : unit -> 'a queue
+
+      (* Whether a queue is empty. *)
+      val is_empty : 'a queue -> bool
+
+      (* [enqueue x q] is the queue [q] with [x] added to the end. *)
+      val enqueue : 'a -> 'a queue -> 'a queue
+
+      (* [peek q] is [Some x], where [x] is the element at the front of the queue,
+         or [None] if the queue is empty. *)
+      val peek : 'a queue -> 'a option
+
+      (* [dequeue q] is [Some q'], where [q'] is the queue containing all the elements
+         of [q] except the front of [q], or [None] if [q] is empty. *)
+      val dequeue : 'a queue -> 'a queue option
+end
 
 
 (* Problem 2c: Modify your solution to Question 2a by
@@ -298,9 +319,51 @@ let  j = let rest = ReverseListIntQueue.dequeue q2 in
    Queue so that it can be used to create queues of elements of
    any type. (This should also be relatively easy.) *)
 
-(* module ReverseListQueue ... *)
+module ReverseListQueue : Queue =
+   struct
+      type 'a queue = 'a list
 
-(* Some code to help you test and debug
+      (* constructor *)
+      let empty () : 'a queue = []
+
+      (* observer *)
+      let is_empty (q:'a queue) : bool =
+         match q with
+         | [] -> true
+         | _ -> false
+
+      let rec peek (q:'a queue) : 'a option = 
+         match q with
+         | [] -> None
+         | hd::tl -> (
+            if (List.length tl) = 0 then
+               Some hd
+            else
+               peek tl
+         )
+      
+      (* modifier *)
+      let enqueue (e:'a) (q:'a queue) : 'a queue = e::q
+      
+      let dequeue (q:'a queue) : 'a queue option = 
+         match q with
+         | [] -> None
+         | _ -> (
+            let rec aux_dequeue (que:'a queue) : 'a queue =
+               match que with
+               | [] -> []
+               | hd::tl -> (
+                  if (List.length tl) = 0 then
+                     []
+                  else
+                     hd::(aux_dequeue tl)
+               )
+            in
+               Some (aux_dequeue q)
+         )
+   end
+
+(* Some code to help you test and debug *)
 let q3 = ReverseListQueue.empty ()
 let q4 = ReverseListQueue.enqueue 42 q3
 let q5 = ReverseListQueue.enqueue 48 q4
@@ -317,7 +380,7 @@ let j2 = let rest = ReverseListQueue.dequeue q8 in
          match rest with
          | Some q -> ReverseListQueue.peek q
          | None -> None
- *)
+(**)
 
 
 (* Problem 2d: Fill in all the "..." in the modified version below
