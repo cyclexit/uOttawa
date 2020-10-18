@@ -387,41 +387,84 @@ let j2 = let rest = ReverseListQueue.dequeue q8 in
    of the IntQueue signature above so that it is a signature
    for an imperative version of an int queue called ImpIntQueue. *)
 
-(*
 module type ImpIntQueue =
   sig
-    (* t is a queue whose elements have type int. *)
-    type t
+      (* t is a queue whose elements have type int. *)
+      type t
 
-    (* Create an empty queue. *)
-    val empty : ...
+      (* Create an empty queue. *)
+      val empty : unit -> t
 
-    (* Whether a queue is empty. *)
-    val is_empty : ...
+      (* Whether a queue is empty. *)
+      val is_empty : t -> bool
 
-    (* [enqueue x q] modifies [q] by adding [x] to the end. *)
-    val enqueue : ...
+      (* [enqueue x q] modifies [q] by adding [x] to the end. *)
+      val enqueue : int -> t -> unit
 
-    (* [dequeue q] returns [Some x], where [x] is the element at the
-       front of the queue, or [None] if the queue is empty.  It also
-       modifies q by removing the front element, if there is one;
-       otherwise no modifications are done.  *)
-    val dequeue : ...
-end
- *)
+      (* [dequeue q] returns [Some x], where [x] is the element at the
+         front of the queue, or [None] if the queue is empty.  It also
+         modifies q by removing the front element, if there is one;
+         otherwise no modifications are done. *)
+      val dequeue : t -> int option
+   end
 
 (* Problem 2e: Modify your solution to Question 2a (using reversed
    lists as before) by introducing a new structure called
    ImpListIntQueue with type ImpIntQueue so that it
    implements an imperative queue. *)
 
-(* module ImpListIntQueue ... *)
+module ImpListIntQueue : ImpIntQueue =
+   struct
+      type t = int list ref
 
-(* Some code to help you test and debug
+      (* constructor *)
+      let empty () : t = ref []
+
+      (* observer *)
+      let is_empty (q:t) : bool =
+         match !q with
+         | [] -> true
+         | _ -> false
+      
+      (* modifier *)
+      let enqueue (num:int) (q:t) = 
+         q := num::(!q)
+      
+      let dequeue (q:t) : int option = 
+         match !q with
+         | [] -> None
+         | _ -> (
+            let rec peek (que:int list) : int option=
+               match que with
+               | [] -> None
+               | hd::tl -> (
+                  if (List.length tl) = 0 then
+                     Some hd
+                  else
+                     peek tl
+               )
+            in
+            let rec aux_dequeue (que:int list) : int list =
+               match que with
+               | [] -> []
+               | hd::tl -> (
+                  if (List.length tl) = 0 then
+                     []
+                  else
+                     hd::(aux_dequeue tl)
+               )
+            in
+            let (rt, new_queue) = (peek !q, aux_dequeue !q) in
+               q := new_queue;
+               rt
+         )
+   end
+
+(* Some code to help you test and debug *)
 let q' = ImpListIntQueue.empty ()
 let _  = ImpListIntQueue.enqueue 42 q'
 let _  = ImpListIntQueue.enqueue 48 q'
 let  i = ImpListIntQueue.dequeue q'
 let  j = ImpListIntQueue.dequeue q'
 let  k = ImpListIntQueue.dequeue q'
- *)
+(**)
