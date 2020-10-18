@@ -229,9 +229,51 @@ end
    of course allowed to implement helper functions inside the structure
    that do not appear in the signature above. *)
 
-(* module ReverseListIntQueue ... *)
+module ReverseListIntQueue : IntQueue =
+   struct
+      type t = int list
 
-(* Some code to help you test and debug
+      (* constructor *)
+      let empty () : t = []
+
+      (* observer *)
+      let is_empty (q:t) : bool =
+         match q with
+         | [] -> true
+         | _ -> false
+
+      let rec peek (q:t) : int option = 
+         match q with
+         | [] -> None
+         | hd::tl -> (
+            if (List.length tl) = 0 then
+               Some hd
+            else
+               peek tl
+         )
+      
+      (* modifier *)
+      let enqueue (num:int) (q:t) : t = num::q
+      
+      let dequeue (q:t) : t option = 
+         match q with
+         | [] -> None
+         | _ -> (
+            let rec aux_dequeue (que:t) : t =
+               match que with
+               | [] -> []
+               | hd::tl -> (
+                  if (List.length tl) = 0 then
+                     []
+                  else
+                     hd::(aux_dequeue tl)
+               )
+            in
+               Some (aux_dequeue q)
+         )
+   end
+
+(* Some code to help you test and debug *)
 let q0 = ReverseListIntQueue.empty ()
 let q1 = ReverseListIntQueue.enqueue 42 q0
 let q2 = ReverseListIntQueue.enqueue 48 q1
@@ -240,7 +282,7 @@ let  j = let rest = ReverseListIntQueue.dequeue q2 in
          match rest with
          | Some q -> ReverseListIntQueue.peek q
          | None -> None
- *)
+(**)
 
 
 (* Problem 2b: Modify the IntQueue signature above so that it is
