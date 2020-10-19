@@ -164,7 +164,7 @@ let validate_env (e:env) : bool * (prop * bool) list =
       | [] -> []
       | hd::tl -> (
          if (check hd tl) = false then
-            collect hd tl
+            (collect hd tl) @ (do_collect tl)
          else
             do_collect tl
       )
@@ -180,6 +180,9 @@ let test_validate_env_1 = validate_env env_1
 
 let env_2 = [("p",true); ("q",false); ("p",true); ("r", true); ("r", true)]
 let test_validate_env_2 = validate_env env_2
+
+let env_3 = [("p",true); ("q",false); ("r", false); ("p",false); ("r", true); ("r", true)]
+let test_validate_env_3 = validate_env env_3
 
 (*************)
 (* PROBLEM 2 *)
