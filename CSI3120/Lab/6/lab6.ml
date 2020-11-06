@@ -46,6 +46,65 @@
    each function, insert print statements that print out the names of
    each variable that is visible along with its value.  *)
 
+(*(i) a: declared inside the body of f
+      x: declared in the global scope
+      y: declared inside the body of f
+      z: declared inside the body of f
+
+  (ii) a: declared inside the body of g
+       x: declared inside the body of g
+       y: declared in the global scope
+       z: declared in the global scope
+       w: declared inside the body of g
+
+  (iii) a: declared inside the body of h
+        b: declared inside the body of h
+        x: declared inside the body of g
+        y: declared in the global scope
+        z: declared inside the body of h
+        w: declared inside the body of g
+  (iv) See the code below
+*)
+
+let x = 1 in
+let y = 2 in
+let z = 3 in
+let f (u:int) = (
+  let a = 10 in
+  let y = 20 in
+  let z = 30 in
+  Printf.printf "Inside f:\n";
+  Printf.printf "a = %d\n" a;
+  Printf.printf "x = %d\n" x;
+  Printf.printf "y = %d\n" y;
+  Printf.printf "z = %d\n" z
+) in
+let g (u:int) = (
+  let a = 11 in
+  let x = 15 in
+  let w = 4 in
+  let h (v:int) = (
+    let a = 12 in
+    let b = 40 in
+    let z = 31 in
+    Printf.printf "Inside h:\n";
+    Printf.printf "a = %d\n" a;
+    Printf.printf "b = %d\n" b;
+    Printf.printf "x = %d\n" x;
+    Printf.printf "y = %d\n" y;
+    Printf.printf "z = %d\n" z;
+    Printf.printf "w = %d\n" w
+  ) in
+  Printf.printf "Inside g:\n";
+  Printf.printf "a = %d\n" a;
+  Printf.printf "x = %d\n" x;
+  Printf.printf "y = %d\n" y;
+  Printf.printf "z = %d\n" z;
+  Printf.printf "w = %d\n" w;
+  h 300
+) in
+  f 100;
+  g 200
 
 (* QUESTION 2. Dynamic Scope *)
 (* Consider the following program (a modified version of the above
