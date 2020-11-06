@@ -47,20 +47,20 @@
    each variable that is visible along with its value.  *)
 
 (*(i) a: declared inside the body of f
-      x: declared in the global scope
+      x: declared in the main scope
       y: declared inside the body of f
       z: declared inside the body of f
 
   (ii) a: declared inside the body of g
        x: declared inside the body of g
-       y: declared in the global scope
-       z: declared in the global scope
+       y: declared in the main scope
+       z: declared in the main scope
        w: declared inside the body of g
 
   (iii) a: declared inside the body of h
         b: declared inside the body of h
         x: declared inside the body of g
-        y: declared in the global scope
+        y: declared in the main scope
         z: declared inside the body of h
         w: declared inside the body of g
   (iv) See the code below
@@ -140,7 +140,7 @@ let g (u:int) = (
    sequences, what variables are visible during execution of the
    last function call in each sequence?  Include with each
    visible variable the name of the block where it is declared
-   (main, f, g, or h).  Draw the full activation stack.  In each
+   (main, f, g, or h).  Draw the full activation stack. In each
    activation record, include the local variables and the
    control link only.  (Note: for this exercise, you don't have
    to include the declarations of functions f, g, and h in the
@@ -150,8 +150,28 @@ let g (u:int) = (
    (ii) main calls f; f calls h.
    (iii) main calls g; g calls h; h calls f. *)
 
-(*
+(* 
+The activation stack for each questoin is submitted as two pictures.
 
+(i) a: declared in the body of h
+    b: declared in the body of g
+    x: declared in the body of h
+    y: declared in the body of f
+    z: declared in the body of g
+    w: declared in the body of h
+    
+(ii) a: declared in the body of h
+     x: declared in the body of h
+     y: declared in the body of f
+     z: declared in the body of f
+     w: declared in the body of h
+
+(iii) a: declared in the body of f
+      b: declared in the body of g
+      x: declared in the body of h
+      y: declared in the body of f
+      z: declared in the body of f
+      w: declared in the body of h
 *)
 
 (* QUESTION 3. Parameter Passing *)
@@ -191,6 +211,7 @@ let g (u:int) = (
    makes the operations on locations, and the differences between
    L-values and R-values, explicit.  Uncomment the code below and fill
    in your solution.
+*)
 
 let x = ref 0
 let p (y' : int ref) : unit =
@@ -201,7 +222,6 @@ let p (y' : int ref) : unit =
 let result = p x
 let _ = x
 
- *)
 
 (* QUESTION 4. Tail Recursion *)
 (* Below are two versions of the factorial function, where the first
