@@ -150,6 +150,10 @@ let g (u:int) = (
    (ii) main calls f; f calls h.
    (iii) main calls g; g calls h; h calls f. *)
 
+(*
+
+*)
+
 (* QUESTION 3. Parameter Passing *)
 (* In "pass-by-value-result", also called "call-by-value-result" and
    "copy-in/copy-out", parameters are passed by value, with an added
@@ -190,7 +194,10 @@ let g (u:int) = (
 
 let x = ref 0
 let p (y' : int ref) : unit =
- ...
+  let y = ref !x in
+    y := 1;
+    x := 0;
+    x := !y
 let result = p x
 let _ = x
 
@@ -221,3 +228,13 @@ let rec power (a:int) (b:int) =
   if b = 0 then 1
   else if b = 1 then a
   else a*power a (b-1)
+
+let power_tr (a:int) (b:int) =
+  let rec power' (a:int) (b:int) (res:int) =
+    if b = 0 then res
+    else power' a (b-1) (res*a)
+  in
+  power' a b 1
+
+let res_power = power 2 3
+let res_power_tr = power_tr 2 3
