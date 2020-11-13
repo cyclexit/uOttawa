@@ -47,7 +47,7 @@ call (f1 1)
 
 (* QUESTION 2. Exceptions and Memory Management *)
 (* The following two versions of the "closest" function take an
-   integer x and a tree t and return the integer leaf value fron t
+   integer x and a tree t and return the integer leaf value from t
    that is closest in absolute value to x.  The first is a
    straightforward recursive function and the second uses
    exceptions. Both are applied to the same simple example tree.
@@ -105,7 +105,24 @@ let _ =
    the error condition.  *)
 
 let f (x:int) (normal_cont:int->int) (exception_cont:unit -> int) =
-  if x < 0
-  then exception_cont()
-  else normal_cont (x/2)
+  if x < 0 then 
+    exception_cont()
+  else 
+    normal_cont (x/2)
 let g (y:int) = f y (fun z -> 1+z) (fun () -> 0)
+
+exception Negative
+let f' (x:int) =
+  if x < 0 then
+    raise Negative
+  else
+    1 + (x / 2)
+let g' (y:int) : int =
+  try 
+    f' y 
+  with | Negative -> 0
+
+(*Some tests to show that g' and g have the same behavior*)
+let test1 = (g 1) = (g' 1)
+let test2 = (g 0) = (g' 0)
+let test3 = (g (-1)) = (g' (-1))

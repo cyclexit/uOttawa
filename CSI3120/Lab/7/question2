@@ -1,0 +1,15 @@
+access link
+parameter
+local variable
+return-result address
+intermediate result of "abs (x-lf)" and "abs (x-rt)"
+
+If any activation records need to be popped off the stack, do not
+erase them, but instead mark them as "popped" and continue below
+them.
+
+TODO:
+1. Draw the activation stack following the above requirements
+2. Explain why the second is sometimes more efficient than the
+   first.
+* Do these on the paper!
