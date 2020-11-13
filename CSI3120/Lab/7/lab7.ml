@@ -32,6 +32,18 @@ let rec f1 (x:int) =
    first one is "call (f1 11)" and the second one is "call (f1 9)".
    Continue from here. *)
 
+(*Answer:
+call (f1 11)
+call (f1 9)
+call (f1 7)
+call (f1 5)
+call (f1 3)
+call (f1 1)
+(f1 1) raise the exception Odd
+(f1 3) handle the exception Odd in the call
+(f1 3) returns with the value -3
+*)
+
 
 (* QUESTION 2. Exceptions and Memory Management *)
 (* The following two versions of the "closest" function take an
