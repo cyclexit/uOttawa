@@ -17,9 +17,11 @@
 
 class virtual expression = object
   method virtual is_atomic : bool
-  method virtual left_sub : expression option
-  method virtual right_sub : expression option
+  method virtual first_sub : expression option
+  method virtual second_sub : expression option
+  method virtual third_sub : expression option
   method virtual value : int
+  method virtual inc : int -> unit
 end
 
 (* Because the grammar has two cases, we have two subclasses of
@@ -30,19 +32,25 @@ class number_exp (n:int) = object
   inherit expression as super
   val mutable number_val = n
   method is_atomic = true
-  method left_sub = None
-  method right_sub = None
+  method first_sub = None
+  method second_sub = None
+  method third_sub = None
   method value = number_val
+  method inc (x:int) = number_val <- number_val + x
 end               
 
 class sum_exp (e1:expression) (e2:expression) = object
   inherit expression as super
-  val mutable left_exp = e1
-  val mutable right_exp = e2
+  val mutable first_exp = e1
+  val mutable second_exp = e2
   method is_atomic = false
-  method left_sub = Some left_exp
-  method right_sub = Some right_exp
-  method value = left_exp#value + right_exp#value
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value + second_exp#value
+  method inc (x:int) = 
+    first_exp#inc x;
+    second_exp#inc x
 end
 
 (* QUESTION 1. Product Class and Method Calls *)
@@ -54,12 +62,16 @@ end
 
 class prod_exp (e1:expression) (e2:expression) = object
   inherit expression as super
-  val mutable left_exp = e1
-  val mutable right_exp = e2
+  val mutable first_exp = e1
+  val mutable second_exp = e2
   method is_atomic = false
-  method left_sub = Some left_exp
-  method right_sub = Some right_exp
-  method value = left_exp#value * right_exp#value
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value * second_exp#value
+  method inc (x:int) = 
+    first_exp#inc x;
+    second_exp#inc x
 end
 
 (* 1(b). Create objects representing the following expressions:
@@ -91,6 +103,19 @@ let value_of_e = e#value
    Changes will be required to the "expression" interface, so you will
    need to reimplement all the classes from above with these changes.
    Try to make as few changes as possible to the program. *)
+
+class square_exp (e:expression) = object
+  inherit expression as super
+  val mutable first_exp = e
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = None
+  method third_sub = None
+  method value = 
+    let t = first_exp#value in
+      t * t
+  method inc (x:int) = first_exp#inc x
+end
 
 (* QUESTION 3. Ternary Expressions and More Method Calls *)
 (* 3(a). Extend this class heirarchy by writing a "cond_exp" class to
