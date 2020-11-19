@@ -211,3 +211,13 @@ by the OCaml interpreter.
    argument value greater than 0.  Then send the message "value" to
    "g". The new value should be different than the original one.
    Verify that your implementation gives the expected new value.  *)
+let a = new number_exp 10
+let b = new number_exp 20
+let c = new number_exp 30
+let d = new sum_exp b c
+let e = new prod_exp d a
+let f = new cond_exp a d e
+let g = new square_exp c
+let value_of_g = g#value (*900*)
+let _ = g#inc 1
+let value_of_g = g#value (*expected: 961; actual: 961*)
