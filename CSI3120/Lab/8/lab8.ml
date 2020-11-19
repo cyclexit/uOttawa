@@ -52,6 +52,16 @@ end
    e ::= ... | e * e
  *)
 
+class prod_exp (e1:expression) (e2:expression) = object
+  inherit expression as super
+  val mutable left_exp = e1
+  val mutable right_exp = e2
+  method is_atomic = false
+  method left_sub = Some left_exp
+  method right_sub = Some right_exp
+  method value = left_exp#value * right_exp#value
+end
+
 (* 1(b). Create objects representing the following expressions:
    - An expression "a" representing the number 3
    - An expression "b" representing the number 0
@@ -62,10 +72,15 @@ end
    Note that "e" represents the expression (3+0)*5.
 
    To answer 1(b), uncomment this code and fill it in:
-   let a = ...
-   let b = ...
-   ...
- *)
+*)
+
+let a = new number_exp 3
+let b = new number_exp 0
+let c = new number_exp 5
+let d = new sum_exp a b
+let e = new prod_exp d c
+let value_of_e = e#value
+
                                               
 (* QUESTION 2. Unary Expressions *)
 (* Extend the class hierarchy further by writing a "square_exp".
