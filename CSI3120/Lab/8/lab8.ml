@@ -94,6 +94,20 @@ let value_of_e = e#value
    need to reimplement all the classes from above with these changes.
    Try to make as few changes as possible to the program. *)
 
+class square_exp (e:expression) = object
+  inherit expression as super
+  val mutable sub_exp = e
+  method is_atomic = false
+  method left_sub = Some sub_exp
+  method right_sub = None
+  method value =
+    let v = sub_exp#value in
+      v * v
+end
+
+let test_square = new square_exp a
+let _ = test_square#value
+
 (* QUESTION 3. Ternary Expressions and More Method Calls *)
 (* 3(a). Extend this class heirarchy by writing a "cond_exp" class to
    represent conditionals of the form
