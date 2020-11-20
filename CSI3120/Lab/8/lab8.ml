@@ -17,11 +17,9 @@
 
 class virtual expression = object
   method virtual is_atomic : bool
-  method virtual first_sub : expression option
-  method virtual second_sub : expression option
-  method virtual third_sub : expression option
+  method virtual left_sub : expression option
+  method virtual right_sub : expression option
   method virtual value : int
-  method virtual inc : int -> unit
 end
 
 (* Because the grammar has two cases, we have two subclasses of
@@ -32,25 +30,19 @@ class number_exp (n:int) = object
   inherit expression as super
   val mutable number_val = n
   method is_atomic = true
-  method first_sub = None
-  method second_sub = None
-  method third_sub = None
+  method left_sub = None
+  method right_sub = None
   method value = number_val
-  method inc (x:int) = number_val <- number_val + x
 end               
 
 class sum_exp (e1:expression) (e2:expression) = object
   inherit expression as super
-  val mutable first_exp = e1
-  val mutable second_exp = e2
+  val mutable left_exp = e1
+  val mutable right_exp = e2
   method is_atomic = false
-  method first_sub = Some first_exp
-  method second_sub = Some second_exp
-  method third_sub = None
-  method value = first_exp#value + second_exp#value
-  method inc (x:int) = 
-    first_exp#inc x;
-    second_exp#inc x
+  method left_sub = Some left_exp
+  method right_sub = Some right_exp
+  method value = left_exp#value + right_exp#value
 end
 
 (* QUESTION 1. Product Class and Method Calls *)
@@ -59,20 +51,6 @@ end
 
    e ::= ... | e * e
  *)
-
-class prod_exp (e1:expression) (e2:expression) = object
-  inherit expression as super
-  val mutable first_exp = e1
-  val mutable second_exp = e2
-  method is_atomic = false
-  method first_sub = Some first_exp
-  method second_sub = Some second_exp
-  method third_sub = None
-  method value = first_exp#value * second_exp#value
-  method inc (x:int) = 
-    first_exp#inc x;
-    second_exp#inc x
-end
 
 (* 1(b). Create objects representing the following expressions:
    - An expression "a" representing the number 3
@@ -84,15 +62,10 @@ end
    Note that "e" represents the expression (3+0)*5.
 
    To answer 1(b), uncomment this code and fill it in:
-*)
-
-let a = new number_exp 3
-let b = new number_exp 0
-let c = new number_exp 5
-let d = new sum_exp a b
-let e = new prod_exp d c
-let value_of_e = e#value
-
+   let a = ...
+   let b = ...
+   ...
+ *)
                                               
 (* QUESTION 2. Unary Expressions *)
 (* Extend the class hierarchy further by writing a "square_exp".
@@ -103,19 +76,6 @@ let value_of_e = e#value
    Changes will be required to the "expression" interface, so you will
    need to reimplement all the classes from above with these changes.
    Try to make as few changes as possible to the program. *)
-
-class square_exp (e:expression) = object
-  inherit expression as super
-  val mutable first_exp = e
-  method is_atomic = false
-  method first_sub = Some first_exp
-  method second_sub = None
-  method third_sub = None
-  method value = 
-    let t = first_exp#value in
-      t * t
-  method inc (x:int) = first_exp#inc x
-end
 
 (* QUESTION 3. Ternary Expressions and More Method Calls *)
 (* 3(a). Extend this class heirarchy by writing a "cond_exp" class to
@@ -132,40 +92,12 @@ end
    so that it handles both unary and ternary expressions.
  *)
 
-class cond_exp (e1:expression) (e2:expression) (e3:expression) = object
-  inherit expression as super
-  val mutable first_exp = e1
-  val mutable second_exp = e2
-  val mutable third_exp = e3
-  method is_atomic = false
-  method first_sub = Some first_exp
-  method second_sub = Some second_exp
-  method third_sub = Some third_exp
-  method value = 
-    if first_exp#value <> 0 then
-      second_exp#value
-    else
-      third_exp#value
-  method inc (x:int) = 
-    first_exp#inc x;
-    second_exp#inc x;
-    third_exp#inc x
-end
-
 (* 3(b). Re-create all the objects a,b,c,d,e above and create new
    objects:
    - An expression "f" representing the square of "c"
    - An expression "g" representing the conditional b?e:f
    Then send the message "value" to "g".
  *)
-let a = new number_exp 2
-let b = new number_exp 1
-let c = new number_exp 3
-let d = new prod_exp a b
-let e = new sum_exp d c
-let f = new square_exp c
-let g = new cond_exp b e f
-let value_of_g = g#value
 
 (* 3(c) Enter the following expressions (for a,b,c,d,e,f,g) into OCaml
    so that you can see what is printed by the OCaml interpreter.  In
@@ -179,7 +111,6 @@ let value_of_g = g#value
    type in OCaml.
 
    To answer 3(c), uncomment this code and execute it.
-*)
 
 let _ = a
 let _ = b
@@ -189,14 +120,7 @@ let _ = e
 let _ = f
 let _ = g
 let e_list : expression list = [a;b;c;d;e;f;g]
-
-(* Answer:
-Because OCaml supports subtyping mechanism and a, b, c, d, e, f, g 
-has all the functionality of the class 'expression', these elements can be
-used in any context where 'expression' type is expected. In this way, the elements
-from a to g can be included in the e_list, since they can casted to 'expression' type
-by the OCaml interpreter.
-*)
+ *)
 
 (* QUESTION 4. Redesign the entire hierarchy again, so that it
    includes a new operation that takes one argument (x:int) and
@@ -211,13 +135,3 @@ by the OCaml interpreter.
    argument value greater than 0.  Then send the message "value" to
    "g". The new value should be different than the original one.
    Verify that your implementation gives the expected new value.  *)
-let a = new number_exp 10
-let b = new number_exp 20
-let c = new number_exp 30
-let d = new sum_exp b c
-let e = new prod_exp d a
-let f = new cond_exp a d e
-let g = new square_exp c
-let value_of_g = g#value (*900*)
-let _ = g#inc 1
-let value_of_g = g#value (*expected: 961; actual: 961*)
