@@ -123,6 +123,8 @@ let _ = test_square#value
    so that it handles both unary and ternary expressions.
  *)
 
+
+
 (* 3(b). Re-create all the objects a,b,c,d,e above and create new
    objects:
    - An expression "f" representing the square of "c"
@@ -166,3 +168,95 @@ let e_list : expression list = [a;b;c;d;e;f;g]
    argument value greater than 0.  Then send the message "value" to
    "g". The new value should be different than the original one.
    Verify that your implementation gives the expected new value.  *)
+
+class virtual expression = object
+  method virtual is_atomic : bool
+  method virtual first_sub : expression option
+  method virtual second_sub : expression option
+  method virtual third_sub : expression option
+  method virtual value : int
+  method virtual inc : int -> unit
+end
+
+class number_exp (n:int) = object
+  inherit expression as super
+  val mutable number_val = n
+  method is_atomic = true
+  method first_sub = None
+  method second_sub = None
+  method third_sub = None
+  method value = number_val
+  method inc (x:int) = number_val <- number_val + x
+end
+
+class sum_exp (e1:expression) (e2:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value + second_exp#value
+  method inc (x:int) = 
+    first_exp#inc x;
+    second_exp#inc x
+end
+
+class prod_exp (e1:expression) (e2:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value * second_exp#value
+  method inc (x:int) = 
+    first_exp#inc x;
+    second_exp#inc x
+end
+
+class square_exp (e:expression) = object
+  inherit expression as super
+  val mutable first_exp = e
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = None
+  method third_sub = None
+  method value = 
+    let t = first_exp#value in
+      t * t
+  method inc (x:int) = first_exp#inc x
+end
+
+class cond_exp (e1:expression) (e2:expression) (e3:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  val mutable third_exp = e3
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = Some third_exp
+  method value = 
+    if first_exp#value <> 0 then
+      second_exp#value
+    else
+      third_exp#value
+  method inc (x:int) = 
+    first_exp#inc x;
+    second_exp#inc x;
+    third_exp#inc x
+end
+
+let a = new number_exp 10
+let b = new number_exp 20
+let c = new number_exp 30
+let d = new sum_exp b c
+let e = new prod_exp d a
+let f = new cond_exp a d e
+let g = new square_exp c
+let value_of_g = g#value (*900*)
+let _ = g#inc 1
+let value_of_g = g#value (*expected: 961; actual: 961*)
