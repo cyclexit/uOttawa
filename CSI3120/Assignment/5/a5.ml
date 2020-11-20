@@ -50,8 +50,18 @@ let tlfact n =
    floats and returns the minimum as a float option.  If the list is
    empty, return None.  *) 
 
-(* let tlmin (xs:float list) : float option = *)
+let tlmin (xs:float list) : float option =
+  let rec aux (xs:float list) (mn:float) : float =
+    match xs with
+    | [] -> mn
+    | hd::tl -> aux tl (min mn hd)
+  in
+    match xs with
+    | [] -> None
+    | hd::tl -> Some (aux tl hd)
 
+let test_tlmin_1 = tlmin []
+let test_tlmin_2 = tlmin [3.0; 2.4; 9.5; 2.7]
 
 (******************************************)
 (* PROBLEM 3: Programming with exceptions *)
