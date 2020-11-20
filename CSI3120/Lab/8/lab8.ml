@@ -123,6 +123,74 @@ let _ = test_square#value
    so that it handles both unary and ternary expressions.
  *)
 
+class virtual expression = object
+  method virtual is_atomic : bool
+  method virtual first_sub : expression option
+  method virtual second_sub : expression option
+  method virtual third_sub : expression option
+  method virtual value : int
+end
+
+class number_exp (n:int) = object
+  inherit expression as super
+  val mutable number_val = n
+  method is_atomic = true
+  method first_sub = None
+  method second_sub = None
+  method third_sub = None
+  method value = number_val
+end
+
+class sum_exp (e1:expression) (e2:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value + second_exp#value
+end
+
+class prod_exp (e1:expression) (e2:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = None
+  method value = first_exp#value * second_exp#value
+end
+
+class square_exp (e:expression) = object
+  inherit expression as super
+  val mutable first_exp = e
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = None
+  method third_sub = None
+  method value = 
+    let t = first_exp#value in
+      t * t
+end
+
+(*cond_exp class for question 3*)
+class cond_exp (e1:expression) (e2:expression) (e3:expression) = object
+  inherit expression as super
+  val mutable first_exp = e1
+  val mutable second_exp = e2
+  val mutable third_exp = e3
+  method is_atomic = false
+  method first_sub = Some first_exp
+  method second_sub = Some second_exp
+  method third_sub = Some third_exp
+  method value = 
+    if first_exp#value <> 0 then
+      second_exp#value
+    else
+      third_exp#value
+end
 
 
 (* 3(b). Re-create all the objects a,b,c,d,e above and create new
@@ -131,6 +199,15 @@ let _ = test_square#value
    - An expression "g" representing the conditional b?e:f
    Then send the message "value" to "g".
  *)
+
+let a = new number_exp 2
+let b = new number_exp 1
+let c = new number_exp 3
+let d = new prod_exp a b
+let e = new sum_exp d c
+let f = new square_exp c
+let g = new cond_exp b e f
+let value_of_g = g#value (*expected: 5; actual: 5*)
 
 (* 3(c) Enter the following expressions (for a,b,c,d,e,f,g) into OCaml
    so that you can see what is printed by the OCaml interpreter.  In
@@ -144,6 +221,7 @@ let _ = test_square#value
    type in OCaml.
 
    To answer 3(c), uncomment this code and execute it.
+*)
 
 let _ = a
 let _ = b
@@ -153,7 +231,14 @@ let _ = e
 let _ = f
 let _ = g
 let e_list : expression list = [a;b;c;d;e;f;g]
- *)
+
+(* Answer:
+Because OCaml supports subtyping mechanism and a, b, c, d, e, f, g 
+has all the functionality of the class 'expression', these elements can be
+used in any context where 'expression' type is expected. In this way, the elements
+from a to g can be included in the e_list, since they can casted to 'expression' type
+by the OCaml interpreter.
+*)
 
 (* QUESTION 4. Redesign the entire hierarchy again, so that it
    includes a new operation that takes one argument (x:int) and
