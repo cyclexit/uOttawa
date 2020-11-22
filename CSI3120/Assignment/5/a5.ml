@@ -167,7 +167,15 @@ let n1 = f4 (fib 14) (fib 41) (-1)
    Does one call execute faster than the other?  If so, which one is
    faster and why?  If not, explain why they take (roughly) the same
    amount of time. *)
-  
+
+(* 
+Answer:
+  They take almost the same amout of time. In both two cases, before the 
+  activation record for the function call of f4 is created, the values of
+  (fib 14) and (fib 41) are both required to calculate so that the values 
+  can be used for the parameter passing. As a result, the efficiency is 
+  almost the same for both two cases.
+*)
 
 (* Problem 4(b) *)
 (* Write a call-by-need version of the f4 function from 4(a).  The
@@ -175,8 +183,11 @@ let n1 = f4 (fib 14) (fib 41) (-1)
    type "int".  Do not change the type of the third argument.  The
    first two arguments should only be evaluated if needed. *)
 
-(* let f4_cbn ...  = ... *)
-
+let f4_cbn (x:int delay ref) (y:int delay ref) (z:int) : int = 
+  if z < 0 then
+    force x
+  else
+    force y
 
 (* Problem 4(c) *)
 (* Calculate m2 and n2 below by calling your function f4_cbn from 4(b)
@@ -188,6 +199,21 @@ let n1 = f4 (fib 14) (fib 41) (-1)
    Then calculate m2' by repeating the same call to f4_cbn as you did
    for calculating m2.  Why is the calculation of m2' faster? *)
 
-(* let m2 = f4_cbn ... *)
-(* let n2 = f4_cbn ... *)
-(* let m2' = f4_cbn ... *)
+let x = (ref (UN (fun () -> fib 14)))
+let y = (ref (UN (fun () -> fib 41)))
+
+let m2 = f4_cbn x y 1
+let n2 = f4_cbn x y (-1)
+let m2' = f4_cbn x y 1
+
+(*
+Answer:
+  The funcion call to calculate n2 is faster than the one to calculate m2, 
+  because in the call to calculate n2, (fib 14) is evaluated with z = -1, 
+  while in the call to calculate m2, (fib 41) is evaluated with z = 1.
+
+  Calculating m2' is faster than calculating m2, because in the call to calculate
+  m2, the y is changed from UN(unevaluated) to EV(evaluated). As a result, inside
+  the funcion f4_cbn, there is no need to calculate the value of y again, so
+  calculating m2' is faster than calculating m2.
+*)
