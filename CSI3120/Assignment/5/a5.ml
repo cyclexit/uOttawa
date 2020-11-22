@@ -81,14 +81,31 @@ let test_tlmin_2 = tlmin [3.0; 2.4; 9.5; 2.7]
    is shown below providing examples that illustrate the behavior of
    this function. *)
 
-(* let product xs = *)
+exception ProductIsZero
+exception NegativeInList of float
+let rec product (xs:float list) : float =
+  match xs with
+  | [] -> 1.0
+  | hd::tl -> (
+    if hd = 0.0 then
+      raise ProductIsZero
+    else if hd < 0.0 then
+      let mn = (tlmin xs) in
+        match mn with
+        | None -> raise (NegativeInList hd)
+        | Some num -> raise (NegativeInList num)
+    else
+      hd *. (product tl)
+  )
 
-(* let test3a1 = product [3.2;0.4;90.3;1.8;4.6;90.0]
-   val test3a1 : float = 86133.1968
-   let test3a2 = product [3.2;0.4;90.3;-1.8;4.6;-90.0]
-   Exception: NegativeInList (-90.).
-   let test3a3 = product [3.2;0.4;0.0;-1.8;4.6;-90.0]
-   Exception: ProductIsZero. *)
+(*
+let test3a1 = product [3.2;0.4;90.3;1.8;4.6;90.0]
+(*val test3a1 : float = 86133.1968*)
+let test3a2 = product [3.2;0.4;90.3;-1.8;4.6;-90.0]
+(*Exception: NegativeInList (-90.).*)
+let test3a3 = product [3.2;0.4;0.0;-1.8;4.6;-90.0]
+(*Exception: ProductIsZero.*)
+*)
 
 
 (* Problem 3(b) *)
@@ -99,7 +116,13 @@ let test_tlmin_2 = tlmin [3.0; 2.4; 9.5; 2.7]
    each case (including all cases where an exception is raised or
    not). *)
 
-let try_product (xs:float list) : string = ""
+let try_product (xs:float list) : string =
+  try
+    let res = product xs in
+      string_of_float res
+  with
+  | ProductIsZero -> "0."
+  | NegativeInList num -> "List contains aw negative number; minimum is " ^ (string_of_float num)
 
 let test3b1 = try_product [3.2;0.4;90.3;1.8;4.6;90.0]
 (* val test3b1 : string = "86133.1968" *)
