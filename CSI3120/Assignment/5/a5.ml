@@ -1,7 +1,7 @@
 (*** CSI 3120 Assignment 5 ***)
-(*** YOUR NAME HERE ***)
-(*** YOUR STUDENT ID HERE ***)
-(*** OCAML VERSION USED FOR THIS ASSIGNMENT HERE ***)
+(*** Hongyi Lin ***)
+(*** 300053082 ***)
+(*** 4.08.1 ***)
 (* If you use the version available from the lab machines via VCL, the
    version is 4.05.0 ***)
 
