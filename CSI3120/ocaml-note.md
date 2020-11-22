@@ -45,3 +45,14 @@ concat: `^` operator
 
 ## Comparison
 `=` is structural equality and `==` is physical equality. Beware: `<>` is structural not-equals while `!=` is physical not-equals.
+
+## Execution Time
+```ml
+let time f =
+  let t = Sys.time () in
+  let res = f () in
+  Printf.printf "Execution time: %f seconds\n"
+                (Sys.time () -. t);
+  res
+;;
+```
