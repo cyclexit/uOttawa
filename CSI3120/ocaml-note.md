@@ -56,3 +56,35 @@ let time f =
   res
 ;;
 ```
+
+## Object-Oriented
+1. `virtual`: used to declare the class and method
+2. `mutable`: make the variable insdie the class mutable
+3. `val`: used to declare a variable in a class
+4. `method`: used to declare a method in a class
+5. `<-`: used to assign the value to a mutable variable
+6. `#`: used to call the class method on an instance
+7. `:>`: type coercion operator, used as `:> type`.
+8. `new`: used to create a new instance
+9. declare a class:
+    ```ml
+    type radius = float
+    type point = float * float
+    type side = float
+
+    class virtual shape = object
+        val mutable location : point = (0.0, 0.0)
+        method get_location = location
+        method set_location (x:float) (y:float) : unit =
+            location <- (x, y)
+        method virtual area : float
+    end
+
+    class circle = object
+        inherit shape as super (*inheritance*)
+        val mutable rad = 1.0
+        method get_radius = rad
+        method set_radius (r:radius) : unit = rad <- r
+        method area = pi *. rad *. rad
+    end
+    ```
