@@ -82,6 +82,65 @@ let out_of_100 (max_marks:float) (actual_marks:float) : float =
    using the result to calculate the letter grade using the University
    of Ottawa grading scheme. *)
 
+let do_second f (x, y) = (x, f y)
+
+let marks_change_final (mks:marks) : marks =
+  let (a1, a2, a3, t1, t2, final) = mks in
+    (a1, a2, a3, t1, t2, out_of_100 95.0 final)
+
+let marks_to_mark_triple (mks:marks) : mark_triple =
+  let (a1, a2, a3, t1, t2, final) = mks in
+    (a1 +. a2 +. a3, t1 +. t2, final)
+
+let mark_triple_percentage (mt:mark_triple) : mark_triple =
+  let (pa, pt, pf) = marks_to_mark_triple perfect_score in
+  let (a, t, f) = mt in
+    (a /. pa, t /.pt, f /. pf)
+
+let mark_triple_portion (mt:mark_triple) : mark_triple =
+  let (a, t, f) = mt in
+    (a *. assign_percent1, t *. test_percent1, f *. exam_percent1)
+
+let get_letter_grade (fg:final_grade) : letter_grade =
+  if fg > 90. then
+    "A+"
+  else if fg > 85. then
+    "A"
+  else if fg > 80. then
+    "A-"
+  else if fg > 75. then
+    "B+"
+  else if fg > 70. then
+    "B"
+  else if fg > 65. then
+    "B-"
+  else if fg > 60. then
+    "C"
+  else if fg > 55. then
+    "D+"
+  else if fg > 50. then
+    "D"
+  else if fg > 40. then
+    "E"
+  else
+    "F"
+
+let rc2_to_rc3 (rc2:st_record2) : st_record3 =
+  let (id, mt) = rc2 in
+  let (a, t, f) = mt in
+  let fg = a +. t +. f in
+  (id, fg, get_letter_grade fg)
+
+let rc1_to_rc3 (rc:st_record1) : st_record3 =
+  rc |> do_second marks_change_final
+     |> do_second marks_to_mark_triple
+     |> do_second mark_triple_percentage
+     |> do_second mark_triple_portion
+     |> rc2_to_rc3
+
+let test_data = (1, (50., 75., 40., 45., 50., 96.))
+let _ = rc1_to_rc3 test_data
+
 (* QUESTION 2 *)
 (* Define a version of the "display" function on page 18 of the course
    notes on pipelines that works with the data in this lab.  The type
