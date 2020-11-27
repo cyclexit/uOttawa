@@ -82,24 +82,28 @@ let out_of_100 (max_marks:float) (actual_marks:float) : float =
    using the result to calculate the letter grade using the University
    of Ottawa grading scheme. *)
 
-let do_second f (x, y) = (x, f y)
-
-let marks_change_final (mks:marks) : marks =
+let rc1_change_final (rc1:st_record1) : st_record1 =
+  let (id, mks) = rc1 in
   let (a1, a2, a3, t1, t2, final) = mks in
-    (a1, a2, a3, t1, t2, out_of_100 95.0 final)
+    (id, (a1, a2, a3, t1, t2, out_of_100 95.0 final))
 
-let marks_to_mark_triple (mks:marks) : mark_triple =
+let rc1_to_rc2 (rc1:st_record1) : st_record2 =
+  let (id, mks) = rc1 in
   let (a1, a2, a3, t1, t2, final) = mks in
-    (a1 +. a2 +. a3, t1 +. t2, final)
+    (id, (a1 +. a2 +. a3, t1 +. t2, final))
 
-let mark_triple_percentage (mt:mark_triple) : mark_triple =
-  let (pa, pt, pf) = marks_to_mark_triple perfect_score in
+let rc2_to_percent (rc2:st_record2) : st_record2 =
+  let pa = total_a1 +. total_a2 +. total_a3 in
+  let pt = total_t1 +. total_t2 in
+  let pf = total_exam in
+  let (id, mt) = rc2 in
   let (a, t, f) = mt in
-    (a /. pa, t /.pt, f /. pf)
+    (id, (a /. pa, t /.pt, f /. pf))
 
-let mark_triple_portion (mt:mark_triple) : mark_triple =
+let rc2_to_portion (rc2:st_record2) : st_record2 =
+  let (id, mt) = rc2 in
   let (a, t, f) = mt in
-    (a *. assign_percent1, t *. test_percent1, f *. exam_percent1)
+    (id, (a *. assign_percent1, t *. test_percent1, f *. exam_percent1))
 
 let get_letter_grade (fg:final_grade) : letter_grade =
   if fg > 90. then
@@ -131,11 +135,11 @@ let rc2_to_rc3 (rc2:st_record2) : st_record3 =
   let fg = a +. t +. f in
   (id, fg, get_letter_grade fg)
 
-let rc1_to_rc3 (rc:st_record1) : st_record3 =
-  rc |> do_second marks_change_final
-     |> do_second marks_to_mark_triple
-     |> do_second mark_triple_percentage
-     |> do_second mark_triple_portion
+let rc1_to_rc3 (rc1:st_record1) : st_record3 =
+  rc1 |> rc1_change_final
+     |> rc1_to_rc2
+     |> rc2_to_percent
+     |> rc2_to_portion
      |> rc2_to_rc3
 
 let test_data = (1, (50., 75., 40., 45., 50., 96.))
@@ -163,5 +167,5 @@ let display (lst:st_record1 list) : unit =
       |> List.map stringify
       |> List.iter print_endline
 
-let test_list = [(1, (50., 75., 40., 45., 50., 96.)); (2, (50., 75., 40., 45., 40., 90.))]
+let test_list = [(1, (50., 75., 40., 45., 50., 96.)); (2, (50., 75., 40., 45., 40., 90.)); (3, (50., 75., 40., 42., 46., 95.))]
 let _ = display test_list
