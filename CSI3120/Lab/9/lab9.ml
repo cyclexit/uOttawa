@@ -148,3 +148,20 @@ let _ = rc1_to_rc3 test_data
    "st_record1 list", and you will use your solution to Question 1
    instead of "compute_score".  You will also need to define a new
    version of "compare_score" and "stringify". *)
+
+let compare_score (_, f1, _) (_, f2, _) =
+  if f1 < f2 then 1
+  else if f1 > f2 then -1
+  else 0
+
+let stringify (id, f, l) =
+  "id = " ^ (string_of_int id) ^ ", final_grade = " ^ (string_of_float f) ^ ", letter_grade = " ^ l 
+
+let display (lst:st_record1 list) : unit =
+  lst |> List.map rc1_to_rc3
+      |> List.sort compare_score
+      |> List.map stringify
+      |> List.iter print_endline
+
+let test_list = [(1, (50., 75., 40., 45., 50., 96.)); (2, (50., 75., 40., 45., 40., 90.))]
+let _ = display test_list
