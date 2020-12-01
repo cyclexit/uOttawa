@@ -50,11 +50,77 @@ let balance_list = get_fBalances loan_list
 
 (* Your code for parts 2(a) and (b) go here *)
 
-(* class note_payable = *)
+exception PaybackOverflow of fBalance
+class note_payable = object
+  val mutable balance = 0.0
+  method get_balance = balance
+  method borrow (amount:fBalance) =
+    balance <- balance +. amount
+  method payback (amount:fBalance) =
+    if amount > balance then
+      raise (PaybackOverflow balance)
+    else
+      balance <- balance -. amount
+  method to_loan =
+    NotePayable balance
+end
 
-(* class credit_card = *)
+class credit_card = object
+  inherit note_payable as super
+  val mutable interest_rate = 0.2
+  method get_interest_rate = interest_rate
+  method set_interest_rate (r:fInterestRate) =
+    interest_rate <- r
+  method add_interest =
+    let interest = super#get_balance *. interest_rate in
+      super#borrow interest
+  method to_loan =
+    CreditCard (super#get_balance, interest_rate)
+end
 
-(* class bank_loan = *)
+class bank_loan = object
+  inherit note_payable as super
+  val mutable monthly_payment = 0.0
+  method borrow (amount:fBalance) =
+    super#borrow amount;
+    monthly_payment <- monthly_payment +. (amount *. 0.1)
+  method payback_monthly_amount =
+    super#payback monthly_payment;
+    monthly_payment <- super#get_balance *. 0.1
+  method get_monthly_payment = monthly_payment
+  method to_loan =
+    BankLoan (super#get_balance, monthly_payment)
+end
+
+(* test for problem 2 *)
+
+let np = new note_payable
+let _ = np#get_balance
+let _ = np#borrow 10.0
+let _ = np#get_balance
+let _ = np#payback 5.0
+let _ = np#to_loan
+
+let cc = new credit_card
+let _ = cc#get_balance
+let _ = cc#get_interest_rate
+let _ = cc#to_loan
+let _ = cc#borrow 100.0
+let _ = cc#get_balance
+let _ = cc#set_interest_rate 0.1
+let _ = cc#get_interest_rate
+let _ = cc#add_interest
+let _ = cc#to_loan
+
+let bl = new bank_loan
+let _ = bl#get_balance
+let _ = bl#get_monthly_payment
+let _ = bl#to_loan
+let _ = bl#borrow 5000.0
+let _ = bl#get_balance
+let _ = bl#get_monthly_payment
+let _ = bl#payback_monthly_amount
+let _ = bl#to_loan
 
 
 (* Problem 2(a)  *)
