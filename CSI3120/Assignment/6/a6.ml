@@ -26,16 +26,23 @@ type loan =
    example, the first element of the result must be the balance of the
    first loan in the input list *)
 
-(* let get_fBalances l =
-   or
-   let rec get_fBalances l = *)
-
+let rec get_fBalances (l:loan list) : fBalance list =
+  match l with
+  | [] -> []
+  | hd::tl -> (
+    match hd with
+    | NotePayable x -> x::(get_fBalances tl)
+    | CreditCard (x, _) -> x::(get_fBalances tl)
+    | BankLoan (x, _) -> x::(get_fBalances tl)
+  )
 
 (* Problem 1(b)  *)
 (* Write some test code: Create a list containing 3 loan accounts (one
    of each kind).  Set the monthly payment for the bank loan
    to 0. Apply your function from part 1(a) to your list of accounts *)
-
+  
+let loan_list = [NotePayable 1000.0; CreditCard (150.0, 0.003); BankLoan (50000.0, 0.0)]
+let balance_list = get_fBalances loan_list
 
 (*******************************************)
 (* PROBLEM 2: Object-Oriented Organization *)
