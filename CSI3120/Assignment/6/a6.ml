@@ -235,4 +235,12 @@ let balance_list3b = get_oBalances1 loan_list3b
    convert them to elements of type loan, and then call your
    function from Problem 1(a) *)
 
-(* let get_oBalances2 ... *)
+let get_oBalances2 (l:note_payable list) : fBalance list =
+  let rec to_loan_list (l:note_payable list) : loan list =
+    match l with
+    | [] -> []
+    | hd::tl -> (hd#to_loan)::(to_loan_list tl)
+  in
+    get_fBalances (to_loan_list l)
+
+let balance_list4 = get_oBalances2 loan_list3b
