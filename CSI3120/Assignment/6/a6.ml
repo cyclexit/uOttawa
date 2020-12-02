@@ -41,7 +41,7 @@ let rec get_fBalances (l:loan list) : fBalance list =
    of each kind).  Set the monthly payment for the bank loan
    to 0. Apply your function from part 1(a) to your list of accounts *)
   
-let loan_list = [NotePayable 1000.0; CreditCard (150.0, 0.003); BankLoan (50000.0, 0.0)]
+let loan_list = [NotePayable 1000.0; CreditCard (150.0, 0.03); BankLoan (50000.0, 0.0)]
 let balance_list = get_fBalances loan_list
 
 (*******************************************)
@@ -94,33 +94,33 @@ end
 
 (* test for problem 2 *)
 
-let np = new note_payable
-let _ = np#get_balance
-let _ = np#borrow 10.0
-let _ = np#get_balance
-let _ = np#payback 5.0
-let _ = np#to_loan
+let np_test = new note_payable
+let _ = np_test#get_balance
+let _ = np_test#borrow 10.0
+let _ = np_test#get_balance
+let _ = np_test#payback 5.0
+let _ = np_test#to_loan
 
-let cc = new credit_card
-let _ = cc#get_balance
-let _ = cc#get_interest_rate
-let _ = cc#to_loan
-let _ = cc#borrow 100.0
-let _ = cc#get_balance
-let _ = cc#set_interest_rate 0.1
-let _ = cc#get_interest_rate
-let _ = cc#add_interest
-let _ = cc#to_loan
+let cc_test = new credit_card
+let _ = cc_test#get_balance
+let _ = cc_test#get_interest_rate
+let _ = cc_test#to_loan
+let _ = cc_test#borrow 100.0
+let _ = cc_test#get_balance
+let _ = cc_test#set_interest_rate 0.1
+let _ = cc_test#get_interest_rate
+let _ = cc_test#add_interest
+let _ = cc_test#to_loan
 
-let bl = new bank_loan
-let _ = bl#get_balance
-let _ = bl#get_monthly_payment
-let _ = bl#to_loan
-let _ = bl#borrow 5000.0
-let _ = bl#get_balance
-let _ = bl#get_monthly_payment
-let _ = bl#payback_monthly_amount
-let _ = bl#to_loan
+let bl_test = new bank_loan
+let _ = bl_test#get_balance
+let _ = bl_test#get_monthly_payment
+let _ = bl_test#to_loan
+let _ = bl_test#borrow 5000.0
+let _ = bl_test#get_balance
+let _ = bl_test#get_monthly_payment
+let _ = bl_test#payback_monthly_amount
+let _ = bl_test#to_loan
 
 
 (* Problem 2(a)  *)
@@ -184,11 +184,21 @@ let _ = bl#to_loan
    creates a credit card must take an additional argument used to
    set the interest rate. *)
 
-(* let construct_note_payable ... *)
+let construct_note_payable (amount:fBalance) : note_payable =
+  let np = new note_payable in
+    np#borrow amount;
+    np
 
-(* let construct_credit_card ... *)
+let construct_credit_card (amount:fBalance) (ir:fInterestRate) : credit_card =
+  let cc = new credit_card in
+    cc#borrow amount;
+    cc#set_interest_rate ir;
+    cc
 
-(* let construct_bank_loan ... *)
+let construct_bank_loan (amount:fBalance) =
+  let bl = new bank_loan in
+    bl#borrow amount;
+    bl
 
 
 (* Problem 3(b)  *)
@@ -197,6 +207,10 @@ let _ = bl#to_loan
    all of them.  You may have to use the coercion operator from
    Chapter 12 of "Real World OCaml".  (See the course notes.) *)
 
+let np3b = construct_note_payable 1000.0
+let cc3b = construct_credit_card 150.0 0.03
+let bl3b = construct_bank_loan 50000.0
+let loan_list3b = [np3b; (cc3b :> note_payable); (bl3b :> note_payable)]
 
 (* Problem 3(c)  *)
 (* Redo Problem 1(a), writing the object-oriented version this time (a
@@ -204,7 +218,12 @@ let _ = bl#to_loan
    returns a list of balances.  Call your function on your list from
    Problem 3(b). *)
 
-(* let get_oBalances1 ... *)
+let rec get_oBalances1 (l:note_payable list) : fBalance list =
+  match l with
+  | [] -> []
+  | hd::tl -> (hd#get_balance)::(get_oBalances1 tl)
+
+let balance_list3b = get_oBalances1 loan_list3b
 
 
 (****************************************************)
