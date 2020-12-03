@@ -86,7 +86,6 @@ class bank_loan = object
     monthly_payment <- monthly_payment +. (amount *. 0.1)
   method payback_monthly_amount =
     super#payback monthly_payment;
-    monthly_payment <- super#get_balance *. 0.1
   method get_monthly_payment = monthly_payment
   method to_loan =
     BankLoan (super#get_balance, monthly_payment)
