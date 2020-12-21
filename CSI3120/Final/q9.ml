@@ -37,7 +37,10 @@ let rec new_product_cp (xs:int list) (k:int -> int)
         new_product_cp t (fun x -> k (h * x)) zerok negk
   )
 
-let new_try_product_cp (xs:int list) : int = new_product_cp xs (fun x -> x) 0 (fun (cur:int) (xs:int list) -> find_min cur xs)
+let new_try_product_cp (xs:int list) : int = new_product_cp xs (fun x -> x) 0 (fun (cur:int) (xs:int list) -> 2 * (find_min cur xs))
 
 let x00 = new_try_product_cp list0
 let x11 = new_try_product_cp list1
+let list2 = [1; 3; 2 -1; -9]
+let x2 = try_product_cp list2
+let x22 = new_try_product_cp list2 
