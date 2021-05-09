@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Question 6</title>
+    </head>
+
+    <body>
+        <form autocomplete="on">
+            <p>
+                <label><strong>Days of the week:</strong></label>
+                <!--The ids of different elements should not be the same.-->
+                <input id="weekday" name="weekday" list="days" type="text">
+                <datalist id="days">
+                    <option value="Monday">
+                    <option value="Tuesday">
+                    <option value="Wednesday">
+                    <option value="Thursday">
+                    <option value="Friday">
+                    <option value="Saturday">
+                    <option value="Sunday">
+                </datalist>
+            </p>
+
+            <p>
+                <input type="submit" value="Submit">
+                <input type="reset" value="Reset">
+            </p>
+        </form>
+    </body>
+</html>
