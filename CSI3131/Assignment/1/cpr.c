@@ -19,7 +19,7 @@ Explanation of the zombie process
 #include <sys/select.h>
 
 /* Prototype */
-void createChildAndRead (int);
+void createChildAndRead(int);
 
 /* -------------------------------------------------------------
 Function: main
@@ -33,11 +33,11 @@ Description:
 	the child's data.
 -------------------------------------------------- ----------- */
 
-int main (int ac, char **av) {
+int main(int ac, char **av) {
   int processNumber; 
   
 	if (ac == 2) {
-		if (sscanf (av [1], "%d", &processNumber)== 1) {
+		if (sscanf(av[1], "%d", &processNumber) == 1) {
     	createChildAndRead(processNumber);
 		} else {
 			fprintf(stderr, "Cannot translate argument\n");
@@ -46,7 +46,7 @@ int main (int ac, char **av) {
 		fprintf(stderr, "Invalid arguments\n");
 	}
 
-	return (0);
+	return 0;
 }
 
 
