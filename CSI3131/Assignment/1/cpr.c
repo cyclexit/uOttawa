@@ -1,8 +1,8 @@
 /* ------------------------------------------------ ------------
 File: cpr.c
 
-Last name:
-Student number:
+Last name: Lin
+Student number: 300053082
 
 Description: This program contains the code for creation
  of a child process and attach a pipe to it.
@@ -33,20 +33,20 @@ Description:
 	the child's data.
 -------------------------------------------------- ----------- */
 
-int main (int ac, char **av)
-{
- int processNumber; 
+int main (int ac, char **av) {
+  int processNumber; 
+  
+	if (ac == 2) {
+		if (sscanf (av [1], "%d", &processNumber)== 1) {
+    	createChildAndRead(processNumber);
+		} else {
+			fprintf(stderr, "Cannot translate argument\n");
+		}
+	} else {
+		fprintf(stderr, "Invalid arguments\n");
+	}
 
- if (ac == 2)
- {
- if (sscanf (av [1], "%d", &processNumber)== 1)
- {
-    createChildAndRead(processNumber);
- }
-    else fprintf(stderr, "Cannot translate argument\n");
- }
-    else fprintf(stderr, "Invalid arguments\n");
-    return (0);
+	return (0);
 }
 
 
@@ -62,12 +62,7 @@ Description:
 	be read from the pipe.
 -------------------------------------------------- ----------- */
 
-void createChildAndRead(int prcNum)
-{
-
- /* Please complete this function according to the
+void createChildAndRead(int prcNum) {
+/* Please complete this function according to the
 Assignment instructions. */
 }
-
-
-
