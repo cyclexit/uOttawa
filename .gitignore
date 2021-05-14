@@ -3,3 +3,6 @@
 
 # zip file
 *.zip
+
+# .vscode folder
+.vscode/
