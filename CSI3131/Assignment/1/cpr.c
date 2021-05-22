@@ -67,17 +67,15 @@ void createChildAndRead(int prcNum) {
 	/* Please complete this function according to the
 	Assignment instructions. */
 
-	char msg[BUFSIZ];
-	int msg_len;
 	if (prcNum == 1) {
-		msg_len = sprintf(msg, "Process %d begins\n", prcNum);
-		write(STDOUT_FILENO, msg, msg_len);
+		printf("Process %d begins\n", prcNum);
+		fflush(stdout);
 		sleep(5);
-		msg_len = sprintf(msg, "Process %d ends\n", prcNum);
-		write(STDOUT_FILENO, msg, msg_len);
+		printf("Process %d ends\n", prcNum);
+		fflush(stdout);
 	} else {
-		msg_len = sprintf(msg, "Process %d begins\n", prcNum);
-		write(STDOUT_FILENO, msg, msg_len);
+		printf("Process %d begins\n", prcNum);
+		fflush(stdout);
 
 		// create pipes
 		int pipe_fd[2];
@@ -102,14 +100,13 @@ void createChildAndRead(int prcNum) {
 			execvp(file, cmd);
 		} else { // parent
 			close(pipe_fd[1]);
-			char buffer[BUFSIZ];
-			int read_len;
-			while ((read_len = read(pipe_fd[0], buffer, 1)) > 0) {
-				write(STDOUT_FILENO, buffer, read_len);
+			char buf;
+			while (read(pipe_fd[0], &buf, 1) > 0) {
+				write(STDOUT_FILENO, &buf, 1);
 			}
 			close(pipe_fd[0]);
-			msg_len = sprintf(msg, "Process %d ends\n", prcNum);
-			write(STDOUT_FILENO, msg, msg_len);
+			printf("Process %d ends\n", prcNum);
+			fflush(stdout);
 		}
 	}
 }
