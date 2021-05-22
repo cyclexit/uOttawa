@@ -6,3 +6,6 @@
 
 # .vscode folder
 .vscode/
+
+# binary folder
+bin/
