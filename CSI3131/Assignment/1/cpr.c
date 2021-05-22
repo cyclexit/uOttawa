@@ -11,7 +11,11 @@ Description: This program contains the code for creation
 
 Explanation of the zombie process
 (point 5 of "To be completed" in the assignment):
-
+	The process is marked as "[cpr] <defunct>" in the print of the command
+	"ps -ef | grep cpr". This process is the zombie process. This zombie
+	process exists during the whole running time of the program, and it is
+	released until the program exit. In other words, this zombie process wastes
+	the memory during the running of the program.
 	(please complete this part);
 
 ------------------------------------------------------------- */
@@ -107,6 +111,8 @@ void createChildAndRead(int prcNum) {
 			close(pipe_fd[0]);
 			printf("Process %d ends\n", prcNum);
 			fflush(stdout);
+
+			sleep(10); // create a delay
 		}
 	}
 }
