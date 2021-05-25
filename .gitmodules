@@ -1,0 +1,3 @@
+[submodule "CSI3131"]
+	path = CSI3131
+	url = git@github.com:cyclexit/CSI3131.git
