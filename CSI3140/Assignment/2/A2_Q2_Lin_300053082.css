@@ -1,0 +1,26 @@
+.nav-button {
+    border-style: dotted;
+    border-width: 2px;
+    border-color: lightblue;
+    background-color: lightcyan;
+    color: grey;
+    width: max-content;
+    height: max-content;
+    
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-button:hover {
+    border-style: dashed;
+    color: lightgrey;
+}
+
+a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: inherit;
+}
