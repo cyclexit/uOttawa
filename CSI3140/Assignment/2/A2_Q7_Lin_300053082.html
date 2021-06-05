@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Question 7</title>
+        <style type="text/css">
+            table, table th, table td {
+                border-style: solid;
+                border-width: 2px;
+                border-color: lightblue;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table id="sales-summary-table">
+            <caption><h1>Sales Summary Table</h1></caption>
+            <thead>
+                <tr>
+                    <th>Product No.</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total Sales</th>
+                </tr>
+            </thead>
+        </table>
+        <script type="text/javascript">
+            window.alert("There are 5 products which have product numbers from 1 to 5.");
+
+            var products = [
+                {id: 1, unit_price: 2.98, quantity: 0, total: 0},
+                {id: 2, unit_price: 4.50, quantity: 0, total: 0},
+                {id: 3, unit_price: 9.98, quantity: 0, total: 0},
+                {id: 4, unit_price: 4.49, quantity: 0, total: 0},
+                {id: 5, unit_price: 6.87, quantity: 0, total: 0}
+            ];
+            do {
+                var input = prompt("Enter product number and quantity in the form \"number, quantity\":");
+                if (input == null) break;
+                var id = parseInt(input.split(",")[0]);
+                var quantity = parseInt(input.split(",")[1]);
+                console.log("id = " + id, "quantity = " + quantity);
+                if (isNaN(id) || isNaN(quantity)) {
+                    window.alert("Invalid input. Enter again.");
+                    continue;
+                }
+                switch (id) {
+                    case 1:
+                        products[0].quantity += quantity;
+                        products[0].total = products[0].unit_price * products[0].quantity;
+                        break;
+                    case 2:
+                        products[1].quantity += quantity;
+                        products[1].total = products[1].unit_price * products[1].quantity;
+                        break;
+                    case 3:
+                        products[2].quantity += quantity;
+                        products[2].total = products[2].unit_price * products[2].quantity;
+                        break;
+                    case 4:
+                        products[3].quantity += quantity;
+                        products[3].total = products[3].unit_price * products[3].quantity;
+                        break;
+                    case 5:
+                        products[4].quantity += quantity;
+                        products[4].total = products[4].unit_price * products[4].quantity;
+                        break;
+                    default:
+                        window.alert("Invalid product number. Product numbers are from 1 to 5.");
+                        break;
+                }
+            } while (input !== null);
+
+            var table = document.getElementById("sales-summary-table");
+            for (var i = 0; i < 5; ++i) {
+                console.log(products[i]);
+                var row = `
+                    <tr>
+                        <td>${products[i].id}</td>
+                        <td>${products[i].unit_price}</td>
+                        <td>${products[i].quantity}</td>
+                        <td>${products[i].total.toFixed(2)}</td>
+                    </tr>
+                `;
+                table.insertAdjacentHTML("beforeend", row)
+            }
+        </script>
+    </body>
+</html>
