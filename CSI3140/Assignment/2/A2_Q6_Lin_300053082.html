@@ -5,29 +5,29 @@
         <meta charset="utf-8">
         <title>Question 6</title>
         <script type="text/javascript">
-            var ok = false
-            var num
+            var ok = false;
+            var num;
             while (!ok) {
-                num = parseInt(window.prompt("Enter a five-digit integer: "))
+                num = parseInt(window.prompt("Enter a five-digit integer: "));
     
                 if (num.toString().length != 5) {
-                    window.alert("The integer does not have five digits.")
+                    window.alert("The integer does not have five digits.");
                 } else {
-                    ok = true
+                    ok = true;
                 }
             }
-            var is_palindrome = true
-            num = num.toString()
+            var is_palindrome = true;
+            num = num.toString();
             for (var i = 0; i < 2; ++i) {
                 if (num[i] != num[num.length - i - 1]) {
-                    is_palindrome = false
-                    break
+                    is_palindrome = false;
+                    break;
                 }
             }
             if (is_palindrome) {
-                document.writeln(num + " is a palindrome.")
+                document.writeln(num + " is a palindrome.");
             } else {
-                document.writeln(num + " is not a palindrome.")
+                document.writeln(num + " is not a palindrome.");
             }
         </script>
     </head>
