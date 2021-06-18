@@ -7,5 +7,8 @@
 # .vscode folder
 .vscode/
 
+# pycache folder
+__pycache__/
+
 # binary folder
 bin/
