@@ -139,24 +139,26 @@ if __name__ == "__main__":
     parser.add_argument("-payload", required=True, help="Data of the IP packet")
     args = parser.parse_args()
 
-    # get IP addresses
-    src_ip = socket.gethostbyname(socket.gethostname())
-    src_ip = "192.168.0.3" # test
-    if is_ipv4_addr(args.server):
-        dst_ip = args.server
-    else:
+    # open the socket and connect to the server
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    dst_ip = args.server
+    if not is_ipv4_addr(dst_ip):
         print("ERROR: Invalid IPv4 address")
         exit(1)
+    client_socket.connect((dst_ip, const.SERVER_PORT))
+
+    # get src IP addresses
+    src_ip, _ = client_socket.getsockname()
+    # src_ip = "192.168.0.3" # test purpose
 
     # get IP packet
     data = get_ipv4_packet(src_ip, dst_ip, args.payload)
 
-    # open the socket and connect to the server
-    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # client_socket.connect((args.server, const.SERVER_PORT))
-
-    # send the data
-    # try:
-        # pass
-    # finally:
-        # pass
+    # send the data and get the server reply
+    try:
+        client_socket.sendall(bytes(data))
+        recv_data = client_socket.recv(const.SOCKET_BUFFER_SIZE)
+        if recv_data:
+            print("From server:", recv_data.decode("ascii"))
+    finally:
+        client_socket.close()
