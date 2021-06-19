@@ -74,7 +74,7 @@ def get_ipv4_checksum(src_ip_hexstr, dst_ip_hexstr, ip_header_len):
     # print("checksum =", checksum_hexstr) # test
     # deal with the overflow
     if len(checksum_hexstr) > 4:
-        checksum += int(checksum_hexstr[0])
+        checksum += int(checksum_hexstr[0], 16)
         checksum_hexstr = hex(checksum)[3:] # ignore 0x and the overflow
     # 1s complement
     checksum_hexstr = hex(int(checksum_hexstr, 16) ^ 0xffff)[2:] # ignore 0x
