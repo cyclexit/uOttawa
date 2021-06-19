@@ -1,1 +1,8 @@
+# server port
 SERVER_PORT = 10086
+
+# IPv4 header parts
+IPV4_FIXED_PART_1 = "4500"
+IPV4_FIXED_PART_2 = "4000"
+IPV4_FIXED_PART_3 = "4006"
+PACKET_ID = "1c46"
