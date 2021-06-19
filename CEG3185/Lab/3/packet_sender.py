@@ -7,6 +7,14 @@ import const
 # python3 packet_sender.py -server 192.168.0.1 -payload "COLOMBIA 2 - MESSI 0"
 
 def is_ipv4_addr(ip_addr):
+    '''
+        Argument:
+        ip_addr: a string in the form "x.x.x.x" where 0<=x<=255
+
+        Return:
+        True if ip_addr is a valid IPv4 address.
+        False otherwise.
+    '''
     arr = ip_addr.split('.')
     if len(arr) != 4:
         return False
@@ -19,9 +27,25 @@ def is_ipv4_addr(ip_addr):
         return False
 
 def ipv4_addr_to_bytearray(ip_addr):
+    '''
+        Argument:
+        ip_addr: a string in the form "x.x.x.x" where 0<=x<=255
+
+        Return:
+        IP address in bytearray form
+    '''
     return bytearray(bytes(map(int, ip_addr.split('.'))))
 
 def get_ipv4_checksum(src_ip_hexstr, dst_ip_hexstr, ip_header_len):
+    '''
+        Argument:
+        src_ip_hexstr: a hex string represent the source IP address
+        dst_ip_hexstr: a hex string represent the destination IP address
+        ip_header_len: a decimal value
+
+        Return:
+        IPv4 checksum in bytearray form
+    '''
     # print(src_ip_hexstr) # test
     # print(dst_ip_hexstr) # test
     # print(ip_header_len) # test
