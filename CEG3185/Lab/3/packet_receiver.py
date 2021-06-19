@@ -1,6 +1,43 @@
 import socket
+import textwrap
 
 import const
+
+def validate_ipv4_checksum(header_arr):
+    '''
+        Argument:
+        header_arr: a list of data where each element is a hex string with length 4.
+
+        Return:
+        True if 1s complement of the sum of the data is 0.
+        False otherwise.
+    '''
+    # print(header_arr) # test
+    sum = 0
+    for x in header_arr:
+        sum += int(x, 16)
+    sum_hexstr = hex(sum)[2:] # ignore 0x
+    if len(sum_hexstr) > 4:
+        sum += int(sum_hexstr[0], 16)
+        sum_hexstr = hex(sum)[3:] # ignore 0x and the overflow
+    # print(sum_hexstr) # test
+    # 1s complement
+    res = int(sum_hexstr, 16) ^ 0xffff
+    # print(res) # test
+    return (res == 0)
+
+def get_ipv4_msg(msg_arr):
+    '''
+        Argument:
+        msg_arr: a list of data where each element is a hex string with length 4.
+
+        Return:
+        A string decoded from msg_arr
+    '''
+    msg = ""
+    for x in msg_arr:
+        msg += bytes(bytearray.fromhex(x)).decode("ascii")
+    return msg
 
 if __name__ == "__main__":
     # bind the socket to listen
@@ -29,24 +66,35 @@ if __name__ == "__main__":
                         data_bytearray += bytearray(data)
                     else:
                         break
+                # Question: Why can't the message be sent here?
             
-            # decode the data
-
-
-            # first print
-            print("The data received from {} is {}".format(
-                client_ip[0], "" # TODO: decode the packet
-            ))
-            # second print
-            print(
-                "The data has {} bits or {} bytes.".format(
-                    0, 0 # TODO: decode the packet
-                ),
-                "Total length of the packet is {} bytes.".format(
-                    len(data_bytearray)
+            # check the length of the data
+            data_arr = textwrap.wrap(data_bytearray.hex(), 4)
+            if len(data_arr) < 10:
+                print("ERROR: Incorrect data size. Discard the data.")
+                continue
+            # validate the checksum
+            if not validate_ipv4_checksum(data_arr[0:10]): # first 20 bytes
+                print("The verification of the checksum demonstrates that the packet received is corrupted. Packet discarded!")
+            else:
+                # decode the data
+                msg = get_ipv4_msg(data_arr[10:])
+                print(len(msg)) # test
+                # first print
+                print("The data received from {} is {}".format(
+                    client_ip[0], msg
+                ))
+                # second print
+                print(
+                    "The data has {} bits or {} bytes.".format(
+                        len(msg) * 8, len(msg)
+                    ),
+                    "Total length of the packet is {} bytes.".format(
+                        len(data_bytearray)
+                    )
                 )
-            )
-            # third print
+                # third print
+                print("The verification of the checksum demonstrates that the packet received is correct.")
     except KeyboardInterrupt:
         server_socket.close()
         print("Bye~")
