@@ -47,14 +47,14 @@ if __name__ == "__main__":
     )
     server_socket.bind(("", const.SERVER_PORT)) # all available interface
     server_socket.listen(1)
-    print(server_socket.getsockname()) # test
+    # print(server_socket.getsockname()) # test
 
     # running until the keyboard interrupt
     try:
         while True:
             print("Wait for the connection...")
             conn, client_ip = server_socket.accept()
-            print(client_ip) # test
+            # print(client_ip) # test
             
             # read the data
             data_bytearray = bytearray()
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             else:
                 # decode the data
                 msg = get_ipv4_msg(data_arr[10:])
-                print(len(msg)) # test
+                # print(len(msg)) # test
                 # first print
                 print("The data received from {} is {}".format(
                     client_ip[0], msg
