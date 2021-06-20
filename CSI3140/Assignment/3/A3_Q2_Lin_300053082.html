@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Question 2</title>
+        <style>
+            html, body {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                flex-direction: column;
+            }
+        </style>
+        <script>
+            var answer = Math.floor(Math.random() * 1000) + 1;
+            function check() {
+                var usrInput = parseInt(document.getElementById("usr-input").value);
+                var result = document.getElementById("result");
+                if (usrInput < answer) {
+                    result.style.color = "red";
+                    result.innerText = "Too low. Try again.";
+                } else if (usrInput > answer) {
+                    result.style.color = "red";
+                    result.innerText = "Too high. Try again.";
+                } else {
+                    result.style.color = "green";
+                    result.innerText = "Congratulations. You guessed the number!";
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <p>Guess a number between 1 and 1000:</p>
+        <div>
+            <input id="usr-input" type="number">
+            <button id="check" onclick="check()">Check</button>
+        </div>
+        <p id="result"></p>
+    </body>
+</html>
