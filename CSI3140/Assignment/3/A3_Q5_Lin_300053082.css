@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+#start-race {
+    font-size: larger;
+    border-radius: 0.5em;
+    padding: 10px;
+    background-color: lightcyan;
+}
+#start-race:hover {
+    background-color: lightpink;
+}
+#start-race:disabled {
+    background-color: lightgray;
+}
+
+#race {
+    font-family: monospace;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
