@@ -36,7 +36,14 @@ def get_ipv4_msg(msg_arr):
     '''
     msg = ""
     for x in msg_arr:
-        msg += bytes(bytearray.fromhex(x)).decode("ascii")
+        first_byte = x[0:2]
+        if first_byte == "00":
+            break
+        msg += bytes(bytearray.fromhex(first_byte)).decode("ascii")
+        second_byte = x[2:]
+        if second_byte == "00":
+            break
+        msg += bytes(bytearray.fromhex(second_byte)).decode("ascii")
     return msg
 
 if __name__ == "__main__":

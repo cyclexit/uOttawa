@@ -19,6 +19,11 @@
             function check() {
                 var usrInput = parseInt(document.getElementById("usr-input").value);
                 var result = document.getElementById("result");
+                if (isNaN(usrInput)) {
+                    result.style.color = "red";
+                    result.innerText = "Wrong input! You should enter a number between 1 and 1000.";
+                    return;
+                }
                 if (usrInput < answer) {
                     result.style.color = "red";
                     result.innerText = "Too low. Try again.";
@@ -36,7 +41,7 @@
     <body>
         <p>Guess a number between 1 and 1000:</p>
         <div>
-            <input id="usr-input" type="number">
+            <input id="usr-input" type="text">
             <button id="check" onclick="check()">Check</button>
         </div>
         <p id="result"></p>

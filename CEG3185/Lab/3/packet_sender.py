@@ -131,7 +131,7 @@ def get_ipv4_packet(src_ip, dst_ip, payload):
     # payload
     packet += payload_bytearray
 
-    print(textwrap.wrap(packet.hex(), 4)) # test
+    # print(textwrap.wrap(packet.hex(), 4)) # test
     return packet
 
 
