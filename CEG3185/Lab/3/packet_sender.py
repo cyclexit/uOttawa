@@ -4,7 +4,7 @@ import textwrap
 
 import const
 
-# python3 packet_sender.py -server 192.168.0.1 -payload "COLOMBIA 2 - MESSI 0"
+# python3 packet_sender.py -server 127.0.0.1 -payload "Hello!"
 
 def is_ipv4_addr(ip_addr):
     '''
@@ -36,23 +36,23 @@ def ipv4_addr_to_bytearray(ip_addr):
     '''
     return bytearray(bytes(map(int, ip_addr.split('.'))))
 
-def get_ipv4_checksum(src_ip_hexstr, dst_ip_hexstr, ip_header_len):
+def get_ipv4_checksum(src_ip_hexstr, dst_ip_hexstr, total_len):
     '''
         Argument:
         src_ip_hexstr: a hex string represent the source IP address
         dst_ip_hexstr: a hex string represent the destination IP address
-        ip_header_len: a decimal value
+        total_len: a decimal value
 
         Return:
         IPv4 checksum in bytearray form
     '''
     # print(src_ip_hexstr) # test
     # print(dst_ip_hexstr) # test
-    # print(ip_header_len) # test
+    # print(total_len) # test
 
     checksum = 0
-    # add ip_header_len
-    checksum += ip_header_len
+    # add total_len
+    checksum += total_len
     # add the data in const.py
     checksum += int(const.IPV4_FIXED_PART_1, 16)
     checksum += int(const.IPV4_FIXED_PART_2, 16)
@@ -100,8 +100,11 @@ def get_ipv4_packet(src_ip, dst_ip, payload):
     packet = bytearray.fromhex(const.IPV4_FIXED_PART_1)
 
     # total length of the header in bytes
-    ip_header_len = 20 + len(payload_bytearray) # decimal
-    packet += bytearray(ip_header_len.to_bytes(2, "big"))
+    total_len = 20 + len(payload_bytearray) # decimal
+    while (total_len % 8) != 0:
+        total_len += 1
+        payload_bytearray += bytearray.fromhex("00")
+    packet += bytearray(total_len.to_bytes(2, "big"))
 
     # fixed ID field
     packet += bytearray.fromhex(const.PACKET_ID)
@@ -116,7 +119,7 @@ def get_ipv4_packet(src_ip, dst_ip, payload):
     packet += get_ipv4_checksum(
         src_ip_bytearray.hex(),
         dst_ip_bytearray.hex(),
-        ip_header_len
+        total_len
     )
 
     # source IP in bytes
@@ -128,7 +131,7 @@ def get_ipv4_packet(src_ip, dst_ip, payload):
     # payload
     packet += payload_bytearray
 
-    # print(textwrap.wrap(packet.hex(), 4)) # test
+    print(textwrap.wrap(packet.hex(), 4)) # test
     return packet
 
 
