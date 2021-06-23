@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Question 2</title>
+        <style>
+            html, body {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                flex-direction: column;
+            }
+        </style>
+        <script>
+            var answer = Math.floor(Math.random() * 1000) + 1;
+            var cnt = 0;
+            function check() {
+                console.log(answer, cnt);
+                var usrInput = parseInt(document.getElementById("usr-input").value);
+                var result = document.getElementById("result");
+                if (isNaN(usrInput)) {
+                    result.style.color = "red";
+                    result.innerText = "Wrong input! You should enter a number between 1 and 1000.";
+                    return;
+                }
+                if (usrInput < answer) {
+                    ++cnt;
+                    result.style.color = "red";
+                    result.innerText = "Too low. Try again.";
+                } else if (usrInput > answer) {
+                    ++cnt;
+                    result.style.color = "red";
+                    result.innerText = "Too high. Try again.";
+                } else {
+                    result.style.color = "green";
+                    if (cnt < 10) {
+                        result.innerText = "Either you know the secret or you got lucky!";
+                    } else if (cnt == 10) {
+                        result.innerText = "Ahah! You know the secret!";
+                    } else {
+                        result.innerText = "You should be able to do better!";
+                    }
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <p>Guess a number between 1 and 1000:</p>
+        <div>
+            <input id="usr-input" type="text">
+            <button id="check" onclick="check()">Check</button>
+        </div>
+        <p id="result"></p>
+    </body>
+</html>
