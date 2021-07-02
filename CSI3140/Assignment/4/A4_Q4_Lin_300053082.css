@@ -1,0 +1,8 @@
+#moveable-img {
+    position: absolute;
+}
+#moveable-img:hover {
+    cursor: move;
+    border-style: solid;
+    border-width: 1px;
+}
