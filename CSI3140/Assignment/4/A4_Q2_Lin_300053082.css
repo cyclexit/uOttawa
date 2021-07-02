@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+table {
+    border-style: solid;
+    text-align: center;
+}
+
+td {
+    border-style: solid;
+    width: 50px;
+    height: 50px;
+}
+
+td:hover {
+    cursor: pointer;
+    background-color: lightblue;
+}
