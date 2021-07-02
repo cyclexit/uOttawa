@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+#shape-canvas {
+    width: 500px;
+    height: 300px;
+    border-style: solid;
+    border-width: 1px;
+}
