@@ -28,13 +28,26 @@ function isLegalSlot(id) {
         res.push(emptySlotID + 1);
         res.push(emptySlotID - 1);
     }
-    console.log("id = ", id, "empty", emptySlotID, "legal = ", res); // test
+    console.log("id =", id, "empty =", emptySlotID, "legal =", res); // test
     for (var i = 0; i < res.length; ++i) {
         if (id === res[i]) {
             return true;
         }
     }
     return false;
+}
+
+function isSolved() {
+    if (emptySlotID !== 15) {
+        return false;
+    }
+    for (var i = 0; i < TOTAL_SLOTS - 1; ++i) {
+        var value = parseInt(slots[i].textContent);
+        if (value !== i + 1) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function clickListener() {
@@ -50,6 +63,15 @@ function clickListener() {
             emptySlotID = id;
         } else {
             alert("Illegal Move: This slot is not adjacent to the empty slot.");
+        }
+        // check whether the puzzle is solved or not
+        if (isSolved()) {
+            var winMsg = "Wow! Congratulations! You solved the puzzle! Do you want to play again?";
+            setTimeout(() => {
+                if (confirm(winMsg)) {
+                    location.reload();
+                }
+            }, 1000);
         }
     }
 }
