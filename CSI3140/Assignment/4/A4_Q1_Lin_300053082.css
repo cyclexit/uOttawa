@@ -19,5 +19,6 @@ td {
 }
 
 td:hover {
+    cursor: pointer;
     background-color: lightblue;
 }
