@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="A4_Q7_Lin_300053082.xsl"?>
+
+<product name="Grandma White's cookies">
+    <serving_size unit="package">1</serving_size>
+    <nutrition per="1">
+        <calories unit="">260</calories>
+        <fat_calories unit="">100</fat_calories>
+        <fat unit="grams">11</fat>
+        <saturated_fat unit="grams">2</saturated_fat>
+        <cholesterol unit="milligrams">5</cholesterol>
+        <sodium unit="milligrams">210</sodium>
+        <carbohydrates unit="grams">36</carbohydrates>
+        <fiber unit="grams">2</fiber>
+        <sugar unit="grams">15</sugar>
+        <protein unit="grams">5</protein>
+    </nutrition>
+</product>
