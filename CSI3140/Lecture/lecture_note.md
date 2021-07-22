@@ -110,3 +110,29 @@ https://www.php.net/manual/en/reserved.keywords.php
     ```
 
 ### String
+#### Basic
+Anything enclosed in `''` in a print statement is not interpolated, unless the single quotes are nested in a double-quoted string literal.
+
+#### String Comparison
+1. `==`, `!=`, `<`, `<=`, `>`, `>=` can be used to compare strings
+2. `strcmp($str1, $str2)`: return -1 if `str1 < str2`; 0 if `str1 == str2`; 1 otherwise.
+#### Regular Expression
+1. `preg_match($regx, $str)`: use regular expressions to search a string for a specified pattern using **Perl-compatible regular expressions**. Return the length of the matched string
+2. Regular expressions must be enclosed in `/.../`.
+3. Meta-characters for regular expressions
+    * `^`: matches the beginning of a string
+    * `$`: matches the end of a string
+    * `.`: matches any single character
+    * `[]`: used for bracket expression; match any single character from the list
+    * `-`: range, like `a-z`
+    * `\b`: indicate the beginning or end of a word
+4. Quantifiers
+    * `{n}`: exactly n times
+    * `{m, n}` between m and n times, inclusive
+    * `{n,}`: n or more times
+    * `+`: same as `{1,}`
+    * `*`: same as `{0,}`
+    * `?`: same as `{0, 1}`
+5. `preg_match($regx, $str, $match)`: optional third argument, which is an array that stores matches to the regular expression.
+6. `preg_replace($pattern, $replace, $str)`: replace the first occurrence of the `$pattern` in `$str` with `$replace`
+7. To find multiple instances of a given pattern, we must make multiple calls to `preg_match`, and remove matched instances before calling the function again by using a function such as `preg_replace`.
