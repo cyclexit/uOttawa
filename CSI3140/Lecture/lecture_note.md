@@ -136,3 +136,44 @@ Anything enclosed in `''` in a print statement is not interpolated, unless the s
 5. `preg_match($regx, $str, $match)`: optional third argument, which is an array that stores matches to the regular expression.
 6. `preg_replace($pattern, $replace, $str)`: replace the first occurrence of the `$pattern` in `$str` with `$replace`
 7. To find multiple instances of a given pattern, we must make multiple calls to `preg_match`, and remove matched instances before calling the function again by using a function such as `preg_replace`.
+8: Character Classes: enclosed by `[::]`
+    * alnum: Alphanumeric characters, same as the combination of `[a-zA-Z]` and `[0-9]`.
+    * alpha: `[a-zA-z]`
+    * lower: `[a-z]`
+    * upper: `[A-Z]`
+    * digit: `[0-9]`
+    * space: White space
+9. Some examples about character classes
+    * `[[:upper:][:lower:]]*`: represents all strings of uppercase and lowercase letters in any order
+    * `[[:upper:]][[:lower:]]*`: matches strings with a single uppercase letter followed by any number of lowercase letters
+    * `([[:upper:]][[:lower:]])*`: represents all strings that alternate between uppercase and lowercase characters, starting with an uppercase and ending with a lowercase.
+
+### HTML Form Processing
+* `die()`: terminate the script execution </br>
+    `die($str)`: print the `$str` when exiting
+#### Superglobal Array
+
+|Variable name|Description
+|-----|-----
+|$_SERVER|Data about the currently running server
+|$_ENV|Data about the client's environment
+|$_GET|Data sent to the server by a `get` request
+|$_POST|Data sent to the server by a `post` request
+|$_COOKIE|Data contained in cookies on the client's computer
+|$GLOBALS|Array containing all global variables
+
+### Database Operation
+1. `mysql_connect($host, $usr, $password)`: connect to a database; return a database handler or false if failed.
+2. `mysql_select_db($name, $database)`: select and open the database to be queried
+3. `mysql_query($query, $database)`: specifying the query string; return a **resource** containing the query result.
+4. `mysql_error()`: return any error string from the database
+5. `mysql_fetch_row($result)`: return an array containing the values for each column in the current row of the query result. </br>
+    `mysql_num_rows($result)`: return the number of rows in `$result`
+
+### Cookies
+* `setcookie($cookie_name, $value, $expire)`
+    * If no expiration date is specified, the cookie lasts only until the end of the current session—that is, when the user closes the browser. This type of cookie is known as **session cookie** while the one with an expiration date is a **persistent cookie**.
+    * If only the cookie name argument is passed to function setcookie, the cookie is deleted from the client’s computer.
+
+### Dynamic Content
+* `isset($_POST["key"])`: determine whether the `$_POST` array contain keys representing the various form fields.
