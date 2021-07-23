@@ -1,5 +1,31 @@
 # CSI3140 Lecture Note
 
+## Chapter 16
+### Introduction
+1. Rich Internet Application (RIA)
+    * Definition: Web applications that approximate the look, feel and usability of desktop applications
+    * Two key attributes: Performance and Rich GUI
+    * Ajax (Asynchronous JavaScript and XML): use client-side scripting to make web applications more responsive
+2. XMLHttpRequest object
+
+    |Event or Property|Description
+    |---|---
+    |readystatechange|Register a listener for this event to specify the callback function—the event handler that gets called when the server responds.
+    |readyState|Keeps track of the request’s progress. It’s usually used in the callback function to determine when the code that processes the response should be launched. The readyState value `0` signifies that the request is unini-tialized; `1` that the request is loading; `2` that the request has been loaded; `3` that data is actively being sent from the server; and `4` that the request has been completed.
+    |responseText|Text that’s returned to the client by the server.
+    |responseXML|If the server’s response is in XML format, this property contains the XML document; otherwise, it’s empty. It can be used like a document object in JavaScript, which makes it useful for receiving complex data (e.g., populating a table).
+    |status|HTTP status code of the request.
+    |statusText|Additional information on the request’s status. It’s often used to display the error to the user when the request fails.
+    |open|Initializes the request and has two *mandatory* parameters—**method** and **URL**. The method parameter specifies the purpose of the request—typically GET or POST. The URL parameter specifies the address of the file on the server that will generate the response. A third optional Boolean parameter specifies whether the request is asynchronous—it’s set to true by default.
+    |send |Sends the request to the server. It has one optional parameter, data, which specifies the data to be POSTed to the server—it’s set to null by default.
+    |setRequestHeader |Alters the request header. The two parameters specify the header and its new value. It’s often used to set the content-type field.
+    |getResponseHeader |Returns the header data that precedes the response body. It takes one parameter, the name of the header to retrieve. This call is often used to determine the response’s type, to parse the response correctly.
+    |getAllResponseHeaders |Returns an array that contains all the headers that precede the response body.
+    |abort|Cancels the current request.
+
+3. JSON (JavaScipt Object Notation)
+    * `JSON.parse(data)` is used to parse the JSON data. The result will be an array or a dictionary.
+
 ## Chapter 19
 ### Introduction
 1. PHP code is embedded directly into text-based documents, such as HTML. PHP code can be placed anywhere in HTML markup.
