@@ -1,5 +1,67 @@
 # CSI3140 Lecture Note
 
+## Chapter 15
+### Basics
+1. XML = Extensible Markup Language 
+2. XML syntax requires:
+    * A single root element
+    * A start tag and end tag for each element
+    * Properly nested tags
+3. An XML document can reference a **Document Type Definition (DTD)** or **schema** that defines the document’s proper structure.
+3. Two types of **XML parser**:
+    * **Validating parser**: Checks that the XML document conforms with the DTD it references; Generates error if it doesn’t
+    * **Non-validating parser**: Checks for well-formedness of the XML document; Can ignore external DTD
+
+### XML Structure
+1. An XML document begins with an <u>optional</u> **XML declaration**, which identifies the document as an XML document. The version attribute in the XML declaration specifies the version of XML syntax used in the document.
+    ```xml
+    <?xml version="1.0"?>
+    ```
+2. **XML element name** can contain letters, digits, underscores, hyphens and periods. Must begin with either a letter or an underscore, and they should NOT begin with “xml” in any combination of uppercase and lowercase letters, as this is reserved for use in the XML standards
+3. **XML namespace**: provide a means for document authors to unambiguously refer to elements with the same name 
+    * Default namespace: `xmlns`
+4. **Document Type Definition (DTD)**: specify documents’ element types and attributes, and their relationships to one another.
+    * A DTD expresses the set of rules for document structure using an **EBNF (Extended Backus-Naur Form)** grammar
+    * In a DTD, an `ELEMENT` **element type declaration** defines the rules for an element. An `ATTLIST` **attribute-list declaration** defines attributes for a particular element, e.g.,
+        ```
+        <!ELEMENT contact (name, addr1, addr2, city, state, zip, phone, flag)>
+        <!ELEMENT name(#PCDATA)>
+        ```
+5. XML Schema
+    * Two categories of data types: simple types and complex types. Simple types cannot contain attributes or child elements, but complex types can. Complex types can have either simple content or complex content. Both can contain attributes, but only complex content can contain child elements.
+    * Some XML schema data types: string, boolean, decimal, float, double,
+    long, int, short, date, time.
+6. XML also has Document Object Model (DOM), and XML DOM is very similar to HTML DOM.
+    * Use XMLHttpRequest object to get the XML content
+        ```js
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open("get", url, false);
+        xmlHttpRequest.send(null);
+        var xml_doc = xmlHttpRequest.responseXML;
+        // Then, use doc.childNodes to go through XML document
+        ```
+7. XPath: more efficient way to travel through XML document.
+
+### XSL and XSL Transformation
+1. XSL = Extensible Stylesheet Language
+2. XSL is a group of 3 technologies:
+    * **XSL-FO (XSL Formatting Objects)** is a vocabulary for specifying formatting.
+    * **Xpath (XML Path Language)** is a string-based language of expressions used by XML and many of its related technologies for effectively and efficiently locating structures (e.g., elements and attributes) in XML documents.
+    * **XSLT (XSL Transformations)** is a technology for transforming XML documents from one form to another form.
+3. XSL style-sheet elements
+
+    |Element|Description
+    |---|---
+    |\<xsl:apply-templates\> |Applies the templates of the XSL document to the children of the current node.
+    |<xsl:apply-templates match="expression"> |Applies the templates of the XSL document to the children of expression. The value of the attribute match (i.e., expression) must be an XPath expression that specifies elements.
+    |\<xsl:template\> |Contains rules to apply when a specified node is matched.
+    |<xsl:value-of select="expression"> |Selects the value of an XML element and adds it to the output tree of the transformation. The required select attribute con- tains an XPath expression.
+    |<xsl:for-each select="expression"> |Applies a template to every node selected by the XPath specified by the select attribute.
+    |<xsl:sort select="expression"> |Used as a child element of an <xsl:apply-templates> or <xsl:for-each> element. Sorts the nodes selected by the <xsl:apply-template> or <xsl:for-each> element so that the nodes are processed in sorted order.
+    |\<xsl:output\> |e.g, `<xsl:output method="html" version="5.0" />`
+    |\<xsl:copy\> |Adds the current node to the output tree.
+
+
 ## Chapter 16
 ### Introduction
 1. Rich Internet Application (RIA)
