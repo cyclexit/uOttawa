@@ -1,0 +1,11 @@
+# .out
+*.out
+
+# zip file
+*.zip
+
+# .vscode folder
+.vscode/
+
+# binary folder
+bin/
