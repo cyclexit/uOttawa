@@ -66,6 +66,17 @@ function main() {
 }
 
 
+function getWebGLContext(canvas) {
+  var context;
+
+  context = canvas.getContext('webgl');
+  if (!context) {
+    console.log("No WebGL context could be found.");
+  }
+
+  return context;
+};
+
 // Read shader from file
 function readShaderFile(gl, fileName, shader) {
     var request = new XMLHttpRequest();
@@ -74,8 +85,8 @@ function readShaderFile(gl, fileName, shader) {
 
   request.onreadystatechange = function() {
     if (request.readyState == 4 && request.status !== 404) {
-	onReadShader(gl, request.responseText, shader);
-  }
+	    onReadShader(gl, request.responseText, shader);
+    }
   }
   // Create a request to acquire the file
 
