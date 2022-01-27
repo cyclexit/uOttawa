@@ -30,6 +30,7 @@ uniform mat4 mvp_matrix;
 
 
 layout (location=0) in vec4 a_vertex;
+layout (location=1) in vec3 a_color;
 
 out vec3 v_color;
 
@@ -38,5 +39,5 @@ void main() {
   gl_Position = mvp_matrix * a_vertex;
 
   // Pass on the color to the fragment shader
-  v_color = vec3( 0.5, 0.5, 0.0 );
+  v_color = a_color;
 }

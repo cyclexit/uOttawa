@@ -163,12 +163,12 @@ function initVertexBuffers(gl) {
 
   // Add a color
   var vertices = new Float32Array([
-      -1.0, -1.0, 1.0,  // 0
-    1.0, -1.0, 1.0,  // 1
-    0.0, 1.0, 0.0,  // 2
-    0.0, -1.0, -1.0,  // 3
-      -1.0, -1.0, 1.0,  // 0
-    1.0, -1.0, 1.0 // 1
+      -1.0, -1.0, 1.0, 1.0, 0.0, 0.0, // 0
+    1.0, -1.0, 1.0, 0.5, 0.5, 0.0, // 1
+    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, // 2
+    0.0, -1.0, -1.0, 0.0, 0.5, 0.5, // 3
+      -1.0, -1.0, 1.0, 1.0, 0.0, 0.0, // 0
+    1.0, -1.0, 1.0, 0.5, 0.5, 0.0 // 1
   ]);
   var n = 6; // The number of vertices
   var fsize = vertices.BYTES_PER_ELEMENT;
@@ -190,11 +190,18 @@ function initVertexBuffers(gl) {
     return -1;
   }
   // 6 entries per vertex: x y z r g b
-  gl.vertexAttribPointer(a_vertex, 3, gl.FLOAT, false, 0*fsize,  fsize * 0);
+  gl.vertexAttribPointer(a_vertex, 3, gl.FLOAT, false, 6*fsize,  fsize * 0);
   gl.enableVertexAttribArray(a_vertex);
 
   // Todo: Get the storage location of a_color, assign buffer and enable
-
+  var a_color = gl.getAttribLocation(gl.program, 'a_color');
+  if(a_color < 0) {
+    console.log('Failed to get the storage location of a_color');
+    return -1;
+  }
+  // Colors start after 3 entries - the first x y z coordinates
+  gl.vertexAttribPointer(a_color, 3, gl.FLOAT, false, 6*fsize, 3*fsize);
+  gl.enableVertexAttribArray(a_color);
   
   
   gl.bindVertexArray(null);
