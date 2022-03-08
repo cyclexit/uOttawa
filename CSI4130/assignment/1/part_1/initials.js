@@ -42,25 +42,25 @@ function startup() {
         }
     ];
 
-  shaderProgram = buildShaderProgram(shaderSet);
+    shaderProgram = buildShaderProgram(shaderSet);
 
-  aspectRatio = glCanvas.width / glCanvas.height;
-  currentRotation = [0, 1];
-  currentScale = [1.0, aspectRatio];
+    aspectRatio = glCanvas.width / glCanvas.height;
+    currentRotation = [0, 1];
+    currentScale = [1.0, aspectRatio];
 
-  vertexArray = new Float32Array([
-      -0.5, 0.5, 0.5, 0.5, 0.5, -0.5,
-      -0.5, 0.5, 0.5, -0.5, -0.5, -0.5
-  ]);
+    vertexArray = new Float32Array([
+        -0.5, 0.5, 0.5, 0.5, 0.5, -0.5,
+        -0.5, 0.5, 0.5, -0.5, -0.5, -0.5
+    ]);
 
-  vertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
 
-  vertexNumComponents = 2;
-  vertexCount = vertexArray.length / vertexNumComponents;
+    vertexNumComponents = 2;
+    vertexCount = vertexArray.length / vertexNumComponents;
 
-  animateScene();
+    animateScene();
 }
 
 function buildShaderProgram(shaderInfo) {
