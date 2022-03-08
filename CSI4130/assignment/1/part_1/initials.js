@@ -44,7 +44,7 @@ function startup() {
 
   shaderProgram = buildShaderProgram(shaderSet);
 
-  aspectRatio = glCanvas.width/glCanvas.height;
+  aspectRatio = glCanvas.width / glCanvas.height;
   currentRotation = [0, 1];
   currentScale = [1.0, aspectRatio];
 
@@ -58,7 +58,7 @@ function startup() {
   gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
 
   vertexNumComponents = 2;
-  vertexCount = vertexArray.length/vertexNumComponents;
+  vertexCount = vertexArray.length / vertexNumComponents;
 
   animateScene();
 }
@@ -103,7 +103,7 @@ function animateScene() {
     gl.clearColor(0.8, 0.9, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
   
-    let radians = currentAngle * Math.PI / 180.0;
+    var radians = currentAngle * Math.PI / 180.0;
     currentRotation[0] = Math.sin(radians);
     currentRotation[1] = Math.cos(radians);
   
@@ -127,7 +127,7 @@ function animateScene() {
     gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
   
     window.requestAnimationFrame(function(currentTime) {
-        let deltaAngle = ((currentTime - previousTime) / 1000.0)
+        var deltaAngle = ((currentTime - previousTime) / 1000.0)
             * degreesPerSecond;
 
         currentAngle = (currentAngle + deltaAngle) % 360;
