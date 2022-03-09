@@ -1,138 +1,236 @@
-// WebGL utilitis
-var gl = null;
-var glCanvas = null;
-var shaderProgram = null;
+main();
 
-// Aspect ratio and coordinate system details
-var aspectRatio;
-var currentRotation = [0, 1];
-var currentScale = [1.0, 1.0];
+//
+// Start here
+//
+function main() {
+    const canvas = document.getElementById("webgl-canvas");
+    const gl = canvas.getContext("webgl");
 
-// Vertex information
-var vertexArray;
-var vertexBuffer;
-var vertexNumComponents;
-var vertexCount;
+    // If we don't have a GL context, give up now
 
-// Rendering data shared with the scalers.
-var uScalingFactor;
-var uGlobalColor;
-var uRotationVector;
-var aVertexPosition;
+    if (!gl) {
+        alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+        return;
+    }
 
-// Animation timing
-var currentAngle = 0.0;
-var previousTime = 0.0;
-var degreesPerSecond = 90.0;
+    // Vertex shader program
 
-window.addEventListener("load", startup, false);
-
-function startup() {
-    glCanvas = document.getElementById("webgl-canvas");
-    gl = glCanvas.getContext("webgl");
-
-    const shaderSet = [
-        {
-            type: gl.VERTEX_SHADER,
-            id: "vertex-shader"
-        },
-        {
-            type: gl.FRAGMENT_SHADER,
-            id: "fragment-shader"
+    const vsSource = `
+        attribute vec4 aVertexPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        void main() {
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
         }
+    `;
+
+    // Fragment shader program
+
+    const fsSource = `
+        void main() {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+    `;
+
+    // Initialize a shader program; this is where all the lighting
+    // for the vertices and so forth is established.
+    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+
+    // Collect all the info needed to use the shader program.
+    // Look up which attribute our shader program is using
+    // for aVertexPosition and look up uniform locations.
+    const programInfo = {
+        program: shaderProgram,
+        attribLocations: {
+            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+        },
+        uniformLocations: {
+            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+        },
+    };
+
+    // Here's where we call the routine that builds all the
+    // objects we'll be drawing.
+    const buffers = initBuffers(gl);
+
+    // Draw the scene
+    drawScene(gl, programInfo, buffers);
+}
+
+//
+// initBuffers
+//
+// Initialize the buffers we'll need. For this demo, we just
+// have one object -- a simple two-dimensional square.
+//
+function initBuffers(gl) {
+
+    // Create a buffer for the square's positions.
+
+    const positionBuffer = gl.createBuffer();
+
+    // Select the positionBuffer as the one to apply buffer
+    // operations to from here out.
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Now create an array of positions for the square.
+
+    const positions = [
+        1.0, 1.0,
+        -1.0, 1.0,
+        1.0, -1.0,
+        -1.0, -1.0,
     ];
 
-    shaderProgram = buildShaderProgram(shaderSet);
+    // Now pass the list of positions into WebGL to build the
+    // shape. We do this by creating a Float32Array from the
+    // JavaScript array, then use it to fill the current buffer.
 
-    aspectRatio = glCanvas.width / glCanvas.height;
-    currentRotation = [0, 1];
-    currentScale = [1.0, aspectRatio];
+    gl.bufferData(gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW);
 
-    vertexArray = new Float32Array([
-        -0.5, 0.5, 0.5, 0.5, 0.5, -0.5,
-        -0.5, 0.5, 0.5, -0.5, -0.5, -0.5
-    ]);
-
-    vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
-
-    vertexNumComponents = 2;
-    vertexCount = vertexArray.length / vertexNumComponents;
-
-    animateScene();
+    return {
+        position: positionBuffer,
+    };
 }
 
-function buildShaderProgram(shaderInfo) {
-    var program = gl.createProgram();
-  
-    shaderInfo.forEach(function(desc) {
-        var shader = compileShader(desc.id, desc.type);
+//
+// Draw the scene.
+//
+function drawScene(gl, programInfo, buffers) {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+    gl.clearDepth(1.0);                 // Clear everything
+    gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+    gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
 
-        if (shader) {
-            gl.attachShader(program, shader);
-        }
-    });
-  
-    gl.linkProgram(program)
-  
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.log("Error linking shader program:");
-        console.log(gl.getProgramInfoLog(program));
+    // Clear the canvas before we start drawing on it.
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Create a perspective matrix, a special matrix that is
+    // used to simulate the distortion of perspective in a camera.
+    // Our field of view is 45 degrees, with a width/height
+    // ratio that matches the display size of the canvas
+    // and we only want to see objects between 0.1 units
+    // and 100 units away from the camera.
+
+    const fieldOfView = 45 * Math.PI / 180;   // in radians
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 0.1;
+    const zFar = 100.0;
+    const projectionMatrix = glMatrix.mat4.create();
+
+    // note: glmatrix.js always has the first argument
+    // as the destination to receive the result.
+    glMatrix.mat4.perspective(projectionMatrix,
+        fieldOfView,
+        aspect,
+        zNear,
+        zFar);
+
+    // Set the drawing position to the "identity" point, which is
+    // the center of the scene.
+    const modelViewMatrix = glMatrix.mat4.create();
+
+    // Now move the drawing position a bit to where we want to
+    // start drawing the square.
+
+    glMatrix.mat4.translate(modelViewMatrix,     // destination matrix
+        modelViewMatrix,     // matrix to translate
+        [-0.0, 0.0, -6.0]);  // amount to translate
+
+    // Tell WebGL how to pull out the positions from the position
+    // buffer into the vertexPosition attribute.
+    {
+        const numComponents = 2;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexPosition,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexPosition);
     }
-  
-    return program;
+
+    // Tell WebGL to use our program when drawing
+
+    gl.useProgram(programInfo.program);
+
+    // Set the shader uniforms
+
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        projectionMatrix);
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.modelViewMatrix,
+        false,
+        modelViewMatrix);
+
+    {
+        const offset = 0;
+        const vertexCount = 4;
+        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    }
 }
 
-function compileShader(id, type) {
-    var code = document.getElementById(id).firstChild.nodeValue;
-    var shader = gl.createShader(type);
-  
-    gl.shaderSource(shader, code);
+//
+// Initialize a shader program, so WebGL knows how to draw our data
+//
+function initShaderProgram(gl, vsSource, fsSource) {
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    // Create the shader program
+
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+
+    // If creating the shader program failed, alert
+
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+        return null;
+    }
+
+    return shaderProgram;
+}
+
+//
+// creates a shader of the given type, uploads the source and
+// compiles it.
+//
+function loadShader(gl, type, source) {
+    const shader = gl.createShader(type);
+
+    // Send the source to the shader object
+
+    gl.shaderSource(shader, source);
+
+    // Compile the shader program
+
     gl.compileShader(shader);
-  
+
+    // See if it compiled successfully
+
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.log(`Error compiling ${type === gl.VERTEX_SHADER ? "vertex" : "fragment"} shader:`);
-        console.log(gl.getShaderInfoLog(shader));
+        alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
     }
+
     return shader;
-}
-
-function animateScene() {
-    gl.viewport(0, 0, glCanvas.width, glCanvas.height);
-    gl.clearColor(0.8, 0.9, 1.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-  
-    var radians = currentAngle * Math.PI / 180.0;
-    currentRotation[0] = Math.sin(radians);
-    currentRotation[1] = Math.cos(radians);
-  
-    gl.useProgram(shaderProgram);
-  
-    uScalingFactor = gl.getUniformLocation(shaderProgram, "uScalingFactor");
-    uGlobalColor = gl.getUniformLocation(shaderProgram, "uGlobalColor");
-    uRotationVector = gl.getUniformLocation(shaderProgram, "uRotationVector");
-  
-    gl.uniform2fv(uScalingFactor, currentScale);
-    gl.uniform2fv(uRotationVector, currentRotation);
-    gl.uniform4fv(uGlobalColor, [0.1, 0.7, 0.2, 1.0]);
-  
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  
-    aVertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-  
-    gl.enableVertexAttribArray(aVertexPosition);
-    gl.vertexAttribPointer(aVertexPosition, vertexNumComponents, gl.FLOAT, false, 0, 0);
-  
-    gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
-  
-    window.requestAnimationFrame(function(currentTime) {
-        var deltaAngle = ((currentTime - previousTime) / 1000.0)
-            * degreesPerSecond;
-
-        currentAngle = (currentAngle + deltaAngle) % 360;
-
-        previousTime = currentTime;
-        animateScene();
-    });
 }
