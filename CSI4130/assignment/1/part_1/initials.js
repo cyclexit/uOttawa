@@ -23,12 +23,14 @@ const LETTER_L_VERTICES = new Float32Array([
     0.2, 0.3
 ]);
 
+// Global variables
+var gl, canvas;
+
 window.addEventListener("load", main, false);
 
 function main() {
-    const canvas = document.getElementById("webgl-canvas");
-    const gl = getWebGLContext(canvas);
-
+    canvas = document.getElementById("webgl-canvas");
+    gl = getWebGLContext(canvas);
     // If we don't have a GL context, give up now
     if (!gl) {
         console.log('Failed to get the rendering context for WebGL');
@@ -58,36 +60,24 @@ function main() {
         return;
     }
 
-    initScreen(gl, canvas);
+    initMatrices();
+
+    initScreen();
 
     // Draw letter H
-    if (!draw(gl, LETTER_H_VERTICES)) {
+    if (!draw(gl.LINE_LOOP, LETTER_H_VERTICES)) {
         console.log('Failed to draw H.');
         return;
     }
 
     // Draw letter L
-    if (!draw(gl, LETTER_L_VERTICES)) {
+    if (!draw(gl.LINE_LOOP, LETTER_L_VERTICES)) {
         console.log('Failed to draw L.');
         return;
     }
 }
 
-function initScreen(gl, canvas) {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-    gl.clearDepth(1.0); // Clear everything
-    gl.enable(gl.DEPTH_TEST); // Enable depth testing
-    gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-    gl.viewport(0, 0, canvas.width, canvas.height); // set the viewport
-}
-
-function draw(gl, vertices) {
-    // Init vertex buffers
-    if (!initVertexBuffers(gl, vertices)) {
-        console.log('Failed to set the positions of the vertices for H.');
-        return false;
-    }
-
+function initMatrices() {
     // Set the model view matrix
     var uModelViewMatrix = gl.getUniformLocation(gl.program, 'uModelViewMatrix');
     if (!uModelViewMatrix) {
@@ -105,18 +95,30 @@ function draw(gl, vertices) {
     }
     var projectionMatrix = glMatrix.mat4.create();
     gl.uniformMatrix4fv(uProjectionMatrix, false, projectionMatrix);
+}
 
-    // Clear <canvas> - both color and depth
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+function initScreen() {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+    gl.clearDepth(1.0); // Clear everything
+    gl.enable(gl.DEPTH_TEST); // Enable depth testing
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // Clear <canvas> - both color and depth
+    gl.viewport(0, 0, canvas.width, canvas.height); // set the viewport
+}
+
+function draw(mode, vertices) {
+    // Init vertex buffers
+    if (!initVertexBuffers(vertices)) {
+        console.log('Failed to set the positions of the vertices for H.');
+        return false;
+    }
 
     // Draw the shape
-    console.log(vertices.length / SPACE_DIMENSION);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / SPACE_DIMENSION);
+    gl.drawArrays(mode, 0, vertices.length / SPACE_DIMENSION);
 
     return true;
 }
 
-function initVertexBuffers(gl, vertices) {
+function initVertexBuffers(vertices) {
     // Create a buffer object
     var vertexBuffer = gl.createBuffer();
     if (!vertexBuffer) {
