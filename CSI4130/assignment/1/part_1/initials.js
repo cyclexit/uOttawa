@@ -1,26 +1,26 @@
 // Constants
 const SPACE_DIMENSION = 2;
 const LETTER_H_VERTICES = new Float32Array([
-    -0.5, 1.5,
-    -0.5, -1.5,
-    -1.0, -1.5,
-    -1.0, -0.25,
-    -2.0, -0.25,
-    -2.0, -1.5,
-    -2.5, -1.5,
-    -2.5, 1.5,
-    -2.0, 1.5,
-    -2.0, 0.25,
-    -1.0, 0.25,
-    -1.0, 1.5
+    -0.1, 0.3,
+    -0.1, -0.3,
+    -0.2, -0.3,
+    -0.2, -0.05,
+    -0.4, -0.05,
+    -0.4, -0.3,
+    -0.5, -0.3,
+    -0.5, 0.3,
+    -0.4, 0.3,
+    -0.4, 0.05,
+    -0.2, 0.05,
+    -0.2, 0.3
 ]);
 const LETTER_L_VERTICES = new Float32Array([
-    0.5, 1.5,
-    0.5, -1.5,
-    2.5, -1.5,
-    2.5, -1.0,
-    1.0, -1.0,
-    1.0, 1.5
+    0.1, 0.3,
+    0.1, -0.3,
+    0.5, -0.3,
+    0.5, -0.2,
+    0.2, -0.2,
+    0.2, 0.3
 ]);
 
 // Global variables
@@ -70,10 +70,10 @@ function main() {
     }
 
     // Draw letter L
-    // if (!draw(gl, LETTER_L_VERTICES)) {
-    //     console.log('Failed to draw L.');
-    //     return;
-    // }
+    if (!draw(gl, LETTER_L_VERTICES)) {
+        console.log('Failed to draw L.');
+        return;
+    }
 }
 
 function initScreen(gl, canvas) {
