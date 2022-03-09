@@ -23,9 +23,6 @@ const LETTER_L_VERTICES = new Float32Array([
     0.2, 0.3
 ]);
 
-// Global variables
-var VAO;
-
 window.addEventListener("load", main, false);
 
 function main() {
@@ -113,7 +110,6 @@ function draw(gl, vertices) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Draw the shape
-    gl.bindVertexArray(VAO);
     console.log(vertices.length / SPACE_DIMENSION);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / SPACE_DIMENSION);
 
@@ -121,9 +117,6 @@ function draw(gl, vertices) {
 }
 
 function initVertexBuffers(gl, vertices) {
-    VAO = gl.createVertexArray();
-    gl.bindVertexArray(VAO);
-
     // Create a buffer object
     var vertexBuffer = gl.createBuffer();
     if (!vertexBuffer) {
@@ -143,8 +136,6 @@ function initVertexBuffers(gl, vertices) {
 
     gl.vertexAttribPointer(aVertex, SPACE_DIMENSION, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(aVertex);
-
-    gl.bindVertexArray(null);
     
     return true;
 }
