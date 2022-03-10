@@ -1,10 +1,8 @@
 // Constants
 const SPACE_DIMENSION = 2;
 const CIRCLE_RADIUS = 0.5;
-
-// Global variables
-var gl, canvas;
-var verticesH = new Float32Array([
+const ROTATION_ANGLE_RADIAN = Math.PI / 6; // 30 degree
+const CENTER_OFFSET_H = [
     -0.02, 0.06,
     -0.02, -0.06,
     -0.04, -0.06,
@@ -17,17 +15,21 @@ var verticesH = new Float32Array([
     -0.08, 0.01,
     -0.04, 0.01,
     -0.04, 0.06
-]);
-var verticesL = new Float32Array([
+];
+const CENTER_OFFSET_L = [
     0.02, 0.06,
     0.02, -0.06,
     0.1, -0.06,
     0.1, -0.04,
     0.04, -0.04,
     0.04, 0.06
-]);
+];
 
-window.addEventListener("load", main, false);
+// Global variables
+var gl, canvas;
+var center = [0.0, 0.0];
+var verticesH = new Float32Array(CENTER_OFFSET_H);
+var verticesL = new Float32Array(CENTER_OFFSET_L);
 
 function main() {
     canvas = document.getElementById("webgl-canvas");
@@ -79,15 +81,48 @@ function main() {
         console.log('Failed to draw L.');
         return;
     }
+
+    var animate = function() {
+        rotateAroundCenter(ROTATION_ANGLE_RADIAN);
+        // Clear <canvas> - both color and depth
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        // Draw letter H
+        if (!draw(gl.LINE_LOOP, verticesH)) {
+            console.log('Failed to draw H.');
+            return;
+        }
+        // Draw letter L
+        if (!draw(gl.LINE_LOOP, verticesL)) {
+            console.log('Failed to draw L.');
+            return;
+        }
+        window.requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+function updateHL() {
+    for (var i = 0; i < verticesH.length; i += 2) {
+        verticesH[i] = center[0] + CENTER_OFFSET_H[i];
+        verticesH[i + 1] = center[1] + CENTER_OFFSET_H[i + 1];
+    }
+    for (var i = 0; i < verticesL.length; i += 2) {
+        verticesL[i] = center[0] + CENTER_OFFSET_L[i];
+        verticesL[i + 1] = center[1] + CENTER_OFFSET_L[i + 1];
+    }
 }
 
 function translateX(distance) {
-    for (var i = 0; i < verticesH.length; i += 2) {
-        verticesH[i] += distance
-    }
-    for (var i = 0; i < verticesL.length; i += 2) {
-        verticesL[i] += distance
-    }
+    center[0] += distance;
+    console.log(center);
+    updateHL();
+}
+
+function rotateAroundCenter(angleRadian) {
+    var oldX = center[0], oldY = center[1];
+    center[0] = Math.cos(angleRadian) * oldX - Math.sin(angleRadian) * oldY;
+    center[1] = Math.sin(angleRadian) * oldX + Math.cos(angleRadian) * oldY;
+    updateHL();
 }
 
 function initMatrices() {
@@ -154,3 +189,5 @@ function initVertexBuffers(vertices) {
     
     return true;
 }
+
+window.onload = main();
