@@ -1,7 +1,7 @@
 // Constants
 const SPACE_DIMENSION = 2;
 const CIRCLE_RADIUS = 0.5;
-const ROTATION_ANGLE_RADIAN = Math.PI / 6; // 30 degree
+const ROTATION_ANGLE_RADIAN = Math.PI / 600;
 const CENTER_OFFSET_H = [
     -0.02, 0.06,
     -0.02, -0.06,
