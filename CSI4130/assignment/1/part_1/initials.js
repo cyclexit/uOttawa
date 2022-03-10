@@ -101,7 +101,7 @@ function main() {
     animate();
 }
 
-function updateHL() {
+function updateVectices() {
     for (var i = 0; i < verticesH.length; i += 2) {
         verticesH[i] = center[0] + CENTER_OFFSET_H[i];
         verticesH[i + 1] = center[1] + CENTER_OFFSET_H[i + 1];
@@ -115,14 +115,14 @@ function updateHL() {
 function translateX(distance) {
     center[0] += distance;
     console.log(center);
-    updateHL();
+    updateVectices();
 }
 
 function rotateAroundCenter(angleRadian) {
     var oldX = center[0], oldY = center[1];
     center[0] = Math.cos(angleRadian) * oldX - Math.sin(angleRadian) * oldY;
     center[1] = Math.sin(angleRadian) * oldX + Math.cos(angleRadian) * oldY;
-    updateHL();
+    updateVectices();
 }
 
 function initMatrices() {
