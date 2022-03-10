@@ -1,30 +1,31 @@
 // Constants
 const SPACE_DIMENSION = 2;
-const LETTER_H_VERTICES = new Float32Array([
-    -0.1, 0.3,
-    -0.1, -0.3,
-    -0.2, -0.3,
-    -0.2, -0.05,
-    -0.4, -0.05,
-    -0.4, -0.3,
-    -0.5, -0.3,
-    -0.5, 0.3,
-    -0.4, 0.3,
-    -0.4, 0.05,
-    -0.2, 0.05,
-    -0.2, 0.3
-]);
-const LETTER_L_VERTICES = new Float32Array([
-    0.1, 0.3,
-    0.1, -0.3,
-    0.5, -0.3,
-    0.5, -0.2,
-    0.2, -0.2,
-    0.2, 0.3
-]);
+const CIRCLE_RADIUS = 0.5;
 
 // Global variables
 var gl, canvas;
+var verticesH = new Float32Array([
+    -0.02, 0.06,
+    -0.02, -0.06,
+    -0.04, -0.06,
+    -0.04, -0.01,
+    -0.08, -0.01,
+    -0.08, -0.06,
+    -0.1, -0.06,
+    -0.1, 0.06,
+    -0.08, 0.06,
+    -0.08, 0.01,
+    -0.04, 0.01,
+    -0.04, 0.06
+]);
+var verticesL = new Float32Array([
+    0.02, 0.06,
+    0.02, -0.06,
+    0.1, -0.06,
+    0.1, -0.04,
+    0.04, -0.04,
+    0.04, 0.06
+]);
 
 window.addEventListener("load", main, false);
 
@@ -64,16 +65,28 @@ function main() {
 
     initScreen();
 
+    // translate the letters to prepare for the spining.
+    translateX(CIRCLE_RADIUS);
+    
     // Draw letter H
-    if (!draw(gl.LINE_LOOP, LETTER_H_VERTICES)) {
+    if (!draw(gl.LINE_LOOP, verticesH)) {
         console.log('Failed to draw H.');
         return;
     }
 
     // Draw letter L
-    if (!draw(gl.LINE_LOOP, LETTER_L_VERTICES)) {
+    if (!draw(gl.LINE_LOOP, verticesL)) {
         console.log('Failed to draw L.');
         return;
+    }
+}
+
+function translateX(distance) {
+    for (var i = 0; i < verticesH.length; i += 2) {
+        verticesH[i] += distance
+    }
+    for (var i = 0; i < verticesL.length; i += 2) {
+        verticesL[i] += distance
     }
 }
 
