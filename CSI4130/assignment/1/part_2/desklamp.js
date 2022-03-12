@@ -64,23 +64,27 @@ lampJoins[0].position.set(0, 2, 0);
 scene.add(lampJoins[0]);
 
 // add the cylinder lower arm
-const cylinderLowerArm = new THREE.Mesh(
+const lampLowerArm = new THREE.Mesh(
     new THREE.CylinderGeometry(2, 2, 15, 32),
     new THREE.MeshMatcapMaterial({color: 0xe4e6e4})
 )
-cylinderLowerArm.position.set(0, 8, 0);
-scene.add(cylinderLowerArm);
+lampLowerArm.position.set(0, 10, 0);
+scene.add(lampLowerArm);
+
+// add the join 1
+lampJoins[1].position.set(0, 18, 0);
+scene.add(lampJoins[1]);
 
 // add the cylinder upper arm
-const cylinderUpperArm = new THREE.Mesh(
+const lampUpperArm = new THREE.Mesh(
     new THREE.CylinderGeometry(2, 2, 10, 32),
     new THREE.MeshMatcapMaterial({color: 0xe4e6e4})
-)
-// cylinderUpperArm.position.set(20, -30, 0);
-// scene.add(cylinderUpperArm);
-
-
-
+);
+lampUpperArm.position.set(0, 24, 0);
+lampUpperArm.lookAt(lampJoins[1].position);
+lampUpperArm.rotateX(Math.PI / 6);
+scene.add(lampUpperArm);
+    
 // add the cylinder upper lamp shade
 const cylinderUpperLampShade = new THREE.Mesh(
     new THREE.CylinderGeometry(4, 4, 8, 64),
