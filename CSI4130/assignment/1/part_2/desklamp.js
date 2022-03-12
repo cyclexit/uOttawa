@@ -37,7 +37,7 @@ function updateCamera() {
     camera.position.z = radius * Math.sin(theta) * Math.cos(phi);
     camera.lookAt(0, 0, 0);
 }
-cameraRotation.add(sphereCoordinate, "radius", 30, 100, 1).listen();
+cameraRotation.add(sphereCoordinate, "radius", 20, 100, 1).listen();
 cameraRotation.add(sphereCoordinate, "theta", 0, 180, 1).listen();
 cameraRotation.add(sphereCoordinate, "phi", 0, 360, 1).listen();
 cameraRotation.open();
@@ -81,8 +81,10 @@ const lampUpperArm = new THREE.Mesh(
     new THREE.MeshMatcapMaterial({color: 0xe4e6e4})
 );
 lampUpperArm.position.set(0, 24, 0);
-lampUpperArm.lookAt(lampJoins[1].position);
-lampUpperArm.rotateX(Math.PI / 6);
+lampUpperArm.geometry.translate(0, 5, 0);
+lampUpperArm.rotateX(Math.PI / 4);
+lampUpperArm.geometry.translate(0, -5, 5 / Math.sqrt(2) + Math.sqrt(2) / 2);
+// lampUpperArm.lookAt(lampJoins[1].position);
 scene.add(lampUpperArm);
     
 // add the cylinder upper lamp shade
