@@ -1,3 +1,8 @@
+/**
+ * Student Name: Hongyi Lin
+ * Student No.: 300053082
+ */
+
 // Constants
 const SPACE_DIMENSION = 2;
 const CIRCLE_RADIUS = 0.5;

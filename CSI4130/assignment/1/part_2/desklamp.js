@@ -1,3 +1,8 @@
+/**
+ * Student Name: Hongyi Lin
+ * Student No.: 300053082
+ */
+
 // set-up
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
