@@ -111,11 +111,11 @@ scene.add(lampLowerShade);
 
 // add the sphere bulb
 const sphereBulb = new THREE.Mesh(
-    new THREE.SphereGeometry(4, 64, 64),
+    new THREE.SphereGeometry(2, 64, 64),
     new THREE.MeshMatcapMaterial({color: 0xffe139})
 );
-// sphereBulb.position.set(-30, 0, 0);
-// scene.add(sphereBulb);
+sphereBulb.position.set(0, 18 - 4, 10 / Math.sqrt(2) + 1);
+scene.add(sphereBulb);
 
 // start the animation
 function animate() {
