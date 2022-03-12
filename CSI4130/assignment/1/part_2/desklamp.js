@@ -92,20 +92,22 @@ lampJoins[2].position.set(0, 18 + 10 / Math.sqrt(2), 10 / Math.sqrt(2));
 scene.add(lampJoins[2]);
     
 // add the cylinder upper lamp shade
-const cylinderUpperLampShade = new THREE.Mesh(
-    new THREE.CylinderGeometry(4, 4, 8, 64),
-    new THREE.MeshMatcapMaterial({color: 0x9f4cc3})
+const lampUpperShade = new THREE.Mesh(
+    new THREE.CylinderGeometry(2, 2, 8, 64),
+    new THREE.MeshMatcapMaterial({color: 0xcadfef})
 );
-// cylinderUpperLampShade.position.set(50, 30, 0);
-// scene.add(cylinderUpperLampShade);
+lampUpperShade.position.set(0, 18 + 10 / Math.sqrt(2), 10 / Math.sqrt(2));
+lampUpperShade.translateZ(1);
+lampUpperShade.rotateX(-(Math.PI / 4));
+scene.add(lampUpperShade);
 
 // add the cylinder lower lamp shade
-const cylinderLowerLampShade = new THREE.Mesh(
+const lampLowerShade = new THREE.Mesh(
     new THREE.CylinderGeometry(4, 8, 8, 64),
     new THREE.MeshMatcapMaterial({color: 0x9f4cc3})
 );
-// cylinderLowerLampShade.position.set(-50, -20, 0);
-// scene.add(cylinderLowerLampShade);
+// lampLowerShade.position.set(-50, -20, 0);
+// scene.add(lampLowerShade);
 
 // add the sphere bulb
 const sphereBulb = new THREE.Mesh(
