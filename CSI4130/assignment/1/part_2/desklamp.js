@@ -86,6 +86,10 @@ lampUpperArm.rotateX(Math.PI / 4);
 lampUpperArm.geometry.translate(0, -5, 5 / Math.sqrt(2) + Math.sqrt(2) / 2);
 // lampUpperArm.lookAt(lampJoins[1].position);
 scene.add(lampUpperArm);
+
+// add the join 2
+lampJoins[2].position.set(0, 18 + 10 / Math.sqrt(2), 10 / Math.sqrt(2));
+scene.add(lampJoins[2]);
     
 // add the cylinder upper lamp shade
 const cylinderUpperLampShade = new THREE.Mesh(
