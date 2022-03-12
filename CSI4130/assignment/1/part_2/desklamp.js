@@ -23,27 +23,40 @@ window.addEventListener("resize", () => {
 // 3.2: dat.gui control camera rotation
 const gui = new dat.GUI();
 const cameraRotation = gui.addFolder("Camera Rotation");
-var rotationRadianAngles = {
-    x: Math.PI / 2,
-    y: Math.PI / 2,
+var rotationAngles = {
+    x: 90,
+    y: 90,
     z: 0
 };
-var cameraRotationRadius = 50;
-camera.position.set(0, cameraRotationRadius, 0);
+var rotationRadius = 50;
+camera.position.set(0, 0, rotationRadius);
 function rotateX() {
-    
+    var x = camera.position.x, y= camera.position.y, z = camera.position.z;
+    var angle = rotationAngles.x * Math.PI / 180;
+    camera.position.x = x;
+    camera.position.y = Math.cos(angle) * y - Math.sin(angle) * z;
+    camera.position.z = Math.sin(angle) * y + Math.cos(angle) * z;
     camera.lookAt(0, 0, 0);
 }
 function rotateY() {
+    var x = camera.position.x, y= camera.position.y, z = camera.position.z;
+    var angle = rotationAngles.y * Math.PI / 180;
+    camera.position.x = Math.cos(angle) * x + Math.sin(angle) * z;
+    camera.position.y = y;
+    camera.position.z = -Math.sin(angle) * x + Math.cos(angle) * z;
     camera.lookAt(0, 0, 0);
 }
 function rotateZ() {
-    
+    var x = camera.position.x, y= camera.position.y, z = camera.position.z;
+    var angle = rotationAngles.z * Math.PI / 180;
+    camera.position.x = Math.cos(angle) * x - Math.sin(angle) * y;
+    camera.position.y = Math.sin(angle) * x + Math.cos(angle) * y;
+    camera.position.z = z;
     camera.lookAt(0, 0, 0);
 }
-cameraRotation.add(rotationRadianAngles, "x", 0, Math.PI * 2, 0.01).onChange(rotateX);
-cameraRotation.add(rotationRadianAngles, "y", 0, Math.PI * 2, 0.01).onChange(rotateY);
-cameraRotation.add(rotationRadianAngles, "z", 0, Math.PI * 2, 0.01).onChange(rotateZ);
+cameraRotation.add(rotationAngles, "x", 0, 360, 1).onChange(rotateX);
+cameraRotation.add(rotationAngles, "y", 0, 360, 1).onChange(rotateY);
+cameraRotation.add(rotationAngles, "z", 0, 360, 1).onChange(rotateZ);
 cameraRotation.open();
 
 
@@ -104,8 +117,6 @@ const sphereBulb = new THREE.Mesh(
 );
 // sphereBulb.position.set(-30, 0, 0);
 // scene.add(sphereBulb);
-
-// assemble the lamp
 
 // start the animation
 function animate() {
