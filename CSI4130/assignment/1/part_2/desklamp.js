@@ -20,67 +20,92 @@ window.addEventListener("resize", () => {
     renderer.setSize(innerWidth, innerHeight);
 });
 
+// 3.2: dat.gui control camera rotation
+const gui = new dat.GUI();
+const cameraRotation = gui.addFolder("Camera Rotation");
+var rotationRadianAngles = {
+    x: Math.PI / 2,
+    y: Math.PI / 2,
+    z: 0
+};
+var cameraRotationRadius = 50;
+camera.position.set(0, cameraRotationRadius, 0);
+function rotateX() {
+    
+    camera.lookAt(0, 0, 0);
+}
+function rotateY() {
+    camera.lookAt(0, 0, 0);
+}
+function rotateZ() {
+    
+    camera.lookAt(0, 0, 0);
+}
+cameraRotation.add(rotationRadianAngles, "x", 0, Math.PI * 2, 0.01).onChange(rotateX);
+cameraRotation.add(rotationRadianAngles, "y", 0, Math.PI * 2, 0.01).onChange(rotateY);
+cameraRotation.add(rotationRadianAngles, "z", 0, Math.PI * 2, 0.01).onChange(rotateZ);
+cameraRotation.open();
+
+
 // add the cylinder base
-const cylinderBase = new THREE.Mesh(
-    new THREE.CylinderGeometry(5, 5, 1, 32),
-    new THREE.MeshBasicMaterial({color: 0xd3e8f8})
+const lampBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(10, 10, 1, 32),
+    new THREE.MeshMatcapMaterial({color: 0xd3e8f8})
 );
-cylinderBase.position.set(0, 20, 0);
-scene.add(cylinderBase);
+scene.add(lampBase);
 
 // add the cylinder lower arm
 const cylinderLowerArm = new THREE.Mesh(
     new THREE.CylinderGeometry(2, 2, 10, 32),
-    new THREE.MeshBasicMaterial({color: 0xe4e6e4})
+    new THREE.MeshMatcapMaterial({color: 0xe4e6e4})
 )
-cylinderLowerArm.position.set(-20, -30, 0);
-scene.add(cylinderLowerArm);
+// cylinderLowerArm.position.set(-20, -30, 0);
+// scene.add(cylinderLowerArm);
 
 // add the cylinder upper arm
 const cylinderUpperArm = new THREE.Mesh(
     new THREE.CylinderGeometry(2, 2, 10, 32),
-    new THREE.MeshBasicMaterial({color: 0xe4e6e4})
+    new THREE.MeshMatcapMaterial({color: 0xe4e6e4})
 )
-cylinderUpperArm.position.set(20, -30, 0);
-scene.add(cylinderUpperArm);
+// cylinderUpperArm.position.set(20, -30, 0);
+// scene.add(cylinderUpperArm);
 
 // add 3 sphere joints
-var sphereJoins = [];
+var lampJoins = [];
 for (var i = 0; i < 3; ++i) {
-    sphereJoins.push(new THREE.Mesh(
+    lampJoins.push(new THREE.Mesh(
         new THREE.SphereGeometry(5, 32, 32),
-        new THREE.MeshBasicMaterial({color: 0xd3e8f8})
+        new THREE.MeshMatcapMaterial({color: 0xd3e8f8})
     ));
-    sphereJoins[i].position.set(i * 20, 0, 0);
-    scene.add(sphereJoins[i]);
+    // lampJoins[i].position.set(i * 20, 0, 0);
+    // scene.add(lampJoins[i]);
 }
 
 // add the cylinder upper lamp shade
 const cylinderUpperLampShade = new THREE.Mesh(
     new THREE.CylinderGeometry(4, 4, 8, 64),
-    new THREE.MeshBasicMaterial({color: 0x9f4cc3})
+    new THREE.MeshMatcapMaterial({color: 0x9f4cc3})
 );
-cylinderUpperLampShade.position.set(50, 30, 0);
-scene.add(cylinderUpperLampShade);
+// cylinderUpperLampShade.position.set(50, 30, 0);
+// scene.add(cylinderUpperLampShade);
 
 // add the cylinder lower lamp shade
 const cylinderLowerLampShade = new THREE.Mesh(
     new THREE.CylinderGeometry(4, 8, 8, 64),
-    new THREE.MeshBasicMaterial({color: 0x9f4cc3})
+    new THREE.MeshMatcapMaterial({color: 0x9f4cc3})
 );
-cylinderLowerLampShade.position.set(-50, -20, 0);
-scene.add(cylinderLowerLampShade);
+// cylinderLowerLampShade.position.set(-50, -20, 0);
+// scene.add(cylinderLowerLampShade);
 
 // add the sphere bulb
 const sphereBulb = new THREE.Mesh(
     new THREE.SphereGeometry(4, 64, 64),
-    new THREE.MeshBasicMaterial({color: 0xffe139})
+    new THREE.MeshMatcapMaterial({color: 0xffe139})
 );
-sphereBulb.position.set(-30, 0, 0);
-scene.add(sphereBulb);
+// sphereBulb.position.set(-30, 0, 0);
+// scene.add(sphereBulb);
 
-// set the camera z-position
-camera.position.z = 50;
+// assemble the lamp
 
 // start the animation
 function animate() {
