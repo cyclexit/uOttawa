@@ -15,18 +15,16 @@ const views = [
         up: [ 0, 1, 0 ],
         fov: 30,
         updateCamera: function ( camera, scene, mouseX ) {
-
             camera.position.x += mouseX * 0.05;
             camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
             camera.lookAt( scene.position );
-
         }
     },
     {
         left: 0.5,
         bottom: 0,
         width: 0.5,
-        height: 0.5,
+        height: 1.0,
         background: new THREE.Color( 0.7, 0.5, 0.5 ),
         eye: [ 0, 1800, 0 ],
         up: [ 0, 0, 1 ],
@@ -39,23 +37,6 @@ const views = [
 
         }
     },
-    {
-        left: 0.5,
-        bottom: 0.5,
-        width: 0.5,
-        height: 0.5,
-        background: new THREE.Color( 0.5, 0.7, 0.7 ),
-        eye: [ 1400, 800, 1400 ],
-        up: [ 0, 1, 0 ],
-        fov: 60,
-        updateCamera: function ( camera, scene, mouseX ) {
-
-            camera.position.y -= mouseX * 0.05;
-            camera.position.y = Math.max( Math.min( camera.position.y, 1600 ), - 1600 );
-            camera.lookAt( scene.position );
-
-        }
-    }
 ];
 
 function init() {
