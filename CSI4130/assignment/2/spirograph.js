@@ -26,7 +26,7 @@ const views = [
         width: 0.5,
         height: 1.0,
         background: new THREE.Color( 0.7, 0.5, 0.5 ),
-        eye: [ 0, 200, 0 ],
+        eye: [ 0, 2000, 0 ],
         up: [ 0, 0, 1 ],
         fov: 60,
         updateCamera: function ( camera, scene, mouseX ) {
@@ -150,7 +150,7 @@ function init() {
     mesh.position.x = 400;
     scene.add( mesh );
 
-        mesh = new THREE.Mesh( geometry3, material );
+    mesh = new THREE.Mesh( geometry3, material );
     wireframe = new THREE.Mesh( geometry3, wireframeMaterial );
     mesh.add( wireframe );
     scene.add( mesh );
@@ -164,11 +164,9 @@ function init() {
 
 }
 
-function onDocumentMouseMove( event ) {
-
+function onDocumentMouseMove(event) {
     mouseX = ( event.clientX - windowWidth / 2 );
     mouseY = ( event.clientY - windowHeight / 2 );
-
 }
 
 function updateSize() {
@@ -183,7 +181,6 @@ function render() {
     updateSize();
 
     for ( let i = 0; i < views.length; ++ i ) {
-
         const view = views[ i ];
         const camera = view.camera;
 
@@ -211,8 +208,6 @@ function animate() {
     render();
     requestAnimationFrame( animate );
 }
-
-
 
 init();
 animate();
