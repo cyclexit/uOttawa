@@ -1,0 +1,5 @@
+Please create a nice looking 3D lissajous curve. You can find the curve equations at
+
+https://en.wikipedia.org/wiki/Lissajous_curve
+
+Please also change the coloring of the curve based on the distance of vertices from a plane (instead as from the origin as it is in the starter code).
