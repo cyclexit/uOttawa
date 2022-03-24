@@ -1,9 +1,6 @@
-let scene, renderer;
-
-let mouseX = 0, mouseY = 0;
-
-let windowWidth, windowHeight;
-
+const container = document.getElementById("container");
+const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({antialias: true});
 const views = [
     {
         left: 0,
@@ -37,9 +34,11 @@ const views = [
     },
 ];
 
-function init() {
-    const container = document.getElementById( 'container' );
+let mouseX = 0, mouseY = 0;
+let windowWidth, windowHeight;
 
+function init() {
+    // add camera to the views
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
         const camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -47,9 +46,6 @@ function init() {
         camera.up.fromArray( view.up );
         view.camera = camera;
     }
-
-    // create the scene
-    scene = new THREE.Scene();
 
     // add the light
     const light = new THREE.DirectionalLight( 0xffffff );
@@ -104,8 +100,7 @@ function init() {
     mesh.add( wireframe );
     scene.add( mesh );
 
-    // create the renderer
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
     container.appendChild(renderer.domElement);
@@ -142,7 +137,6 @@ function render() {
         camera.updateProjectionMatrix();
 
         renderer.render( scene, camera );
-
     }
 }
 
