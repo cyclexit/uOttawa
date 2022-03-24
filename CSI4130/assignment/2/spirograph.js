@@ -30,17 +30,14 @@ const views = [
         up: [ 0, 0, 1 ],
         fov: 60,
         updateCamera: function ( camera, scene, mouseX ) {
-
             camera.position.x -= mouseX * 0.05;
             camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
             camera.lookAt( scene.position );
-
         }
     },
 ];
 
 function init() {
-
     const container = document.getElementById( 'container' );
 
     for ( let i = 0; i < views.length; ++ i ) {
@@ -109,17 +106,9 @@ function init() {
 
     // create the renderer
     renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    container.appendChild( renderer.domElement );
-
-    document.addEventListener( 'mousemove', onDocumentMouseMove );
-
-}
-
-function onDocumentMouseMove(event) {
-    mouseX = ( event.clientX - windowWidth / 2 );
-    mouseY = ( event.clientY - windowHeight / 2 );
+    renderer.setPixelRatio(devicePixelRatio);
+    renderer.setSize(innerWidth, innerHeight);
+    container.appendChild(renderer.domElement);
 }
 
 function updateSize() {
