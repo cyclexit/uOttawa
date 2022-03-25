@@ -10,12 +10,7 @@ const views = [
         background: new THREE.Color( 0.5, 0.5, 0.7 ),
         eye: [ 0, 0, 100 ],
         up: [ 0, 1, 0 ],
-        fov: 60,
-        updateCamera: function ( camera, scene, mouseX ) {
-            camera.position.x += mouseX * 0.05;
-            camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
-            camera.lookAt( scene.position );
-        }
+        fov: 60
     },
     {
         left: 0.5,
@@ -25,18 +20,12 @@ const views = [
         background: new THREE.Color( 0.7, 0.5, 0.5 ),
         eye: [ 0, 100, 0 ],
         up: [ 0, 0, 1 ],
-        fov: 60,
-        updateCamera: function ( camera, scene, mouseX ) {
-            camera.position.x -= mouseX * 0.05;
-            camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
-            camera.lookAt( scene.position );
-        }
+        fov: 60
     },
 ];
 const curveGroup = new THREE.Group();
 var curveMesh;
 
-let mouseX = 0, mouseY = 0;
 let windowWidth, windowHeight;
 
 // class
@@ -67,8 +56,9 @@ function init() {
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
         const camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.fromArray( view.eye );
-        camera.up.fromArray( view.up );
+        camera.position.fromArray(view.eye);
+        camera.up.fromArray(view.up);
+        camera.lookAt(scene.position);
         view.camera = camera;
     }
 
@@ -158,8 +148,6 @@ function render() {
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
         const camera = view.camera;
-
-        view.updateCamera( camera, scene, mouseX, mouseY );
 
         const left = Math.floor( windowWidth * view.left );
         const bottom = Math.floor( windowHeight * view.bottom );
