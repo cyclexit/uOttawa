@@ -24,7 +24,6 @@ const views = [
     },
 ];
 const curveGroup = new THREE.Group();
-var curveMesh;
 
 let windowWidth, windowHeight;
 
@@ -129,7 +128,7 @@ function init() {
     }
     const gui = new dat.GUI();
     gui.add(controls, 'k', 0.0, 1.0, 0.01).onChange(controls.update);
-    gui.add(controls, 'l', 0.0, 1.0, 0.01).onChange(controls.update);
+    gui.add(controls, 'l', -1.0, 1.0, 0.01).onChange(controls.update);
 
     // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
@@ -139,10 +138,9 @@ function init() {
 
 function updateCurve(k, l) {
     curveGroup.clear();
-    // TODO: use the value from dat.gui
     var curvePath = new MyCurve(k, l);
-    var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 1, 100, false);
-    curveMesh = new THREE.Mesh(curveGeometry, new THREE.MeshPhongMaterial({color: 0x6495ED}));
+    var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 0.5, 100, false);
+    var curveMesh = new THREE.Mesh(curveGeometry, new THREE.MeshPhongMaterial({color: 0x6495ED}));
     curveGroup.add(curveMesh);
 }
 
