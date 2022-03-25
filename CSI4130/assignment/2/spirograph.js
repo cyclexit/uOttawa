@@ -1,3 +1,8 @@
+/**
+ * Student Name: Hongyi Lin
+ * Student No.: 300053082
+ */
+
 const container = document.getElementById("container");
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -120,8 +125,11 @@ function init() {
 function updateCurve(k, l) {
     curveGroup.clear();
     var curvePath = new MyCurve(k, l);
-    var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 0.5, 100, false);
-    var curveMesh = new THREE.Mesh(curveGeometry, new THREE.MeshPhongMaterial({color: 0x6495ED}));
+    var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 0.3, 100, false);
+    var curveMesh = new THREE.Mesh(
+        curveGeometry,
+        new THREE.MeshPhongMaterial({color: 0x6495ED, flatShading: true})
+    );
     curveGroup.add(curveMesh);
 }
 
