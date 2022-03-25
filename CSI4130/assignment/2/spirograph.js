@@ -119,6 +119,18 @@ function init() {
     scene.add(curveGroup);
     updateCurve(0.3, 0.9);
 
+    // add controls
+    const controls = {
+        k: 0.3,
+        l: 0.9,
+        update: () => {
+            updateCurve(controls.k, controls.l);
+        }
+    }
+    const gui = new dat.GUI();
+    gui.add(controls, 'k', 0.0, 1.0, 0.01).onChange(controls.update);
+    gui.add(controls, 'l', 0.0, 1.0, 0.01).onChange(controls.update);
+
     // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
@@ -126,7 +138,7 @@ function init() {
 }
 
 function updateCurve(k, l) {
-    curveGroup.remove(curveMesh);
+    curveGroup.clear();
     // TODO: use the value from dat.gui
     var curvePath = new MyCurve(k, l);
     var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 1, 100, false);
@@ -146,7 +158,7 @@ function render() {
     updateSize();
 
     // rotate the curve
-    curveGroup.rotateY(Math.PI / 300);
+    // curveGroup.rotateY(Math.PI / 300);
 
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
