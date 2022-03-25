@@ -52,7 +52,7 @@ function init() {
     light.position.set( 0, 0, 1 );
     scene.add( light );
 
-    // create shadow
+    // add the shadow
     const canvas = document.createElement( 'canvas' );
     canvas.width = 128;
     canvas.height = 128;
@@ -74,33 +74,7 @@ function init() {
     shadowMesh.rotation.x = - Math.PI / 2;
     scene.add( shadowMesh );
 
-    // add the object
-    const radius = 200;
-    const geometry1 = new THREE.IcosahedronGeometry( radius, 1 );
-    const count = geometry1.attributes.position.count;
-    geometry1.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( count * 3 ), 3 ) );
-
-    const color = new THREE.Color();
-    const positions1 = geometry1.attributes.position;
-    const colors1 = geometry1.attributes.color;
-    for ( let i = 0; i < count; i ++ ) {
-        color.setHSL( ( positions1.getY( i ) / radius + 1 ) / 2, 1.0, 0.5 );
-        colors1.setXYZ( i, color.r, color.g, color.b );
-    }
-
-    const material = new THREE.MeshPhongMaterial( {
-        color: 0xffffff,
-        flatShading: true,
-        vertexColors: true,
-        shininess: 0
-    } );
-    const wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
-    mesh = new THREE.Mesh( geometry1, material );
-    wireframe = new THREE.Mesh( geometry1, wireframeMaterial );
-    mesh.add( wireframe );
-    // scene.add( mesh );
-
-    // add the curve 
+    // add the spirograph curve
     scene.add(curveGroup);
     updateCurve(0.3, 0.9);
 
