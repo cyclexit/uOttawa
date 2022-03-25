@@ -3,6 +3,8 @@
  * Student No.: 300053082
  */
 
+import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
+
 const container = document.getElementById("container");
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -29,6 +31,7 @@ const views = [
     },
 ];
 const curveGroup = new THREE.Group();
+let airplane = (await new GLTFLoader().loadAsync("./assets/airplane.glb")).scene.children[0];
 
 let windowWidth, windowHeight;
 
@@ -77,6 +80,12 @@ function init() {
     // add the spirograph curve
     scene.add(curveGroup);
     updateCurve(0.3, 0.9);
+
+    // add the airplane
+    airplane.scale.set(0.005, 0.005, 0.005);
+    airplane.rotation.set(0, 0, 0);
+    airplane.position.set(0, 0, 10);
+    scene.add(airplane);
 
     // add controls
     const controls = {
