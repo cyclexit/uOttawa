@@ -49,7 +49,7 @@ class MyCurve extends THREE.Curve {
 
 function init() {
     // add axis helper
-    const axesHelper = new THREE.AxesHelper(10);
+    const axesHelper = new THREE.AxesHelper(1000);
     scene.add(axesHelper);
 
     // add camera to the views
@@ -144,6 +144,9 @@ function updateSize() {
 
 function render() {
     updateSize();
+
+    // rotate the curve
+    curveGroup.rotateY(Math.PI / 300);
 
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
