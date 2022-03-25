@@ -33,11 +33,34 @@ const views = [
         }
     },
 ];
+const curveGroup = new THREE.Group();
+var curveMesh, curveGeometry;
 
 let mouseX = 0, mouseY = 0;
 let windowWidth, windowHeight;
 
+// class
+class MyCurve extends THREE.Curve {
+    constructor(k, l, r=50) {
+        super();
+        this.k = k; // inner radius = k * outer radius, 0 < k < 1
+        this.l = l; // pen position
+        this.r = r; // outer radius
+    }
+
+    getPoint(t) {
+        var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
+        var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
+        var tz = 5; // TODO: replace this
+        return new THREE.Vector3(tx, ty, tz);
+    }
+}
+
 function init() {
+    // add axis helper
+    const axesHelper = new THREE.AxesHelper(10);
+    scene.add(axesHelper);
+
     // add camera to the views
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
@@ -98,12 +121,25 @@ function init() {
     mesh = new THREE.Mesh( geometry1, material );
     wireframe = new THREE.Mesh( geometry1, wireframeMaterial );
     mesh.add( wireframe );
-    scene.add( mesh );
+    // scene.add( mesh );
+
+    // add the curve 
+    scene.add(curveGroup);
+    updateCurve();
 
     // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
     container.appendChild(renderer.domElement);
+}
+
+function updateCurve(k, l) {
+    curveGroup.remove(curveMesh);
+    // TODO: use the value from dat.gui
+    var curvePath = new MyCurve(0.3, 0.9);
+    curveGeometry = new THREE.TubeGeometry(curvePath, 300, 1, 300, false);
+    curveMesh = new THREE.Mesh(curveGeometry, new THREE.MeshPhongMaterial({color: 0x6495ED}));
+    curveGroup.add(curveMesh);
 }
 
 function updateSize() {
@@ -116,6 +152,7 @@ function updateSize() {
 
 function render() {
     updateSize();
+    updateCurve();
 
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
@@ -147,18 +184,3 @@ function animate() {
 
 init();
 animate();
-
-class MyCurve extends THREE.Curve {
-    constructor(k, l, r=50) {
-        this.k = k; // inner radius = k * outer radius, 0 < k < 1
-        this.l = l; // pen position
-        this.r = r; // outer radius
-    }
-
-    getPoint(t) {
-        var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - k) * t / this.k));
-        var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - k) * t / this.k));
-        var tz = 5; // TODO: replace this
-        return new THREE.Vector3(tx, ty, tz);
-    }
-}
