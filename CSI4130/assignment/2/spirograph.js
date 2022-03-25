@@ -8,7 +8,7 @@ const views = [
         width: 0.5,
         height: 1.0,
         background: new THREE.Color( 0.5, 0.5, 0.7 ),
-        eye: [ 0, 0, 2000 ],
+        eye: [ 0, 0, 100 ],
         up: [ 0, 1, 0 ],
         fov: 60,
         updateCamera: function ( camera, scene, mouseX ) {
@@ -23,7 +23,7 @@ const views = [
         width: 0.5,
         height: 1.0,
         background: new THREE.Color( 0.7, 0.5, 0.5 ),
-        eye: [ 0, 2000, 0 ],
+        eye: [ 0, 100, 0 ],
         up: [ 0, 0, 1 ],
         fov: 60,
         updateCamera: function ( camera, scene, mouseX ) {
@@ -34,14 +34,14 @@ const views = [
     },
 ];
 const curveGroup = new THREE.Group();
-var curveMesh, curveGeometry;
+var curveMesh;
 
 let mouseX = 0, mouseY = 0;
 let windowWidth, windowHeight;
 
 // class
 class MyCurve extends THREE.Curve {
-    constructor(k, l, r=50) {
+    constructor(k, l, r=20) {
         super();
         this.k = k; // inner radius = k * outer radius, 0 < k < 1
         this.l = l; // pen position
@@ -49,6 +49,8 @@ class MyCurve extends THREE.Curve {
     }
 
     getPoint(t) {
+        t = t * Math.PI * 6;
+        console.log(t);
         var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
         var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
         var tz = 5; // TODO: replace this
@@ -125,7 +127,7 @@ function init() {
 
     // add the curve 
     scene.add(curveGroup);
-    updateCurve();
+    updateCurve(0.3, 0.9);
 
     // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
@@ -136,8 +138,8 @@ function init() {
 function updateCurve(k, l) {
     curveGroup.remove(curveMesh);
     // TODO: use the value from dat.gui
-    var curvePath = new MyCurve(0.3, 0.9);
-    curveGeometry = new THREE.TubeGeometry(curvePath, 300, 1, 300, false);
+    var curvePath = new MyCurve(k, l);
+    var curveGeometry = new THREE.TubeGeometry(curvePath, 100, 1, 100, false);
     curveMesh = new THREE.Mesh(curveGeometry, new THREE.MeshPhongMaterial({color: 0x6495ED}));
     curveGroup.add(curveMesh);
 }
@@ -152,7 +154,6 @@ function updateSize() {
 
 function render() {
     updateSize();
-    updateCurve();
 
     for ( let i = 0; i < views.length; ++ i ) {
         const view = views[ i ];
