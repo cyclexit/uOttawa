@@ -30,12 +30,20 @@ const views = [
         fov: 60
     },
 ];
+const controls = {
+    k: 0.3,
+    l: 0.9,
+    update: () => {
+        updateCurve(controls.k, controls.l);
+    }
+}
 const curveGroup = new THREE.Group();
+const OUTER_RADIUS = 20;
 let airplane = (await new GLTFLoader().loadAsync("./assets/airplane.glb")).scene.children[0];
 let windowWidth, windowHeight;
 
 class MyCurve extends THREE.Curve {
-    constructor(k, l, r=20) {
+    constructor(k, l, r=OUTER_RADIUS) {
         super();
         this.k = k; // inner radius = k * outer radius, 0 < k < 1
         this.l = l; // pen position
@@ -99,19 +107,12 @@ function init() {
     updateCurve(0.3, 0.9);
 
     // add the airplane
-    airplane.scale.set(0.005, 0.005, 0.005);
+    airplane.scale.set(0.003, 0.003, 0.003);
     airplane.rotation.set(0, 0, 0);
     airplane.position.set(0, 0, 10);
     scene.add(airplane);
 
-    // add controls
-    const controls = {
-        k: 0.3,
-        l: 0.9,
-        update: () => {
-            updateCurve(controls.k, controls.l);
-        }
-    }
+    // add dat.gui controls
     const gui = new dat.GUI();
     gui.add(controls, 'k', 0.0, 1.0, 0.01).onChange(controls.update);
     gui.add(controls, 'l', -1.0, 1.0, 0.01).onChange(controls.update);
@@ -141,13 +142,21 @@ function updateSize() {
     }
 }
 
+var t = 0;
+function airplaneMove(k, l, r=OUTER_RADIUS) {
+    t += 0.01;
+    var tx = r * ((1 - k) * Math.cos(t) + l * k * Math.cos((1 - k) * t / k));
+    var ty = r * ((1 - k) * Math.sin(t) - l * k * Math.sin((1 - k) * t / k));
+    var tz = 10; // TODO: replace this
+    airplane.position.set(tx, ty, tz);
+}
+
 function render() {
     updateSize();
 
-    // rotate the curve
-    // curveGroup.rotateY(Math.PI / 300);
+    airplaneMove(controls.k, controls.l);
 
-    for ( let i = 0; i < views.length; ++ i ) {
+    for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
         const camera = view.camera;
 
