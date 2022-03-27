@@ -5,9 +5,9 @@
 
 import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
 
-const container = document.getElementById("container");
+const canvas = document.getElementById("canvas");
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
+const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true, preserveDrawingBuffer: true});
 const views = [
     {
         left: 0,
@@ -34,6 +34,7 @@ const controls = {
     k: 0.3,
     l: 0.9,
     update: () => {
+        renderer.clear();
         updateCurve(controls.k, controls.l);
     },
     is2D: true
@@ -56,11 +57,7 @@ class MyCurve extends THREE.Curve {
         console.log(t);
         var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
         var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
-        if (controls.is2D) {
-            var tz = 5;
-        } else {
-            var tz = this.r * ((1- this.k) * Math.sin(this.k) + this.l * Math.sin((1 - this.k) * t / this.k));
-        }
+        var tz = 0;
         return new THREE.Vector3(tx, ty, tz);
     }
 }
@@ -81,31 +78,13 @@ function init() {
     }
 
     // add the light
-    const light = new THREE.DirectionalLight( 0xffffff );
+    var light = new THREE.DirectionalLight(0xffffff);
     light.position.set( 0, 0, 1 );
-    scene.add( light );
+    scene.add(light);
 
-    // add the shadow
-    const canvas = document.createElement( 'canvas' );
-    canvas.width = 128;
-    canvas.height = 128;
-
-    const context = canvas.getContext( '2d' );
-    const gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
-    gradient.addColorStop( 0.1, 'rgba(0,0,0,0.15)' );
-    gradient.addColorStop( 1, 'rgba(0,0,0,0)' );
-    context.fillStyle = gradient;
-    context.fillRect( 0, 0, canvas.width, canvas.height );
-
-    const shadowTexture = new THREE.CanvasTexture( canvas );
-    const shadowMaterial = new THREE.MeshBasicMaterial( { map: shadowTexture, transparent: true } );
-    const shadowGeo = new THREE.PlaneGeometry( 300, 300, 1, 1 );
-
-    let shadowMesh;
-    shadowMesh = new THREE.Mesh( shadowGeo, shadowMaterial );
-    shadowMesh.position.y = - 250;
-    shadowMesh.rotation.x = - Math.PI / 2;
-    scene.add( shadowMesh );
+    light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(0, 1, 0);
+    scene.add(light);
 
     // add the spirograph curve
     scene.add(curveGroup);
@@ -114,7 +93,7 @@ function init() {
     // add the airplane
     airplane.scale.set(0.003, 0.003, 0.003);
     airplane.rotation.set(0, 0, 0);
-    airplane.position.set(0, 0, 10);
+    airplane.position.set(0, 0, 0);
     scene.add(airplane);
 
     // add dat.gui controls
@@ -124,9 +103,11 @@ function init() {
     gui.add(controls, "is2D").onChange(controls.update);
 
     // configure the renderer
+    renderer.autoClear = false;
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
-    container.appendChild(renderer.domElement);
+    renderer.setClearColor(new THREE.Color( 0.5, 0.5, 0.7 ));
+    // container.appendChild(renderer.domElement);
 }
 
 function updateCurve(k, l) {
@@ -153,22 +134,20 @@ function airplaneMove(k, l, r=OUTER_RADIUS) {
     t += 0.01;
     var tx = r * ((1 - k) * Math.cos(t) + l * k * Math.cos((1 - k) * t / k));
     var ty = r * ((1 - k) * Math.sin(t) - l * k * Math.sin((1 - k) * t / k));
-    if (controls.is2D) {
-        var tz = 5;
-    } else {
-        var tz = r * ((1- k) * Math.sin(k) + l * Math.sin((1 - k) * t / k));
-    }
+    var tz = 0;
     airplane.position.set(tx, ty, tz);
 }
 
 function render() {
     updateSize();
 
-    airplaneMove(controls.k, controls.l);
+    // airplaneMove(controls.k, controls.l);
 
     // rotate the curve
-    // curveGroup.rotateY(Math.PI / 300);
+    curveGroup.rotation.y += Math.PI / 300; // rotate spirograph around y
+    curveGroup.rotation.z += Math.PI / 300; // rotate spirograph around z
 
+    renderer.setClearColor(new THREE.Color( 0.5, 0.5, 0.7 ));
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
         const camera = view.camera;
@@ -178,15 +157,13 @@ function render() {
         const width = Math.floor( windowWidth * view.width );
         const height = Math.floor( windowHeight * view.height );
 
-        renderer.setViewport( left, bottom, width, height );
-        renderer.setScissor( left, bottom, width, height );
-        renderer.setScissorTest( true );
-        renderer.setClearColor( view.background );
+        renderer.setViewport(left, bottom, width, height);
+        renderer.setClearColor(view.background);
 
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
 
-        renderer.render( scene, camera );
+        renderer.render(scene, camera);
     }
 }
 
