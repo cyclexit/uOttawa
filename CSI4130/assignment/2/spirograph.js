@@ -78,7 +78,7 @@ function init() {
 
     // add the light
     var light = new THREE.DirectionalLight(0xffffff);
-    light.position.set( 0, 0, 1 );
+    light.position.set(0, 0, 1);
     scene.add(light);
 
     light = new THREE.DirectionalLight(0xffffff);
@@ -102,7 +102,6 @@ function init() {
     gui.add(controls, "is2D").onChange(controls.update);
 
     // configure the renderer
-    renderer.autoClear = false;
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
 }
@@ -138,11 +137,20 @@ function airplaneMove(k, l, r=OUTER_RADIUS) {
 function render() {
     updateSize();
 
-    // airplaneMove(controls.k, controls.l);
+    if (controls.is2D) {
+        // enable autoClear to clear the airplane flying path 
+        renderer.autoClear = true;
+        // reset the rotation
+        curveGroup.rotation.set(0, 0, 0);
+        airplaneMove(controls.k, controls.l);
+    } else {
+        // disable autoClear to see the 3D sphere
+        renderer.autoClear = false;
+        // rotate the curve to get 3D view
+        curveGroup.rotation.y += Math.PI / 300; // rotate spirograph around y
+        curveGroup.rotation.z += Math.PI / 300; // rotate spirograph around z
+    }
 
-    // rotate the curve
-    curveGroup.rotation.y += Math.PI / 300; // rotate spirograph around y
-    curveGroup.rotation.z += Math.PI / 300; // rotate spirograph around z
 
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
@@ -154,6 +162,8 @@ function render() {
         const height = Math.floor( windowHeight * view.height );
 
         renderer.setViewport(left, bottom, width, height);
+        renderer.setScissor(left, bottom, width, height);
+        renderer.setScissorTest(true);
 
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
