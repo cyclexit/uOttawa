@@ -7,7 +7,7 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/G
 
 const container = document.getElementById("container");
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({antialias: true});
+const renderer = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
 const views = [
     {
         left: 0,
@@ -35,7 +35,8 @@ const controls = {
     l: 0.9,
     update: () => {
         updateCurve(controls.k, controls.l);
-    }
+    },
+    is2D: true
 }
 const curveGroup = new THREE.Group();
 const OUTER_RADIUS = 20;
@@ -55,7 +56,11 @@ class MyCurve extends THREE.Curve {
         console.log(t);
         var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
         var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
-        var tz = 5; // TODO: replace this
+        if (controls.is2D) {
+            var tz = 5;
+        } else {
+            var tz = this.r * ((1- this.k) * Math.sin(this.k) + this.l * Math.sin((1 - this.k) * t / this.k));
+        }
         return new THREE.Vector3(tx, ty, tz);
     }
 }
@@ -116,6 +121,7 @@ function init() {
     const gui = new dat.GUI();
     gui.add(controls, 'k', 0.0, 1.0, 0.01).onChange(controls.update);
     gui.add(controls, 'l', -1.0, 1.0, 0.01).onChange(controls.update);
+    gui.add(controls, "is2D").onChange(controls.update);
 
     // configure the renderer
     renderer.setPixelRatio(devicePixelRatio);
@@ -147,7 +153,11 @@ function airplaneMove(k, l, r=OUTER_RADIUS) {
     t += 0.01;
     var tx = r * ((1 - k) * Math.cos(t) + l * k * Math.cos((1 - k) * t / k));
     var ty = r * ((1 - k) * Math.sin(t) - l * k * Math.sin((1 - k) * t / k));
-    var tz = 10; // TODO: replace this
+    if (controls.is2D) {
+        var tz = 5;
+    } else {
+        var tz = r * ((1- k) * Math.sin(k) + l * Math.sin((1 - k) * t / k));
+    }
     airplane.position.set(tx, ty, tz);
 }
 
@@ -155,6 +165,9 @@ function render() {
     updateSize();
 
     airplaneMove(controls.k, controls.l);
+
+    // rotate the curve
+    // curveGroup.rotateY(Math.PI / 300);
 
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
