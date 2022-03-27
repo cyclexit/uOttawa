@@ -54,7 +54,6 @@ class MyCurve extends THREE.Curve {
 
     getPoint(t) {
         t = t * Math.PI * 6;
-        console.log(t);
         var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
         var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
         var tz = 0;
@@ -106,8 +105,6 @@ function init() {
     renderer.autoClear = false;
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(innerWidth, innerHeight);
-    renderer.setClearColor(new THREE.Color( 0.5, 0.5, 0.7 ));
-    // container.appendChild(renderer.domElement);
 }
 
 function updateCurve(k, l) {
@@ -147,7 +144,6 @@ function render() {
     curveGroup.rotation.y += Math.PI / 300; // rotate spirograph around y
     curveGroup.rotation.z += Math.PI / 300; // rotate spirograph around z
 
-    renderer.setClearColor(new THREE.Color( 0.5, 0.5, 0.7 ));
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
         const camera = view.camera;
@@ -158,7 +154,6 @@ function render() {
         const height = Math.floor( windowHeight * view.height );
 
         renderer.setViewport(left, bottom, width, height);
-        renderer.setClearColor(view.background);
 
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
