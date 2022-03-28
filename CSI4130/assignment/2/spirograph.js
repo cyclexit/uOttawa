@@ -3,7 +3,6 @@
  * Student No.: 300053082
  */
 
-import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
 
 const canvas = document.getElementById("canvas");
 const scene = new THREE.Scene();
@@ -37,11 +36,11 @@ const controls = {
         renderer.clear();
         updateCurve(controls.k, controls.l);
     },
-    is2D: true
+    is2D: false
 }
 const curveGroup = new THREE.Group();
 const OUTER_RADIUS = 20;
-let airplane = (await new GLTFLoader().loadAsync("./assets/airplane.glb")).scene.children[0];
+let teapot;
 let windowWidth, windowHeight;
 
 class MyCurve extends THREE.Curve {
@@ -55,9 +54,6 @@ class MyCurve extends THREE.Curve {
     getPoint(t) {
         t = t * Math.PI * 6;
         const [tx, ty, tz] = getXYZ(t, this.k, this.l, this.r);
-        // var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
-        // var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
-        // var tz = 0;
         return new THREE.Vector3(tx, ty, tz);
     }
 }
@@ -90,11 +86,12 @@ function init() {
     scene.add(curveGroup);
     updateCurve(0.3, 0.9);
 
-    // add the airplane
-    airplane.scale.set(0.003, 0.003, 0.003);
-    airplane.rotation.set(0, 0, 0);
-    airplane.position.set(0, 0, 0);
-    scene.add(airplane);
+    // add the teapot
+    teapot = new THREE.Mesh(
+        new THREE.TeapotGeometry(1, 15, true, true, true, false, false),
+        new THREE.MeshPhongMaterial({color: 0xFA8072})
+    );
+    scene.add(teapot);
 
     // add dat.gui controls
     const gui = new dat.GUI();
@@ -131,24 +128,24 @@ function updateCurve(k, l) {
 }
 
 function updateSize() {
-    if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
+    if (windowWidth != window.innerWidth || windowHeight != window.innerHeight) {
         windowWidth = window.innerWidth;
         windowHeight = window.innerHeight;
         renderer.setSize( windowWidth, windowHeight );
     }
 }
 
-var airplaneTime = 0;
-function airplaneMove(k, l, r=OUTER_RADIUS) {
-    airplaneTime += 0.01;
-    const [tx, ty, tz] = getXYZ(airplaneTime, k, l, r);
-    airplane.position.set(tx, ty, tz);
+var teapotTime = 0;
+function teapotMove(k, l, r=OUTER_RADIUS) {
+    teapotTime += 0.01;
+    const [tx, ty, tz] = getXYZ(teapotTime, k, l, r);
+    teapot.position.set(tx, ty, tz);
 }
 
 function render() {
     updateSize();
 
-    airplaneMove(controls.k, controls.l);
+    teapotMove(controls.k, controls.l);
 
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
