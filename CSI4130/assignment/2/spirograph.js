@@ -7,7 +7,7 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/G
 
 const canvas = document.getElementById("canvas");
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true, preserveDrawingBuffer: true});
+const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true});
 const views = [
     {
         left: 0,
@@ -54,9 +54,10 @@ class MyCurve extends THREE.Curve {
 
     getPoint(t) {
         t = t * Math.PI * 6;
-        var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
-        var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
-        var tz = 0;
+        const [tx, ty, tz] = getXYZ(t, this.k, this.l, this.r);
+        // var tx = this.r * ((1 - this.k) * Math.cos(t) + this.l * this.k * Math.cos((1 - this.k) * t / this.k));
+        // var ty = this.r * ((1 - this.k) * Math.sin(t) - this.l * this.k * Math.sin((1 - this.k) * t / this.k));
+        // var tz = 0;
         return new THREE.Vector3(tx, ty, tz);
     }
 }
@@ -106,6 +107,18 @@ function init() {
     renderer.setSize(innerWidth, innerHeight);
 }
 
+function getXYZ(t, k, l, r=OUTER_RADIUS) {
+    var tx = r * ((1 - k) * Math.cos(t) + l * k * Math.cos((1 - k) * t / k));
+    var ty = r * ((1 - k) * Math.sin(t) - l * k * Math.sin((1 - k) * t / k));
+    var tz;
+    if (controls.is2D) {
+        tz = 0;
+    } else {
+        tz = r * Math.sin(t);
+    }
+    return [tx, ty, tz];
+}
+
 function updateCurve(k, l) {
     curveGroup.clear();
     var curvePath = new MyCurve(k, l);
@@ -125,32 +138,17 @@ function updateSize() {
     }
 }
 
-var t = 0;
+var airplaneTime = 0;
 function airplaneMove(k, l, r=OUTER_RADIUS) {
-    t += 0.01;
-    var tx = r * ((1 - k) * Math.cos(t) + l * k * Math.cos((1 - k) * t / k));
-    var ty = r * ((1 - k) * Math.sin(t) - l * k * Math.sin((1 - k) * t / k));
-    var tz = 0;
+    airplaneTime += 0.01;
+    const [tx, ty, tz] = getXYZ(airplaneTime, k, l, r);
     airplane.position.set(tx, ty, tz);
 }
 
 function render() {
     updateSize();
 
-    if (controls.is2D) {
-        // enable autoClear to clear the airplane flying path 
-        renderer.autoClear = true;
-        // reset the rotation
-        curveGroup.rotation.set(0, 0, 0);
-        airplaneMove(controls.k, controls.l);
-    } else {
-        // disable autoClear to see the 3D sphere
-        renderer.autoClear = false;
-        // rotate the curve to get 3D view
-        curveGroup.rotation.y += Math.PI / 300; // rotate spirograph around y
-        curveGroup.rotation.z += Math.PI / 300; // rotate spirograph around z
-    }
-
+    airplaneMove(controls.k, controls.l);
 
     for (let i = 0; i < views.length; ++i) {
         const view = views[ i ];
@@ -163,6 +161,7 @@ function render() {
 
         renderer.setViewport(left, bottom, width, height);
         renderer.setScissor(left, bottom, width, height);
+        renderer.setClearColor(view.background);
         renderer.setScissorTest(true);
 
         camera.aspect = width / height;
